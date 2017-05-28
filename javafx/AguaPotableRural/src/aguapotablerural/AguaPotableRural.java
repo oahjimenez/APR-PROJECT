@@ -5,6 +5,9 @@
  */
 package aguapotablerural;
 
+import aguapotablerural.database.SQLiteJDBCDriverConnection;
+import aguapotablerural.model.Usuario;
+import aguapotablerural.model.UsuarioManager;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
@@ -46,16 +49,16 @@ public class AguaPotableRural extends Application {
         
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
-        Scene scene = new Scene(grid, 300, 275);;
+        Scene scene = new Scene(grid, 600, 400);
         
         primaryStage.setTitle("Agua Potable Rural");
         primaryStage.setScene(scene);
         
-       Text scenetitle = new Text("Welcome");
+       Text scenetitle = new Text("Registro de Usuario");
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
-        Label userName = new Label("User Name:");
+        Label userName = new Label("Nombre Usuario:");
         grid.add(userName, 0, 1);
 
         TextField userTextField = new TextField();
@@ -68,18 +71,44 @@ public class AguaPotableRural extends Application {
         grid.add(pwBox, 1, 2);
        //  grid.setGridLinesVisible(true);
        
+       Label direccionBox = new Label("Direccion:");
+       grid.add(direccionBox,0,3);
+       
+       TextField direccionTextField = new TextField();
+       grid.add(direccionTextField,1,3);
+       
+       Label telefonoBox = new Label("Telefono:");
+       grid.add(telefonoBox, 0, 4);
+       
+       TextField telefonoTextField = new TextField();
+       grid.add(telefonoTextField,1,4);
+       
        Button btn = new Button("Sign in");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
-        grid.add(hbBtn, 1, 4);
+        grid.add(hbBtn, 1, 5);
         
         btn.setOnAction(new EventHandler<ActionEvent>() {
  
         @Override
             public void handle(ActionEvent e) {
                 actiontarget.setFill(Color.FIREBRICK);
-                actiontarget.setText("Sign in button pressed");
+                actiontarget.setText(userTextField.getText() + " ha sido registrado con éxito.");
+                UsuarioManager usuarioManager = new UsuarioManager(new SQLiteJDBCDriverConnection());
+                Usuario andres = new Usuario(new SQLiteJDBCDriverConnection());
+                andres.setRut("25.773.171.9").setNombre("Oswaldo Andres").setPassword("12345").setDireccion("Av. San Martin, Santiago. Region Metropolitana 413, Dpto 306").setTelefono("961607765");
+                andres.save();
+                
+                Usuario carlos = new Usuario(new SQLiteJDBCDriverConnection());
+                carlos.setRut("17.548.054-4").setNombre("Carlos Mardones").setPassword("6789").setDireccion("Nataniel Cox con Coquimbo 898, Samtiago Region Metropolitana").setTelefono("79373783");
+                carlos.save();
+               // carlos.delete();
+               
+               Usuario inputUser = new Usuario(new SQLiteJDBCDriverConnection());
+               inputUser.setRut("1-9").setNombre(userTextField.getText()).setPassword(pwBox.getText()).setDireccion(direccionTextField.getText()).setTelefono(telefonoTextField.getText());
+               inputUser.save();
+                System.out.println(usuarioManager.getAll());
             }
         });
        

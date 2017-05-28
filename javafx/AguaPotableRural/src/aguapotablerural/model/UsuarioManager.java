@@ -6,10 +6,9 @@
 package aguapotablerural.model;
 
 import aguapotablerural.database.SQLiteJDBCDriverConnection;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,42 +28,29 @@ public class UsuarioManager {
     }
     
     public List<Usuario> getAll(){
-        Connection c = null;
-        Statement statement = null;
+        List<Usuario> usuarios = new LinkedList();
         try {
-            statement = c.createStatement();
-            String sql = "SELECT * FROM USUARIO;";
-            statement.execute(sql);
+            PreparedStatement statement = dbconnection.getConnection().prepareStatement("SELECT * FROM USUARIO;");
+            ResultSet usuariosRs = statement.executeQuery();
+            
+            while (usuariosRs.next()) {
+                String rut = usuariosRs.getString("rut");
+                String password = usuariosRs.getString("password");
+                String nombre = usuariosRs.getString("nombre");
+                String direccion = usuariosRs.getString("direccion");
+                String telefono = usuariosRs.getString("telefono");
+                Usuario usuario = new Usuario(this.dbconnection).setRut(rut).setNombre(nombre).setDireccion(direccion).setTelefono(telefono);
+                usuarios.add(usuario);
+            }
             statement.close();
         }catch (Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-            return null;
+            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
-        return null;
+        return usuarios;
     }
     
     public void delete(Usuario usuario){
-        Connection conn = null;
-         try {
-            // db parameters
-            String url = "jdbc:sqlite:C:/Users/carlo/Desktop/gitrepo/APR-PROJECT/sqlite3/AGUA_POTABLE_RURAL.db";
-            // create a connection to the database
-            conn = DriverManager.getConnection(url);
-            
-            System.out.println("Connection to SQLite has been established.");
-            
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-      //  usuario.delete();
+       usuario.delete();
     }
     
     public void save(Usuario usuario){

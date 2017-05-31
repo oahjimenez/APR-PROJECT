@@ -6,20 +6,21 @@
 package aguapotablerural.model;
 
 import aguapotablerural.database.SQLiteJDBCDriverConnection;
-import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 
 /**
  *
  * @author carlo
  */
-public class Usuario {
+public class Usuario implements ModeloDominio {
     
     private String rut;
-    private String password;
     private String nombre;
     private String direccion;
     private String telefono;
+    private Date fechaRegistro;
+    private Date fechaRetiro;
     
     private SQLiteJDBCDriverConnection dbconnection;
 
@@ -44,15 +45,6 @@ public class Usuario {
         return this;
     }
     
-    
-    public String getPassword() {
-        return password;
-    }
-
-    public Usuario setPassword(String password) {
-        this.password = password;
-        return this;
-    }
 
     public String getNombre() {
         return nombre;
@@ -80,22 +72,45 @@ public class Usuario {
         this.telefono = telefono;
         return this;
     }
-    
-    @Override
-    public String toString() {
-        return "Usuario{" + "rut=" + rut + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono + '}';
+
+    public Date getFechaRegistro() {
+        return fechaRegistro;
     }
 
+    public Usuario setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+        return this;
+    }
+
+    public Date getFechaRetiro() {
+        return fechaRetiro;
+    }
+
+    public Usuario setFechaRetiro(Date fechaRetiro) {
+        this.fechaRetiro = fechaRetiro;
+        return this;
+    }
     
+    protected SQLiteJDBCDriverConnection getDbconnection() {
+        return this.dbconnection;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "rut=" + rut + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
+    }
+    
+    @Override
     public void save(){
         try {
-            PreparedStatement statement = dbconnection.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,password,nombre,direccion,telefono) " +
+            PreparedStatement statement = dbconnection.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,nombre,direccion,telefono,fechaRegistro,fechaRetiro) " +
                      "  VALUES (?, ? , ?, ? , ? );");
             statement.setString(1,this.rut);
-            statement.setString(2,this.password);
             statement.setString(3,this.nombre);
             statement.setString(4,this.direccion);
             statement.setString(5,this.telefono);
+            statement.setDate(5,this.fechaRegistro);
+            statement.setDate(6,this.fechaRetiro);
             statement.executeUpdate();
             statement.close();
         }catch (Exception e){
@@ -103,9 +118,10 @@ public class Usuario {
         }
     }
     
+    @Override
     public void delete() {
           try {
-            PreparedStatement statement = dbconnection.getConnection().prepareStatement("DELETE FROM USUARIO WHERE rut = ?;");
+            PreparedStatement statement = dbconnection.getConnection().prepareStatement("UPDATE USUARIO SET FECHA_FINIQUITO = CURRENT_DATE WHERE rut = ?;");
             statement.setString(1,this.rut);
             statement.executeUpdate();
             statement.close();

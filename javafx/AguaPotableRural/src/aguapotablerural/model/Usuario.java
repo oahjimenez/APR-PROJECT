@@ -103,14 +103,12 @@ public class Usuario implements ModeloDominio {
     @Override
     public void save(){
         try {
-            PreparedStatement statement = dbconnection.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,nombre,direccion,telefono,fechaRegistro,fechaRetiro) " +
-                     "  VALUES (?, ? , ?, ? , ? );");
+            PreparedStatement statement = dbconnection.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,nombre,direccion,telefono,fecha_registro) " +
+                     "  VALUES (?, ? , ?, ? , CURRENT_DATE );");
             statement.setString(1,this.rut);
-            statement.setString(3,this.nombre);
-            statement.setString(4,this.direccion);
-            statement.setString(5,this.telefono);
-            statement.setDate(5,this.fechaRegistro);
-            statement.setDate(6,this.fechaRetiro);
+            statement.setString(2,this.nombre);
+            statement.setString(3,this.direccion);
+            statement.setString(4,this.telefono);
             statement.executeUpdate();
             statement.close();
         }catch (Exception e){

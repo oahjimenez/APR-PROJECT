@@ -32,19 +32,25 @@ public class Administrador extends Usuario {
     @Override
     public void save(){
         try {
-            PreparedStatement statement = this.getDbconnection().getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,password,nombre,direccion,telefono,fechaRegistro,fechaRetiro) " +
-                     "  VALUES (?, ?, ? , ?, ? , ? );");
+            super.save();
+            PreparedStatement statement = this.getDbconnection().getConnection().prepareStatement("INSERT OR REPLACE INTO ADMINISTRADOR (rut,password) " +
+                     "  VALUES (?, ?);");
             statement.setString(1,this.getRut());
             statement.setString(2,this.password);
-            statement.setString(3,this.getNombre());
-            statement.setString(4,this.getDireccion());
-            statement.setString(5,this.getTelefono());
-            statement.setDate(5,this.getFechaRegistro());
-            statement.setDate(6,this.getFechaRetiro());
             statement.executeUpdate();
             statement.close();
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
         }
+    }
+    
+    @Override
+    public void delete(){
+       try {
+            super.delete();
+        }catch (Exception e){
+            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
+        }  
+ 
     }
 }

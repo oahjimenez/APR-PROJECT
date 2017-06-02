@@ -6,6 +6,7 @@
 package aguapotablerural;
 
 import aguapotablerural.database.SQLiteJDBCDriverConnection;
+import aguapotablerural.model.Administrador;
 import aguapotablerural.model.Usuario;
 import aguapotablerural.model.UsuarioManager;
 import javafx.application.Application;
@@ -97,16 +98,16 @@ public class AguaPotableRural extends Application {
                 actiontarget.setText(userTextField.getText() + " ha sido registrado con éxito.");
                 UsuarioManager usuarioManager = new UsuarioManager(new SQLiteJDBCDriverConnection());
                 Usuario andres = new Usuario(new SQLiteJDBCDriverConnection());
-                andres.setRut("25.773.171.9").setNombre("Oswaldo Andres").setPassword("12345").setDireccion("Av. San Martin, Santiago. Region Metropolitana 413, Dpto 306").setTelefono("961607765");
+                andres.setRut("25.773.171.9").setNombre("Oswaldo Andres").setDireccion("Av. San Martin, Santiago. Region Metropolitana 413, Dpto 306").setTelefono("961607765").setFechaRegistro(null);
                 andres.save();
                 
                 Usuario carlos = new Usuario(new SQLiteJDBCDriverConnection());
-                carlos.setRut("17.548.054-4").setNombre("Carlos Mardones").setPassword("6789").setDireccion("Nataniel Cox con Coquimbo 898, Samtiago Region Metropolitana").setTelefono("79373783");
+                carlos.setRut("17.548.054-4").setNombre("Carlos Mardones").setDireccion("Nataniel Cox con Coquimbo 898, Samtiago Region Metropolitana").setTelefono("79373783").setFechaRegistro(null);
                 carlos.save();
                // carlos.delete();
                
-               Usuario inputUser = new Usuario(new SQLiteJDBCDriverConnection());
-               inputUser.setRut("1-9").setNombre(userTextField.getText()).setPassword(pwBox.getText()).setDireccion(direccionTextField.getText()).setTelefono(telefonoTextField.getText());
+               Administrador inputUser = new Administrador(new SQLiteJDBCDriverConnection()).setPassword(pwBox.getText());
+               inputUser.setRut("1-9").setNombre(userTextField.getText()).setDireccion(direccionTextField.getText()).setTelefono(telefonoTextField.getText());
                inputUser.save();
                 System.out.println(usuarioManager.getAll());
             }

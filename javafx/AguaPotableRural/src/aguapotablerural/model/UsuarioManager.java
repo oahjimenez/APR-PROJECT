@@ -27,7 +27,7 @@ public class UsuarioManager {
     public Usuario getUsuario(String rut ){
        Usuario usuario = null;
        try {
-            PreparedStatement statement = dbconnection.getConnection().prepareStatement("SELECT * FROM USUARIO where rut = ?;");
+            PreparedStatement statement = dbconnection.getConnection().prepareStatement("SELECT * FROM USUARIO where rut = ? AND FECHA_RETIRO IS NULL;");
             statement.setString(1,rut);
             ResultSet usuarioRs = statement.executeQuery();
 
@@ -65,7 +65,7 @@ public class UsuarioManager {
         return usuarios;
     }
     
-    public List<Usuario> getActive(){
+    public List<Usuario> getAllActive(){
         List<Usuario> usuarios = new LinkedList();
         try {
             PreparedStatement statement = dbconnection.getConnection().prepareStatement("SELECT * FROM USUARIO WHERE FECHA_RETIRO IS NULL;");

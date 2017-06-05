@@ -7,8 +7,10 @@ package aguapotablerural;
 
 import aguapotablerural.database.SQLiteJDBCDriverConnection;
 import aguapotablerural.model.Administrador;
+import aguapotablerural.model.Medidor;
 import aguapotablerural.model.Usuario;
 import aguapotablerural.model.UsuarioManager;
+import java.sql.Date;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
@@ -110,6 +112,25 @@ public class AguaPotableRural extends Application {
                inputUser.setRut("1-9").setNombre(userTextField.getText()).setDireccion(direccionTextField.getText()).setTelefono(telefonoTextField.getText());
                inputUser.save();
                 System.out.println(usuarioManager.getAll());
+                
+                
+                /*Pruebas implementacion medidor */
+                Medidor medidorCarlos = new Medidor(new SQLiteJDBCDriverConnection());
+                medidorCarlos.setNombre("Medidor bacano del Carlos");
+                medidorCarlos.setId("123K");
+                 System.out.println(medidorCarlos);
+                medidorCarlos.save();
+                medidorCarlos.delete();
+                
+                Medidor medidorAndres =new Medidor(new SQLiteJDBCDriverConnection());
+                medidorAndres.setNombre(userTextField.getText());
+                medidorAndres.setId("1856");
+              //  medidorAndres.getId();
+                //medidorAndres.setFechaRetiro(new Date("01-02-2015"));
+                System.out.println(medidorAndres);
+                medidorAndres.save();
+               //edidorAndres.delete();
+                
             }
         });
        

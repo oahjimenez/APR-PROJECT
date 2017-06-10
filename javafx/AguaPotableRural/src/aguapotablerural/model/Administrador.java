@@ -5,7 +5,7 @@
  */
 package aguapotablerural.model;
 
-import aguapotablerural.database.SQLiteJDBCDriverConnection;
+import aguapotablerural.database.impl.SqliteDriverManager;
 import java.sql.PreparedStatement;
 
 /**
@@ -14,43 +14,28 @@ import java.sql.PreparedStatement;
  */
 public class Administrador extends Usuario {
     
-   private String password;
-    
-   public Administrador(SQLiteJDBCDriverConnection dbconnection){
-        super(dbconnection);
-    }
+    private String password;
 
     public String getPassword() {
         return password;
     }
 
-    public Administrador setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
-        return this;
+    }
+    
+    public void copyFromUsuario(Usuario usuario) {
+        this.setRut(usuario.getRut());
+        this.setNombre(usuario.getNombre());
+        this.setDireccion(usuario.getDireccion());
+        this.setTelefono(usuario.getTelefono());
+        this.setFechaRegistro(usuario.getFechaRegistro());
+        this.setFechaRetiro(usuario.getFechaRegistro());
     }
     
     @Override
-    public void save(){
-        try {
-            super.save();
-            PreparedStatement statement = this.getDbconnection().getConnection().prepareStatement("INSERT OR REPLACE INTO ADMINISTRADOR (rut,password) " +
-                     "  VALUES (?, ?);");
-            statement.setString(1,this.getRut());
-            statement.setString(2,this.password);
-            statement.executeUpdate();
-            statement.close();
-        }catch (Exception e){
-            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
-        }
+    public String toString() {
+        return super.toString();
     }
     
-    @Override
-    public void delete(){
-       try {
-            super.delete();
-        }catch (Exception e){
-            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
-        }  
- 
-    }
 }

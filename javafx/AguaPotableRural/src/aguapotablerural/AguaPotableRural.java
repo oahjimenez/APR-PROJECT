@@ -1,16 +1,18 @@
-/*
+                   /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package aguapotablerural;
 
-import aguapotablerural.database.SQLiteJDBCDriverConnection;
+import aguapotablerural.dao.contract.AdministradorRepository;
+import aguapotablerural.dao.contract.UsuarioRepository;
+import aguapotablerural.dao.impl.AdministradorRepositoryImpl;
+import aguapotablerural.dao.impl.UsuarioRepositoryImpl;
+import aguapotablerural.database.impl.SqliteDriverManager;
 import aguapotablerural.model.Administrador;
 import aguapotablerural.model.Medidor;
 import aguapotablerural.model.Usuario;
-import aguapotablerural.model.UsuarioManager;
-import java.sql.Date;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
@@ -98,37 +100,49 @@ public class AguaPotableRural extends Application {
             public void handle(ActionEvent e) {
                 actiontarget.setFill(Color.FIREBRICK);
                 actiontarget.setText(userTextField.getText() + " ha sido registrado con éxito.");
-                UsuarioManager usuarioManager = new UsuarioManager(new SQLiteJDBCDriverConnection());
-                Usuario andres = new Usuario(new SQLiteJDBCDriverConnection());
-                andres.setRut("25.773.171.9").setNombre("Oswaldo Andres").setDireccion("Av. San Martin, Santiago. Region Metropolitana 413, Dpto 306").setTelefono("961607765").setFechaRegistro(null);
-                andres.save();
                 
-                Usuario carlos = new Usuario(new SQLiteJDBCDriverConnection());
-                carlos.setRut("17.548.054-4").setNombre("Carlos Mardones").setDireccion("Nataniel Cox con Coquimbo 898, Samtiago Region Metropolitana").setTelefono("79373783").setFechaRegistro(null);
-                carlos.save();
+                UsuarioRepository usuarioRepo = new UsuarioRepositoryImpl(new SqliteDriverManager());
+                AdministradorRepository adminRepo = new AdministradorRepositoryImpl(new SqliteDriverManager());
+                
+                Usuario andres = new Usuario();
+                andres.setRut("25.773.171.9");
+                andres.setNombre("Oswaldo Andres");
+                andres.setDireccion("Av. San Martin, Santiago. Region Metropolitana 413, Dpto 306");
+                andres.setTelefono("961607765");
+                andres.setFechaRegistro(null);
+                usuarioRepo.save(andres);
+                
+                Usuario carlos = new Usuario();
+                carlos.setRut("17.548.054-4");
+                carlos.setNombre("Carlos Mardones");
+                carlos.setDireccion("Nataniel Cox con Coquimbo 898, Samtiago Region Metropolitana");
+                carlos.setTelefono("79373783");
+                carlos.setFechaRegistro(null);
+                usuarioRepo.save(carlos);
                // carlos.delete();
                
-               Administrador inputUser = new Administrador(new SQLiteJDBCDriverConnection()).setPassword(pwBox.getText());
-               inputUser.setRut("1-9").setNombre(userTextField.getText()).setDireccion(direccionTextField.getText()).setTelefono(telefonoTextField.getText());
-               inputUser.save();
-                System.out.println(usuarioManager.getAll());
+               Administrador inputUser = new Administrador();
+               inputUser.setPassword(pwBox.getText());
+               inputUser.setRut("1-9");
+               inputUser.setNombre(userTextField.getText());
+               inputUser.setDireccion(direccionTextField.getText());
+               inputUser.setTelefono(telefonoTextField.getText());
+               adminRepo.save(inputUser);
+               System.out.println(usuarioRepo.getAllUsuarios());
                 
                 
                 /*Pruebas implementacion medidor */
-                Medidor medidorCarlos = new Medidor(new SQLiteJDBCDriverConnection());
+                Medidor medidorCarlos = new Medidor();
                 medidorCarlos.setNombre("Medidor bacano del Carlos");
                 medidorCarlos.setId("123K");
                  System.out.println(medidorCarlos);
-                medidorCarlos.save();
-                medidorCarlos.delete();
                 
-                Medidor medidorAndres =new Medidor(new SQLiteJDBCDriverConnection());
+                Medidor medidorAndres =new Medidor();
                 medidorAndres.setNombre(userTextField.getText());
                 medidorAndres.setId("1856");
               //  medidorAndres.getId();
                 //medidorAndres.setFechaRetiro(new Date("01-02-2015"));
                 System.out.println(medidorAndres);
-                medidorAndres.save();
                //edidorAndres.delete();
                 
             }

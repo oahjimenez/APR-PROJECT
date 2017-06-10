@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package aguapotablerural.database;
+package aguapotablerural.database.impl;
 
+import aguapotablerural.database.contract.DBDriverManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  *
  * @author carlo
  */
-public class SQLiteJDBCDriverConnection {
+public class SqliteDriverManager implements DBDriverManager {
     
     private Connection connection;
      /**
@@ -61,7 +62,7 @@ public class SQLiteJDBCDriverConnection {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       SQLiteJDBCDriverConnection connection = new SQLiteJDBCDriverConnection();
+       SqliteDriverManager connection = new SqliteDriverManager();
        connection.getConnection();
     }
 }

@@ -5,7 +5,7 @@
  */
 package aguapotablerural.model;
 
-import aguapotablerural.database.SQLiteJDBCDriverConnection;
+import aguapotablerural.database.impl.SqliteDriverManager;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 
@@ -13,7 +13,7 @@ import java.sql.PreparedStatement;
  *
  * @author carlo
  */
-public class Usuario implements ModeloDominio {
+public class Usuario {
     
     private String rut;
     private String nombre;
@@ -21,28 +21,13 @@ public class Usuario implements ModeloDominio {
     private String telefono;
     private Date fechaRegistro;
     private Date fechaRetiro;
-    
-    private SQLiteJDBCDriverConnection dbconnection;
-
-    public Usuario(SQLiteJDBCDriverConnection dbconnection){
-        this.dbconnection = dbconnection;
-    }
-    
-    public Usuario(String rut, String nombre, String direccion, String telefono, SQLiteJDBCDriverConnection dbconnection) {
-        this.rut = rut;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.dbconnection = dbconnection;
-    }
 
     public String getRut() {
         return rut;
     }
 
-    public Usuario setRut(String rut) {
+    public void setRut(String rut) {
         this.rut = rut;
-        return this;
     }
     
 
@@ -50,27 +35,24 @@ public class Usuario implements ModeloDominio {
         return nombre;
     }
 
-    public Usuario setNombre(String nombre) {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
-        return this;
     }
 
     public String getDireccion() {
         return direccion;
     }
 
-    public Usuario setDireccion(String direccion) {
+    public void setDireccion(String direccion) {
         this.direccion = direccion;
-        return this;
     }
 
     public String getTelefono() {
         return telefono;
     }
 
-    public Usuario setTelefono(String telefono) {
+    public void setTelefono(String telefono) {
         this.telefono = telefono;
-        return this;
     }
 
     public Date getFechaRegistro() {
@@ -90,41 +72,10 @@ public class Usuario implements ModeloDominio {
         this.fechaRetiro = fechaRetiro;
         return this;
     }
-    
-    protected SQLiteJDBCDriverConnection getDbconnection() {
-        return this.dbconnection;
-    }
 
     @Override
     public String toString() {
         return "Usuario{" + "rut=" + rut + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
     }
     
-    @Override
-    public void save(){
-        try {
-            PreparedStatement statement = dbconnection.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,nombre,direccion,telefono,fecha_registro) " +
-                     "  VALUES (?, ? , ?, ? , CURRENT_DATE );");
-            statement.setString(1,this.rut);
-            statement.setString(2,this.nombre);
-            statement.setString(3,this.direccion);
-            statement.setString(4,this.telefono);
-            statement.executeUpdate();
-            statement.close();
-        }catch (Exception e){
-            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
-        }
-    }
-    
-    @Override
-    public void delete() {
-          try {
-            PreparedStatement statement = dbconnection.getConnection().prepareStatement("UPDATE USUARIO SET FECHA_FINIQUITO = CURRENT_DATE WHERE rut = ?;");
-            statement.setString(1,this.rut);
-            statement.executeUpdate();
-            statement.close();
-        }catch (Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-        }
-    }
 }

@@ -3,15 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package aguapotablerural.model;
+package aguapotablerural.database.contract;
+
+import java.sql.Connection;
 
 /**
  *
  * @author carlo
  */
-public interface ModeloDominio {
+public interface DBDriverManager {
     
-    public void save();
-    public void delete();
+    public Connection getConnection();
     
 }

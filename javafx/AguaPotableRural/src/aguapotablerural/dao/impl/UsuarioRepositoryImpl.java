@@ -8,6 +8,7 @@ package aguapotablerural.dao.impl;
 import aguapotablerural.dao.contract.UsuarioRepository;
 import aguapotablerural.database.contract.DBDriverManager;
 import aguapotablerural.database.impl.SqliteDriverManager;
+import aguapotablerural.model.Administrador;
 import aguapotablerural.model.Usuario;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -24,7 +25,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
 
     protected DBDriverManager driverManager;
 
-    public UsuarioRepositoryImpl(SqliteDriverManager driverManager) {
+    public UsuarioRepositoryImpl(DBDriverManager driverManager) {
         this.driverManager = driverManager;
     }
     
@@ -139,5 +140,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
         }
         return usuarios;
     }
+
     
 }

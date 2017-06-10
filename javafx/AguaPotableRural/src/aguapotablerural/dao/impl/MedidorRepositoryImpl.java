@@ -20,7 +20,7 @@ public class MedidorRepositoryImpl implements MedidorRepository {
 
      private DBDriverManager driverManager;
 
-    public MedidorRepositoryImpl(SqliteDriverManager driverManager) {
+    public MedidorRepositoryImpl(DBDriverManager driverManager) {
         this.driverManager = driverManager;
     }
     

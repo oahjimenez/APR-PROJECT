@@ -63,7 +63,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     }
 
     @Override
-    public Collection<Usuario> getHistoryOfUsuarios(Medidor medidor) {
+    public Collection<Usuario> getAllUsuarios(Medidor medidor) {
      Collection<Usuario> usuarios = new ArrayList();
         try {
             PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_RUT FROM TIENE_MEDIDOR WHERE MEDIDOR_ID = ?;");
@@ -85,7 +85,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
    }
 
     @Override
-    public Collection<Medidor> getHistoryOfMedidores(Usuario usuario) {
+    public Collection<Medidor> getAllMedidores(Usuario usuario) {
       Collection<Medidor> medidores = new ArrayList();
         try {
             PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_RUT = ?;");

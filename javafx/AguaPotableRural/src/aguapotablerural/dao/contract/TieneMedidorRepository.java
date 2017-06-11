@@ -18,8 +18,8 @@ public interface TieneMedidorRepository {
     
     public Usuario getActiveUsuario(Medidor medidor);
     public Medidor getActiveMedidor(Usuario usuario);
-    public Collection<Usuario> getHistoryOfUsuarios(Medidor medidor);
-    public Collection<Medidor> getHistoryOfMedidores(Usuario usuario);
+    public Collection<Usuario> getAllUsuarios(Medidor medidor);
+    public Collection<Medidor> getAllMedidores(Usuario usuario);
     
     public Usuario getMostRecentUsuario(Medidor medidor);
     public Medidor getMostRecentMedidor(Usuario usuario);

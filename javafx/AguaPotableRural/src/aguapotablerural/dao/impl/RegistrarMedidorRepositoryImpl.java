@@ -24,13 +24,13 @@ import java.util.Collection;
 public class RegistrarMedidorRepositoryImpl implements RegistraMedidorRepository {
 
     private AdministradorRepository administradorRepository;
-    private MedidorRepository medidorepository;
+    private MedidorRepository medidorRepository;
     private DBDriverManager driverManager;
 
     public RegistrarMedidorRepositoryImpl(DBDriverManager driverManager, AdministradorRepository administradorRepository,MedidorRepository medidorRepository) {
       this.driverManager = driverManager;
       this.administradorRepository = administradorRepository;
-      this.medidorepository = medidorepository;
+      this.medidorRepository = medidorRepository;
     }
     
     @Override
@@ -66,7 +66,7 @@ public class RegistrarMedidorRepositoryImpl implements RegistraMedidorRepository
             
             while (medidoresRs.next()) {
                 Medidor medidor;
-                if ((medidor = this.medidorepository.get(medidoresRs.getString("MEDIDOR_ID"))) != null) {
+                if ((medidor = this.medidorRepository.get(medidoresRs.getString("MEDIDOR_ID"))) != null) {
                     medidores.add(medidor);
                 }
             }

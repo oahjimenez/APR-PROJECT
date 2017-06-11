@@ -25,6 +25,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
 
     protected DBDriverManager driverManager;
 
+    public UsuarioRepositoryImpl() {}
+    
     public UsuarioRepositoryImpl(DBDriverManager driverManager) {
         this.driverManager = driverManager;
     }

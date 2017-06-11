@@ -11,12 +11,12 @@ import java.util.Collection;
  *
  * @author carlo
  */
-public interface UsuarioRepository<T extends Usuario> {
+public interface UsuarioRepository {
     
-    public T get(String rut);
-    public boolean save(T usuario);
-    public boolean delete(T usuario);
-    public Collection<T> getAllUsuarios();
-    public Collection<T> getActiveUsuarios();
+    public Usuario get(String rut);
+    public boolean save(Usuario usuario);
+    public boolean delete(Usuario usuario);
+    public Collection<Usuario> getAllUsuarios();
+    public Collection<Usuario> getActiveUsuarios();
     
 }

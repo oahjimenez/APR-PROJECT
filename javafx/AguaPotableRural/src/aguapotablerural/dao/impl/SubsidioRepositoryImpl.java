@@ -16,6 +16,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -57,7 +59,32 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
 
     @Override
     public Collection<Subsidio> getAllSubsidios(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       List<Subsidio> subsidios = new LinkedList();
+        try {
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT * FROM SUBSIDIO WHERE USUARIO_RUT = ?;");
+            statement.setString(1,usuario.getRut());
+            ResultSet subsidiosRs = statement.executeQuery();
+            
+            while (subsidiosRs.next()) {
+                String id = subsidiosRs.getString("ID");
+                String medidor_id = subsidiosRs.getString("MEDIDOR_ID");
+                Double porcentaje_subsidio = subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO");
+                Double tope = subsidiosRs.getDouble("TOPE");
+                Date fecha = subsidiosRs.getDate("FECHA");
+                Subsidio subsidio = new Subsidio();
+                subsidio.setId(id);
+                subsidio.setUsuario(usuario);
+                subsidio.setMedidor(this.medidorRepository.get(medidor_id));
+                subsidio.setPorcentaje(porcentaje_subsidio);
+                subsidio.setTope(tope);
+                subsidio.setFecha(fecha);
+                subsidios.add(subsidio);
+            }
+            statement.close();
+        }catch (Exception e){
+            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return subsidios;
     }
 
     @Override
@@ -77,7 +104,32 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
 
     @Override
     public Collection<Subsidio> getAllSubsidios(Medidor medidor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       List<Subsidio> subsidios = new LinkedList();
+        try {
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT * FROM SUBSIDIO WHERE MEDIDOR_ID = ?;");
+            statement.setString(1,medidor.getId());
+            ResultSet subsidiosRs = statement.executeQuery();
+            
+            while (subsidiosRs.next()) {
+                String id = subsidiosRs.getString("ID");
+                String usuario_rut = subsidiosRs.getString("USUARIO_RUT");
+                Double porcentaje_subsidio = subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO");
+                Double tope = subsidiosRs.getDouble("TOPE");
+                Date fecha = subsidiosRs.getDate("FECHA");
+                Subsidio subsidio = new Subsidio();
+                subsidio.setId(id);
+                subsidio.setUsuario(this.usuarioRepository.get(usuario_rut));
+                subsidio.setMedidor(medidor);
+                subsidio.setPorcentaje(porcentaje_subsidio);
+                subsidio.setTope(tope);
+                subsidio.setFecha(fecha);
+                subsidios.add(subsidio);
+            }
+            statement.close();
+        }catch (Exception e){
+            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return subsidios;  
     }
 
     @Override

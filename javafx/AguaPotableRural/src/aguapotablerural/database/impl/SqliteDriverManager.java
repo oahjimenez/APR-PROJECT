@@ -17,6 +17,9 @@ import java.sql.SQLException;
 public class SqliteDriverManager implements DBDriverManager {
     
     private Connection connection;
+    
+    public SqliteDriverManager() {}
+    
      /**
      * Connect to a sample database
      */

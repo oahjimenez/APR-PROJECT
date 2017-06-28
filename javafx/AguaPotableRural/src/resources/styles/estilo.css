@@ -1,0 +1,60 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15-06-2017, 10:28:33
+    Author     : Sebastián
+  2FEE7B  CBF73A*/
+/*color de fondo color ejemplo: #00aff0*/
+.background_app{
+    -fx-background-color: #40475c; 
+}
+
+/* cajas de texto */
+.text_app{
+    -fx-background-color: #e5e6e7;
+    -fx-text-fill: #000;
+    -fx-prompt-text-fill: #b1b3b5;
+    -fx-text-box-border: transparent;        
+    -fx-background-radius: 0;
+    -fx-padding: 8;
+    -fx-font-size:14px;
+}
+
+.text_app:focused {
+    -fx-text-fill: #000;
+    -fx-background-color: #fff;     
+}
+
+/*boton de inicio de sesion colo de ejemplo: #0c7daf*/
+.button_app{
+    -fx-background-color: #d1e0e0;
+    -fx-border-radius: 46;
+    -fx-background-radius: 46;
+    -fx-text-fill: #333333;    
+    -fx-alignment: CENTER;
+}
+
+/**etiqueta de inicio de sesion*/
+.textb_app{
+    -fx-text-fill: #fff;
+    -fx-font-size:16px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.5) , 0,0,0,1 );
+}
+
+/**etiqueta ¿no puede...*/
+.textnp_app{
+    -fx-text-fill: #fff;
+    -fx-font-size:12px;
+    -fx-font-weight: normal;    
+}
+
+/*etiqueta de error*/
+.texterr_app{
+    -fx-text-fill: #f8f008;
+    -fx-font-size:12px;
+    -fx-font-style:italic;    
+}

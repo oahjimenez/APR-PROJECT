@@ -7,7 +7,10 @@ package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import main.java.aguapotablerural.model.Usuario;
 
 /**
  * FXML Controller class
@@ -23,5 +26,4 @@ public class NewUsuarioController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
-    
 }

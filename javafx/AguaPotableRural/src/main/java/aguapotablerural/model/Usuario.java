@@ -8,6 +8,7 @@ package main.java.aguapotablerural.model;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -15,17 +16,14 @@ import javafx.beans.property.StringProperty;
  *
  * @author carlo
  */
-public class Usuario {
+public class Usuario implements Comparable{
     
     private final SimpleStringProperty rutColumnProperty;
     private final SimpleStringProperty nombreColumnProperty;
     private final SimpleStringProperty direccionColumnProperty;
     private final SimpleStringProperty telefonoColumnProperty;
     
-    private String rut;
-    private String nombre;
-    private String direccion;
-    private String telefono;
+    
     private Date fechaRegistro;
     private Date fechaRetiro;
 
@@ -33,7 +31,7 @@ public class Usuario {
         this(null,null,null,null);
     }
     
-    public Usuario(String rut,String nombre,String dreccion, String telefono) {
+    public Usuario(String rut,String nombre,String direccion, String telefono) {
         this.rutColumnProperty = new SimpleStringProperty(rut);
         this.nombreColumnProperty = new SimpleStringProperty(nombre);
         this.direccionColumnProperty  = new SimpleStringProperty(direccion);
@@ -49,7 +47,6 @@ public class Usuario {
     }
 
     public void setRut(String rut) {
-        this.rut = rut;
         this.rutColumnProperty.set(rut);
     }
     
@@ -63,7 +60,6 @@ public class Usuario {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
         this.nombreColumnProperty.set(nombre);
     }
 
@@ -76,7 +72,6 @@ public class Usuario {
     }
 
     public void setDireccion(String direccion) {
-        this.direccion = direccion;
         this.direccionColumnProperty.set(direccion);
     }
 
@@ -89,7 +84,6 @@ public class Usuario {
     }
 
     public void setTelefono(String telefono) {
-        this.telefono = telefono;
         this.telefonoColumnProperty.set(telefono);
     }
 
@@ -110,10 +104,37 @@ public class Usuario {
         this.fechaRetiro = fechaRetiro;
         return this;
     }
+    
+     @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Usuario)) {
+            return false;
+        }
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(this.getRut(),usuario.getRut());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getRut());
+    }
+    
+    @Override
+    public int compareTo(Object o) {
+        if(!(o instanceof Usuario)){
+            return -1;
+        }
+        if (this.getRut().equals(((Usuario)o).getRut())){
+           return 0; 
+        }
+        return -1;
+    }
+
 
     @Override
     public String toString() {
-        return "Usuario{" + "rut=" + rut + ", nombre=" + nombre + ", direccion=" + direccion + ", telefono=" + telefono + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
+        return "Usuario{" + "rut=" + this.getRut() + ", nombre=" + this.getNombre() + ", direccion=" + this.getDireccion() + ", telefono=" + this.getTelefono() + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
     }
     
 }

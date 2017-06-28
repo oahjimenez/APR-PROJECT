@@ -7,40 +7,60 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="616.0" prefWidth="779.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.UsuariosController">
-    <children>
-        <Button fx:id="button" layoutX="310.0" layoutY="540.0" onAction="#openNewUsuarioLayoutAction" text="Agregar Usuario" />
-        <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <Button fx:id="button1" layoutX="445.0" layoutY="540.0" onAction="#handleButtonAction" text="Editar Usuario" />
-      <Button fx:id="button2" layoutX="567.0" layoutY="540.0" onAction="#eliminaUsuarioAction" text="Quitar Usuario" />
-      <TabPane layoutX="104.0" layoutY="20.0" prefHeight="134.0" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Buscador">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="96.0" prefWidth="598.0">
-                     <children>
-                        <TextField layoutX="14.0" layoutY="19.0" prefHeight="31.0" prefWidth="572.0" />
-                        <Label layoutX="199.0" layoutY="53.0" prefHeight="31.0" prefWidth="399.0" text="Tipos de filtros individuales: Rut, Medidor, Nombre, Apellido" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Consultas Masivas">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
-      <TableView fx:id="tableViewUsuarios" layoutX="104.0" layoutY="154.0" prefHeight="357.0" prefWidth="598.0">
-        <columns>
-          <TableColumn fx:id="rutColumn" prefWidth="75.0" text="Rut" />
-          <TableColumn fx:id="nombreColumn" prefWidth="75.0" text="Nombre" />
-            <TableColumn fx:id="direccionColumn" prefWidth="75.0" text="Direccion" />
-            <TableColumn fx:id="telefonoColumn" prefWidth="75.0" text="Telefono" />
-        </columns>
-      </TableView>
-    </children>
-</AnchorPane>
+
+<VBox prefHeight="665.0" prefWidth="779.0" stylesheets="@styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="resources.UsuariosController">
+   <children>
+      <AnchorPane prefHeight="68.0" prefWidth="779.0" styleClass="background_app">
+         <children>
+            <ImageView fitHeight="41.0" fitWidth="228.0" layoutX="287.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/rpi2.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane id="AnchorPane" prefHeight="598.0" prefWidth="779.0">
+          <children>
+              <Button fx:id="button" layoutX="310.0" layoutY="540.0" onAction="#handleButtonAction" styleClass="button_app" text="Agregar Usuario" />
+              <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
+            <Button fx:id="button1" layoutX="445.0" layoutY="540.0" onAction="#handleButtonAction" styleClass="button_app" text="Editar Usuario" />
+            <Button fx:id="button2" layoutX="567.0" layoutY="540.0" onAction="#handleButtonAction" styleClass="button_app" text="Quitar Usuario" />
+            <TabPane layoutX="104.0" layoutY="20.0" prefHeight="103.0" prefWidth="598.0" styleClass="tab_pane" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Buscador">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="76.0" prefWidth="598.0" styleClass="tab-header-background">
+                           <children>
+                              <TextField layoutX="13.0" layoutY="22.0" prefHeight="31.0" prefWidth="572.0" promptText="Ingresar un rut, apellido, medidor." />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Consultas Masivas">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextField layoutX="13.0" layoutY="22.0" prefHeight="31.0" prefWidth="572.0" promptText="Calles, mayores consumos, usuarios impagos" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <TableView fx:id="tableViewUsuarios" layoutX="104.0" layoutY="137.0" prefHeight="357.0" prefWidth="598.0">
+              <columns>
+                <TableColumn fx:id="rutColumn" prefWidth="75.0" text="Rut" />
+                <TableColumn fx:id="nombreColumn" prefWidth="75.0" text="Nombre" />
+                  <TableColumn fx:id="direccionColumn" prefWidth="75.0" text="Direccion" />
+                  <TableColumn fx:id="telefonoColumn" prefWidth="75.0" text="Telefono" />
+              </columns>
+            </TableView>
+          </children>
+      </AnchorPane>
+   </children>
+</VBox>

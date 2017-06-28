@@ -4,13 +4,13 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>aguapotablerural.model.RetiraUsuario</class>
     <class>aguapotablerural.model.CargoFijoMensual</class>
-    <class>aguapotablerural.model.Medidor</class>
-    <class>aguapotablerural.model.Administrador</class>
     <class>aguapotablerural.model.TieneMedidor</class>
     <class>aguapotablerural.model.Usuario_1</class>
     <class>aguapotablerural.model.RegistraMedidor</class>
     <class>aguapotablerural.model.CostoMetroCubido</class>
     <class>aguapotablerural.model.RegistraUsuario</class>
+    <class>main.java.aguapotablerural.model.Medidor</class>
+    <class>main.java.aguapotablerural.model.Administrador</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:/Users/carlo/Desktop/gitrepo/APR-PROJECT/sqlite3/AGUA_POTABLE_RURAL.db"/>
       <property name="javax.persistence.jdbc.user" value=""/>

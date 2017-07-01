@@ -28,6 +28,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  *
@@ -135,7 +136,26 @@ public class UsuariosController implements Initializable {
     @FXML
     private void openNewUsuarioLayoutAction(ActionEvent event) {
          try {
-        Parent root1  = FXMLLoader.load(getClass().getClassLoader().getResource("main/resources/layouts/NewUsuario.fxml"));
+                //Parent root1  = FXMLLoader.load(getClass().getClassLoader().getResource("main/resources/layouts/AddUsuario.fxml"));
+
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("main/resources/layouts/AddUsuario.fxml"));
+                fxmlLoader.setControllerFactory(new Callback<Class<?>, Object>() {
+                    @Override
+                    public Object call(Class<?> controllerClass) {
+                        if (controllerClass == AddUsuarioController.class) {
+                            AddUsuarioController controller = new AddUsuarioController();
+                            controller.setUsuariosObservable(usuarios);
+                            controller.setUsuarioRepository(usuarioRepository);
+                            return controller;
+                        } 
+                        try {
+                            return controllerClass.newInstance();
+                        } catch (Exception exc) {
+                            throw new RuntimeException(exc);
+                        }
+                    }
+                });
+                Parent root1 = fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root1));  
                 stage.show();

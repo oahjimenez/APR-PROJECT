@@ -26,9 +26,9 @@
       </AnchorPane>
       <AnchorPane id="AnchorPane" prefHeight="598.0" prefWidth="779.0">
           <children>
-              <Button fx:id="button" layoutX="310.0" layoutY="540.0" onAction="#openNewUsuarioLayoutAction" styleClass="button_app" text="Agregar Usuario" />
+              <Button fx:id="button" layoutX="310.0" layoutY="540.0" onAction="#openAddUsuarioLayoutAction" styleClass="button_app" text="Agregar Usuario" />
               <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-            <Button fx:id="button1" layoutX="445.0" layoutY="540.0" onAction="#handleButtonAction" styleClass="button_app" text="Editar Usuario" />
+            <Button fx:id="button1" layoutX="445.0" layoutY="540.0" onAction="#openEditUsuarioLayoutAction" styleClass="button_app" text="Editar Usuario" />
             <Button fx:id="button2" layoutX="567.0" layoutY="540.0" onAction="#eliminaUsuarioAction" styleClass="button_app" text="Quitar Usuario" />
             <TabPane layoutX="104.0" layoutY="20.0" prefHeight="103.0" prefWidth="598.0" styleClass="tab_pane" tabClosingPolicy="UNAVAILABLE">
               <tabs>

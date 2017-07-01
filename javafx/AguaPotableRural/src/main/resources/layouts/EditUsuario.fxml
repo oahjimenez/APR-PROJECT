@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="485.0" prefWidth="600.0" stylesheets="@styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="resources.NewUsarioController">
+<VBox prefHeight="485.0" prefWidth="600.0" stylesheets="@styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.EditUsuarioController">
    <children>
       <AnchorPane prefHeight="68.0" prefWidth="779.0" styleClass="background_app">
          <children>
@@ -45,10 +45,10 @@
                   <Label text="Rut:" GridPane.rowIndex="2" />
                   <Label text="Dirección:" GridPane.rowIndex="3" />
                   <Label text="Teléfono:" GridPane.rowIndex="4" />
-                  <TextField prefHeight="27.0" prefWidth="284.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-                  <TextField styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                  <TextField prefHeight="25.0" prefWidth="299.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                  <TextField styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                  <TextField fx:id="nombreText" prefHeight="27.0" prefWidth="284.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                  <TextField fx:id="rutText" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                  <TextField fx:id="direccionText" prefHeight="25.0" prefWidth="299.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <TextField fx:id="telefonoText" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
                   <TextField prefWidth="278.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                   <Label text="Apellido:" GridPane.rowIndex="1" />
                   <Label text="Medidores:" GridPane.rowIndex="6" />
@@ -56,7 +56,7 @@
                   <Button mnemonicParsing="false" styleClass="button_app" text="Eliminar Medidor" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                </children>
             </GridPane>
-            <Button layoutX="385.0" layoutY="369.0" mnemonicParsing="false" styleClass="button_app" text="Guardar Usuario" />
+            <Button fx:id="editUsuarioButton" onAction="#editarUsuarioAction" layoutX="385.0" layoutY="369.0" mnemonicParsing="false" styleClass="button_app" text="Guardar Usuario" />
             <Button layoutX="210.0" layoutY="329.0" mnemonicParsing="false" styleClass="button_app" text="Agregar Nuevo Medidor" />
          </children>
       </AnchorPane>

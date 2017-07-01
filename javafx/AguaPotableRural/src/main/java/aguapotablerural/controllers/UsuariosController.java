@@ -12,7 +12,6 @@ import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Usuario;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -26,10 +25,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
 /**
  *
  * @author Sebastián
@@ -56,17 +53,13 @@ public class UsuariosController implements Initializable {
     
     private final UsuarioRepository usuarioRepository;
     
+    private Callback<Class<?>, Object> controllerFactory;
+    
     
     private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
     public UsuariosController() {
         DBDriverManager driverManager = new SqliteDriverManager();
         usuarioRepository = new UsuarioRepositoryImpl(driverManager);
-    }
-
-    
-    @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
     }
     
     @Override
@@ -115,6 +108,24 @@ public class UsuariosController implements Initializable {
 
         //Add filtered data to the table
         tableViewUsuarios.setItems(usuariosOrdenados);
+        
+        controllerFactory = new Callback<Class<?>, Object>() {
+                @Override
+                public Object call(Class<?> controllerClass) {
+                    if (controllerClass == AddUsuarioController.class) {
+                        return new AddUsuarioController(usuarios,usuarioRepository);
+                    } else if (controllerClass == EditUsuarioController.class) {
+                        return new EditUsuarioController(tableViewUsuarios.getSelectionModel().getSelectedItem(),usuarioRepository);
+                    } else {
+                        try {
+                            return controllerClass.newInstance();
+                        } catch (Exception exc) {
+                            System.err.println("Could not create controller for "+controllerClass.getName());
+                            throw new RuntimeException(exc);
+                        }
+                    }
+                }
+            };
        
     }
     
@@ -134,31 +145,29 @@ public class UsuariosController implements Initializable {
     }
     
     @FXML
-    private void openNewUsuarioLayoutAction(ActionEvent event) {
+    private void openAddUsuarioLayoutAction(ActionEvent event) {
          try {
-                //Parent root1  = FXMLLoader.load(getClass().getClassLoader().getResource("main/resources/layouts/AddUsuario.fxml"));
-
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("main/resources/layouts/AddUsuario.fxml"));
-                fxmlLoader.setControllerFactory(new Callback<Class<?>, Object>() {
-                    @Override
-                    public Object call(Class<?> controllerClass) {
-                        if (controllerClass == AddUsuarioController.class) {
-                            AddUsuarioController controller = new AddUsuarioController();
-                            controller.setUsuariosObservable(usuarios);
-                            controller.setUsuarioRepository(usuarioRepository);
-                            return controller;
-                        } 
-                        try {
-                            return controllerClass.newInstance();
-                        } catch (Exception exc) {
-                            throw new RuntimeException(exc);
-                        }
-                    }
-                });
-                Parent root1 = fxmlLoader.load();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root1));  
-                stage.show();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("main/resources/layouts/AddUsuario.fxml"));
+            fxmlLoader.setControllerFactory(controllerFactory);
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));  
+            stage.show();
+        } catch(Exception e) {
+           e.printStackTrace();
+        }
+    }
+    
+    
+    @FXML
+    private void openEditUsuarioLayoutAction(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("main/resources/layouts/EditUsuario.fxml"));
+            fxmlLoader.setControllerFactory(controllerFactory);
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));  
+            stage.show();
         } catch(Exception e) {
            e.printStackTrace();
         }

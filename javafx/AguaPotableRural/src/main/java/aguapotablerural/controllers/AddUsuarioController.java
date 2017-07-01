@@ -41,6 +41,11 @@ public class AddUsuarioController implements Initializable{
     
     private ObservableList<Usuario> usuarios;
     private UsuarioRepository usuarioRepository;
+    
+    public AddUsuarioController(ObservableList<Usuario> usuarios,UsuarioRepository usuarioRepository) {
+        this.usuarios = usuarios;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

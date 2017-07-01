@@ -12,6 +12,7 @@ import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Usuario;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -22,6 +23,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -50,6 +52,9 @@ public class UsuariosController implements Initializable {
     
     @FXML
     private TableColumn<Usuario,String> telefonoColumn;
+        
+    @FXML
+    public Button editUsuarioButton;
     
     private final UsuarioRepository usuarioRepository;
     
@@ -108,6 +113,8 @@ public class UsuariosController implements Initializable {
 
         //Add filtered data to the table
         tableViewUsuarios.setItems(usuariosOrdenados);
+        
+        editUsuarioButton.disableProperty().bind(Bindings.isEmpty(tableViewUsuarios.getSelectionModel().getSelectedItems()));
         
         controllerFactory = new Callback<Class<?>, Object>() {
                 @Override

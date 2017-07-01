@@ -55,6 +55,9 @@ public class EditUsuarioController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.rutText.setText(usuarioEditable.getRut());
+        usuarioEditable.getRutColumnProperty().addListener((obs, oldRut, newRut) -> this.rutText.setText(newRut));
+        
         this.nombreText.setText(usuarioEditable.getNombre());
         usuarioEditable.getNombreColumnProperty().addListener((obs, oldNombre, newNombre) -> this.nombreText.setText(newNombre));
         
@@ -63,9 +66,7 @@ public class EditUsuarioController implements Initializable {
 
         this.telefonoText.setText(usuarioEditable.getTelefono());
         usuarioEditable.getTelefonoColumnProperty().addListener((obs, oldTelefono, newTelefono) -> this.telefonoText.setText(newTelefono));
-
-        
-    }    
+    }
 
     public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;

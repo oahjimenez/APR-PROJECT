@@ -31,9 +31,9 @@ and open the template in the editor.
 /*boton de inicio de sesion colo de ejemplo: #0c7daf*/
 .button_app{
     -fx-background-color: #d1e0e0;
+    -fx-text-fill: #333333;
     -fx-border-radius: 46;
-    -fx-background-radius: 46;
-    -fx-text-fill: #333333;    
+    -fx-background-radius: 46;   
     -fx-alignment: CENTER;
 }
 
@@ -89,7 +89,7 @@ and open the template in the editor.
 
 
 .table-cell:hover {
-    -fx-background-color: #9900ff;
+    -fx-background-color: rgba(105, 145, 142, 0.42);
 }
 
 .table-row-cell:empty, .table-cell:empty:hover {
@@ -100,16 +100,16 @@ and open the template in the editor.
     -fx-border-width: 0px;
 }
 
-.table-view:row-selection .table-row-cell:filled:hover { 
-    -fx-background-color: rgba(28, 183, 236, 0.25);
+/*.table-view:row-selection .table-row-cell:filled:hover { 
+    -fx-background-color: rgba(228, 183, 236, 0.90);
 }
 
 .table-view:row-selection .table-row-cell:filled:selected:hover { 
     -fx-background-color: rgba(228, 183, 236, 0.90);
-}
+}*/
 
 .table-view:row-selection .table-row-cell:filled:selected { 
-    -fx-background-color: rgba(28, 183, 236, 0.65);
+    -fx-background-color: rgba(65, 72, 93, 0.6);
 }
 
 .table-view, .table-view:focused {

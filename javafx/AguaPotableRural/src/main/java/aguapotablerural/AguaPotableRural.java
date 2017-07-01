@@ -128,7 +128,7 @@ public class AguaPotableRural extends Application {
         //edidorAndres.delete();
         }
         });*/
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main/resources/layouts/FXMLUsuariosView.fxml"));    
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main/resources/layouts/UsuariosView.fxml"));    
         primaryStage.setTitle("Medidor de Agua Potable Rural");    
         Scene scene = new Scene(root);        
         primaryStage.setScene(scene);

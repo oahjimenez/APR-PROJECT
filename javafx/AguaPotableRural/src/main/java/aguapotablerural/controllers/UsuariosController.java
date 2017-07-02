@@ -74,12 +74,10 @@ public class UsuariosController implements Initializable {
        direccionColumn.setCellValueFactory(cellData -> cellData.getValue().getDireccionColumnProperty());
        telefonoColumn.setCellValueFactory(cellData -> cellData.getValue().getTelefonoColumnProperty());
        
-        
         usuarios.addAll(usuarioRepository.getActiveUsuarios());
         tableViewUsuarios.setItems(usuarios);
        // Wrap ObservableList in a FilteredList
-        FilteredList<Usuario> usuariosFiltrados = new FilteredList<>(usuarios, u -> true);
-        
+        FilteredList<Usuario> usuariosFiltrados = new FilteredList<>(usuarios,u -> true);
          //Set filter Predicate whenever the filter changes
         filtroText.textProperty().addListener((observable, oldValue, newValue) -> {
             usuariosFiltrados.setPredicate(usuario -> {
@@ -133,7 +131,6 @@ public class UsuariosController implements Initializable {
                     }
                 }
             };
-       
     }
     
     @FXML

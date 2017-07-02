@@ -9,21 +9,20 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="429.0" prefWidth="480.0" styleClass="background_app" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.login.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="429.0" prefWidth="480.0" styleClass="background_app" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.LoginController">
    <children>
-      <Button layoutX="218.0" layoutY="310.0" mnemonicParsing="false" styleClass="button_app" text="Ingresar" />
+      <Button fx:id="mainMenuButton" onAction="#openMainMenuLayoutAction" layoutX="218.0" layoutY="310.0" mnemonicParsing="false" styleClass="button_app" text="Ingresar" />
       <TextField layoutX="161.0" layoutY="206.0" promptText="Nombre de usuario" styleClass="text_app" />
       <PasswordField layoutX="161.0" layoutY="252.0" promptText="Contraseña" styleClass="text_app" />
       <Label layoutX="198.0" layoutY="168.0" styleClass="textb_app" text="Iniciar Sesión" />
       <Label layoutX="183.0" layoutY="348.0" styleClass="texterr_app" text="Los datos son incorrectos" />
       <ImageView fitHeight="119.0" fitWidth="286.0" layoutX="105.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@img/logocorp.png" />
+            <Image url="@../img/rpi1.png" />
          </image>
       </ImageView>
    </children>
    <stylesheets>
-      <URL value="@../resurces/estilo.css" />
-      <URL value="@styles/estilo.css" />
+      <URL value="@../styles/estilo.css" />
    </stylesheets>
 </AnchorPane>

@@ -8,9 +8,12 @@ package main.java.aguapotablerural.model;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.util.Collection;
 import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -22,7 +25,7 @@ public class Usuario implements Comparable{
     private final SimpleStringProperty nombreColumnProperty;
     private final SimpleStringProperty direccionColumnProperty;
     private final SimpleStringProperty telefonoColumnProperty;
-    
+    private final ObservableList<Medidor> medidores = FXCollections.observableArrayList();
     
     private Date fechaRegistro;
     private Date fechaRetiro;
@@ -103,6 +106,18 @@ public class Usuario implements Comparable{
     public Usuario setFechaRetiro(Date fechaRetiro) {
         this.fechaRetiro = fechaRetiro;
         return this;
+    }
+    
+    public ObservableList<Medidor> getMedidoresObservable() {
+        return this.medidores;
+    }
+    
+    public boolean addMedidor(Medidor medidor) {
+        return this.medidores.add(medidor);
+    }
+    
+    public boolean addMedidores(Collection<Medidor> medidores) {
+        return this.medidores.addAll(medidores);
     }
     
      @Override

@@ -135,5 +135,29 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
         }
         return medidor;
      }
+
+    @Override
+    public boolean save(Usuario usuario, Medidor medidor) {
+        try {
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO TIENE_MEDIDOR (USUARIO_RUT,MEDIDOR_ID,FECHA_ADQUISICION)  VALUES (?, ? , CURRENT_DATE );");
+            statement.setString(1,usuario.getRut());
+            statement.setString(2,medidor.getId());
+            int rowsAffected = statement.executeUpdate();
+            statement.close();
+            return rowsAffected>0;
+        }catch (Exception e){
+            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
+        }
+       return false;
+    }
+    
+    @Override
+    public boolean save(Usuario usuario,Collection<? extends Medidor> medidores) {
+        boolean allSaved = true;
+        for (Medidor medidor : medidores){
+            allSaved = allSaved && this.save(usuario, medidor);
+        }
+        return allSaved;
+    }
     
 }

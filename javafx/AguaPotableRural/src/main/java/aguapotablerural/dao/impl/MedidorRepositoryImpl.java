@@ -47,6 +47,15 @@ public class MedidorRepositoryImpl implements MedidorRepository {
     }
 
     @Override
+    public boolean saveAll(Collection<? extends Medidor> medidores) {
+        boolean allSaved = true;
+        for (Medidor medidor : medidores){
+            allSaved = allSaved && this.save(medidor);
+        }
+        return allSaved;
+    }
+    
+    @Override
     public boolean delete(Medidor medidor) {
         System.out.println("Eliminando medidor en base sqlite3");
         try {

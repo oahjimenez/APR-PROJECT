@@ -7,15 +7,20 @@ package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import main.java.aguapotablerural.dao.contract.MedidorRepository;
 import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 
 /**
@@ -37,14 +42,28 @@ public class AddUsuarioController implements Initializable{
     private TextField telefonoText;
     
     @FXML
-    public Button addUsuarioButton;
+    private TextField idMedidorText;
     
+    @FXML
+    private Button addUsuarioButton;
+    
+    @FXML
+    private Button addMedidorButton;
+    
+    @FXML
+    private GridPane gridUsuarioForm;
+    
+    
+    private ObservableList<Medidor> medidores = FXCollections.observableArrayList();
     private ObservableList<Usuario> usuarios;
-    private UsuarioRepository usuarioRepository;
     
-    public AddUsuarioController(ObservableList<Usuario> usuarios,UsuarioRepository usuarioRepository) {
+    private UsuarioRepository usuarioRepository;
+    private MedidorRepository medidorRepository;
+    
+    public AddUsuarioController(ObservableList<Usuario> usuarios,UsuarioRepository usuarioRepository,MedidorRepository medidorRepository) {
         this.usuarios = usuarios;
         this.usuarioRepository = usuarioRepository;
+        this.medidorRepository = medidorRepository;
     }
 
     @Override
@@ -68,11 +87,20 @@ public class AddUsuarioController implements Initializable{
         usuario.setNombre(nombreText.getText());
         usuario.setDireccion(direccionText.getText());
         usuario.setTelefono(telefonoText.getText());
+        usuario.addMedidores(medidores);
         
         boolean registradoConExito = usuarioRepository.save(usuario) && usuarios.add(usuario);
         Stage stage = (Stage) addUsuarioButton.getScene().getWindow();
         stage.close();
         return registradoConExito;
+    }
+    
+    @FXML
+    private boolean agregaMedidorAction(ActionEvent event) {
+        Medidor medidor = new Medidor();
+        medidor.setId(this.idMedidorText.getText());
+        gridUsuarioForm.getChildren().add(new Label(medidor.getId()));
+        return medidores.add(medidor);
     }
 
     public void setUsuariosObservable(ObservableList<Usuario> usuarios) {

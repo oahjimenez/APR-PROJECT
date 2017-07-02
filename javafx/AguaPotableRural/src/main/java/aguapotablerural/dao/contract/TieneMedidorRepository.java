@@ -24,4 +24,7 @@ public interface TieneMedidorRepository {
     public Usuario getMostRecentUsuario(Medidor medidor);
     public Medidor getMostRecentMedidor(Usuario usuario);
     
+    public boolean save(Usuario usuario,Medidor medidor);
+    public boolean save(Usuario usuario,Collection<? extends Medidor> medidores);
+    
 }

@@ -29,6 +29,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import main.java.aguapotablerural.dao.contract.MedidorRepository;
+import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
 /**
  *
  * @author Sebastián
@@ -58,6 +60,8 @@ public class UsuariosController implements Initializable {
     
     private final UsuarioRepository usuarioRepository;
     
+    private final MedidorRepository medidorRepository;
+    
     private Callback<Class<?>, Object> controllerFactory;
     
     
@@ -65,6 +69,7 @@ public class UsuariosController implements Initializable {
     public UsuariosController() {
         DBDriverManager driverManager = new SqliteDriverManager();
         usuarioRepository = new UsuarioRepositoryImpl(driverManager);
+        medidorRepository = new MedidorRepositoryImpl(driverManager);
     }
     
     @Override
@@ -118,7 +123,7 @@ public class UsuariosController implements Initializable {
                 @Override
                 public Object call(Class<?> controllerClass) {
                     if (controllerClass == AddUsuarioController.class) {
-                        return new AddUsuarioController(usuarios,usuarioRepository);
+                        return new AddUsuarioController(usuarios,usuarioRepository,medidorRepository);
                     } else if (controllerClass == EditUsuarioController.class) {
                         return new EditUsuarioController(tableViewUsuarios.getSelectionModel().getSelectedItem(),usuarioRepository);
                     } else {

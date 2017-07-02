@@ -16,6 +16,8 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import main.java.aguapotablerural.dao.contract.MedidorRepository;
+import main.java.aguapotablerural.dao.contract.TieneMedidorRepository;
 
 /**
  *
@@ -24,11 +26,16 @@ import java.util.List;
 public class UsuarioRepositoryImpl implements UsuarioRepository{
 
     protected DBDriverManager driverManager;
+    
+    private MedidorRepository medidorRepository;
+    private TieneMedidorRepository tieneMedidorRepository;
 
     public UsuarioRepositoryImpl() {}
     
     public UsuarioRepositoryImpl(DBDriverManager driverManager) {
         this.driverManager = driverManager;
+        this.medidorRepository = new MedidorRepositoryImpl(driverManager);
+        this.tieneMedidorRepository = new TieneMedidorRepositoryImpl(driverManager,this,this.medidorRepository);
     }
     
     @Override
@@ -69,7 +76,12 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             statement.setString(4,usuario.getTelefono());
             int rowsAffected = statement.executeUpdate();
             statement.close();
-            return rowsAffected>0;
+            
+            if (!(rowsAffected>0)){
+                return false;
+            }
+            return this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
+            this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
         }  

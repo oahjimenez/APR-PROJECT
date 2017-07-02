@@ -10,7 +10,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="415.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.AddUsuarioController">
    <children>
-      <GridPane layoutX="110.0" layoutY="96.0" prefHeight="210.0" prefWidth="386.0" vgap="20.0">
+      <GridPane fx:id="gridUsuarioForm" layoutX="110.0" layoutY="96.0" prefHeight="210.0" prefWidth="386.0" vgap="20.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="181.0" minWidth="10.0" prefWidth="92.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="164.0" />
@@ -38,11 +38,11 @@
            <TextField fx:id="filtroText" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
            <Label text="Apellido:" GridPane.rowIndex="1" />
            <Label text="Medidores:" GridPane.rowIndex="6" />
-           <Button mnemonicParsing="false" text="Agregar Medidor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-           <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Button fx:id="addMedidorButton" onAction="#agregaMedidorAction" mnemonicParsing="false" text="Agregar Medidor" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+           <TextField fx:id="idMedidorText" GridPane.columnIndex="1" GridPane.rowIndex="6" />
         </children>
       </GridPane>
       <Label layoutX="233.0" layoutY="29.0" prefHeight="36.0" prefWidth="140.0" text="Registro de Usuario" />
-      <Button fx:id="addUsuarioButton" layoutX="393.0" layoutY="370.0" mnemonicParsing="false" onAction="#registraUsuarioAction" text="Guardar Usuario" />
+      <Button fx:id="addUsuarioButton" onAction="#registraUsuarioAction" layoutX="393.0" layoutY="370.0" mnemonicParsing="false" text="Guardar Usuario" />
    </children>
 </AnchorPane>

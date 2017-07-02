@@ -19,6 +19,7 @@ public interface MedidorRepository {
     public boolean delete(Medidor medidor);
     public Collection<Medidor> getAll();
     public Collection<Medidor> getAllActive();
-    
+    public boolean saveAll(Collection<? extends Medidor> medidores);
+
     
 }

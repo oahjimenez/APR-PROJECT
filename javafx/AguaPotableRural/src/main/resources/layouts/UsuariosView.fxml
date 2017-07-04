@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox prefHeight="665.0" prefWidth="779.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.UsuariosController">
    <children>
       <AnchorPane prefHeight="68.0" prefWidth="779.0" styleClass="background_app">
@@ -55,9 +54,10 @@
             <TableView fx:id="tableViewUsuarios" layoutX="104.0" layoutY="137.0" prefHeight="357.0" prefWidth="598.0">
               <columns>
                 <TableColumn fx:id="rutColumn" prefWidth="75.0" text="Rut" />
-                <TableColumn fx:id="nombreColumn" prefWidth="75.0" text="Nombre" />
+                <TableColumn fx:id="nombresColumn" prefWidth="75.0" text="Nombres" />
+                  <TableColumn fx:id="apellidosColumn" prefWidth="75.0" text="Apellidos" />
                   <TableColumn fx:id="direccionColumn" prefWidth="75.0" text="Direccion" />
-                  <TableColumn fx:id="telefonoColumn" prefWidth="75.0" text="Telefono" />
+                  <TableColumn fx:id="telefonoColumn" minWidth="-1.0" prefWidth="75.0" text="Telefono" />
               </columns>
             </TableView>
           </children>

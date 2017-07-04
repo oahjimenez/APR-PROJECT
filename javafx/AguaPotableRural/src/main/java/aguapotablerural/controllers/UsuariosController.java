@@ -47,7 +47,11 @@ public class UsuariosController implements Initializable {
     private TableColumn<Usuario,String> rutColumn;
     
     @FXML
-    private TableColumn<Usuario,String> nombreColumn;
+    private TableColumn<Usuario,String> nombresColumn;
+    
+    
+    @FXML
+    private TableColumn<Usuario,String> apellidosColumn;
     
     @FXML
     private TableColumn<Usuario,String> direccionColumn;
@@ -74,10 +78,11 @@ public class UsuariosController implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       rutColumn.setCellValueFactory(cellData -> cellData.getValue().getRutColumnProperty());
-       nombreColumn.setCellValueFactory(cellData -> cellData.getValue().getNombreColumnProperty());
-       direccionColumn.setCellValueFactory(cellData -> cellData.getValue().getDireccionColumnProperty());
-       telefonoColumn.setCellValueFactory(cellData -> cellData.getValue().getTelefonoColumnProperty());
+       rutColumn.setCellValueFactory(cellData -> cellData.getValue().getRutProperty());
+       nombresColumn.setCellValueFactory(cellData -> cellData.getValue().getNombresProperty());
+       apellidosColumn.setCellValueFactory(cellData -> cellData.getValue().getApellidosProperty());
+       direccionColumn.setCellValueFactory(cellData -> cellData.getValue().getDireccionProperty());
+       telefonoColumn.setCellValueFactory(cellData -> cellData.getValue().getTelefonoProperty());
        
         usuarios.addAll(usuarioRepository.getActiveUsuarios());
         tableViewUsuarios.setItems(usuarios);
@@ -95,13 +100,13 @@ public class UsuariosController implements Initializable {
                 if (usuario.getRut().toLowerCase().contains(lowerCaseFilter)) {
                     return true; 
                 } 
-                if (usuario.getNombre().toLowerCase().contains(lowerCaseFilter)) {
+                if (usuario.getNombres().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; 
+                }
+                if (usuario.getApellidos().toLowerCase().contains(lowerCaseFilter)) {
                     return true; 
                 }
                 if (usuario.getDireccion().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; 
-                }
-                if (usuario.getTelefono().toLowerCase().contains(lowerCaseFilter)) {
                     return true; 
                 }
                 return false;

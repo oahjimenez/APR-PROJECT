@@ -26,7 +26,7 @@ public class Administrador extends Usuario {
     
     public void copyFromUsuario(Usuario usuario) {
         this.setRut(usuario.getRut());
-        this.setNombre(usuario.getNombre());
+        this.setNombres(usuario.getNombres());
         this.setDireccion(usuario.getDireccion());
         this.setTelefono(usuario.getTelefono());
         this.setFechaRegistro(usuario.getFechaRegistro());

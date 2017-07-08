@@ -54,7 +54,7 @@ public class Medidor {
 
     @Override
     public String toString() {
-        return "Medidor{" + "id=" + id + ", nombre=" + nombre + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
+        return String.format("Medidor %s",this.id);
     }
   
 }

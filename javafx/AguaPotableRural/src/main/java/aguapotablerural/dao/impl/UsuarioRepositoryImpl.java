@@ -47,14 +47,16 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             statement.setString(1,rut);
             ResultSet usuarioRs = statement.executeQuery();
 
-            String nombre = usuarioRs.getString("nombre");
+            String nombres = usuarioRs.getString("nombres");
+            String apellidos = usuarioRs.getString("apellidos");
             String direccion = usuarioRs.getString("direccion");
             String telefono = usuarioRs.getString("telefono");
             Date fechaRegistro = usuarioRs.getDate("fecha_registro");
             Date fechaRetiro = usuarioRs.getDate("fecha_retiro");
             usuario = new Usuario();
             usuario.setRut(rut);
-            usuario.setNombre(nombre);
+            usuario.setNombres(nombres);
+            usuario.setApellidos(apellidos);
             usuario.setDireccion(direccion);
             usuario.setTelefono(telefono);
             usuario.setFechaRegistro(fechaRegistro);
@@ -69,11 +71,12 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
     @Override
     public boolean save(Usuario usuario) {
       try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,nombre,direccion,telefono,fecha_registro) VALUES (?, ? , ?, ? , CURRENT_DATE );");
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,nombres,apellidos,direccion,telefono,fecha_registro) VALUES (?, ? , ?, ?, ? , CURRENT_DATE );");
             statement.setString(1,usuario.getRut());
-            statement.setString(2,usuario.getNombre());
-            statement.setString(3,usuario.getDireccion());
-            statement.setString(4,usuario.getTelefono());
+            statement.setString(2,usuario.getNombres());
+            statement.setString(3,usuario.getApellidos());
+            statement.setString(4,usuario.getDireccion());
+            statement.setString(5,usuario.getTelefono());
             int rowsAffected = statement.executeUpdate();
             statement.close();
             
@@ -112,12 +115,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             
             while (usuariosRs.next()) {
                 String rut = usuariosRs.getString("rut");
-                String nombre = usuariosRs.getString("nombre");
+                String nombre = usuariosRs.getString("nombres");
+                String apellidos = usuariosRs.getString("apellidos");
                 String direccion = usuariosRs.getString("direccion");
                 String telefono = usuariosRs.getString("telefono");
                 Usuario usuario = new Usuario();
                 usuario.setRut(rut);
-                usuario.setNombre(nombre);
+                usuario.setNombres(nombre);
+                usuario.setApellidos(apellidos);
                 usuario.setDireccion(direccion);
                 usuario.setTelefono(telefono);
                 usuarios.add(usuario);
@@ -138,12 +143,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             
             while (usuariosRs.next()) {
                 String rut = usuariosRs.getString("rut");
-                String nombre = usuariosRs.getString("nombre");
+                String nombre = usuariosRs.getString("nombres");
+                String apellidos = usuariosRs.getString("apellidos");
                 String direccion = usuariosRs.getString("direccion");
                 String telefono = usuariosRs.getString("telefono");
                 Usuario usuario = new Usuario();
                 usuario.setRut(rut);
-                usuario.setNombre(nombre);
+                usuario.setNombres(nombre);
+                usuario.setApellidos(apellidos);
                 usuario.setDireccion(direccion);
                 usuario.setTelefono(telefono);
                 usuarios.add(usuario);

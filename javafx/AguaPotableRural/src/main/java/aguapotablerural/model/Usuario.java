@@ -21,73 +21,87 @@ import javafx.collections.ObservableList;
  */
 public class Usuario implements Comparable{
     
-    private final SimpleStringProperty rutColumnProperty;
-    private final SimpleStringProperty nombreColumnProperty;
-    private final SimpleStringProperty direccionColumnProperty;
-    private final SimpleStringProperty telefonoColumnProperty;
+    private final SimpleStringProperty rutProperty;
+    private final SimpleStringProperty nombresProperty;
+    private final SimpleStringProperty apellidosProperty;
+    private final SimpleStringProperty direccionProperty;
+    private final SimpleStringProperty telefonoProperty;
     private final ObservableList<Medidor> medidores = FXCollections.observableArrayList();
     
     private Date fechaRegistro;
     private Date fechaRetiro;
 
     public Usuario () {
-        this(null,null,null,null);
+        this(null,null,null,null,null);
     }
     
-    public Usuario(String rut,String nombre,String direccion, String telefono) {
-        this.rutColumnProperty = new SimpleStringProperty(rut);
-        this.nombreColumnProperty = new SimpleStringProperty(nombre);
-        this.direccionColumnProperty  = new SimpleStringProperty(direccion);
-        this.telefonoColumnProperty = new SimpleStringProperty(telefono);
+    public Usuario(String rut,String nombres,String apellidos,String direccion, String telefono) {
+        this.rutProperty = new SimpleStringProperty(rut);
+        this.nombresProperty = new SimpleStringProperty(nombres);
+        this.apellidosProperty = new SimpleStringProperty(apellidos);
+        this.direccionProperty  = new SimpleStringProperty(direccion);
+        this.telefonoProperty = new SimpleStringProperty(telefono);
     }
     
     public String getRut() {
-        return this.rutColumnProperty.get();
+        return this.rutProperty.get();
     }
     
-    public StringProperty getRutColumnProperty() {
-        return this.rutColumnProperty;
+    public StringProperty getRutProperty() {
+        return this.rutProperty;
     }
 
     public void setRut(String rut) {
-        this.rutColumnProperty.set(rut);
+        this.rutProperty.set(rut);
     }
     
 
-    public String getNombre() {
-        return this.nombreColumnProperty.get();
+    public String getNombres() {
+        return this.nombresProperty.get();
     }
     
-    public StringProperty getNombreColumnProperty() {
-        return this.nombreColumnProperty;
+    public StringProperty getNombresProperty() {
+        return this.nombresProperty;
     }
 
-    public void setNombre(String nombre) {
-        this.nombreColumnProperty.set(nombre);
+    public void setNombres(String nombres) {
+        this.nombresProperty.set(nombres);
+    }
+    
+    public String getApellidos(){
+        return this.apellidosProperty.get();
+    }
+    
+    public void setApellidos(String apellidos){
+        this.apellidosProperty.set(apellidos);
+    }
+    
+    public StringProperty getApellidosProperty() {
+        return this.apellidosProperty;
     }
 
     public String getDireccion() {
-        return this.direccionColumnProperty.get();
+        return this.direccionProperty.get();
     }
     
-    public StringProperty getDireccionColumnProperty() {
-        return this.direccionColumnProperty;
+    public StringProperty getDireccionProperty() {
+        return this.direccionProperty;
     }
 
     public void setDireccion(String direccion) {
-        this.direccionColumnProperty.set(direccion);
+        this.direccionProperty.set(direccion);
     }
 
     public String getTelefono() {
-        return this.telefonoColumnProperty.get();
+        return this.telefonoProperty.get();
     }
     
-    public StringProperty getTelefonoColumnProperty() {
-        return this.telefonoColumnProperty;
+    public StringProperty getTelefonoProperty() {
+        return this.telefonoProperty;
     }
 
     public void setTelefono(String telefono) {
-        this.telefonoColumnProperty.set(telefono);
+        this.telefonoProperty.set(telefono);
     }
 
     public Date getFechaRegistro() {
@@ -149,7 +163,7 @@ public class Usuario implements Comparable{
 
     @Override
     public String toString() {
-        return "Usuario{" + "rut=" + this.getRut() + ", nombre=" + this.getNombre() + ", direccion=" + this.getDireccion() + ", telefono=" + this.getTelefono() + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
+        return "Usuario{" + "rut=" + this.getRut() + ", nombre=" + this.getNombres() + ", direccion=" + this.getDireccion() + ", telefono=" + this.getTelefono() + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
     }
     
 }

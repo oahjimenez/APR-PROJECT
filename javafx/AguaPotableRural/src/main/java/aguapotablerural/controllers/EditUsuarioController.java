@@ -7,15 +7,18 @@ package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 
 /**
@@ -24,18 +27,27 @@ import main.java.aguapotablerural.model.Usuario;
  * @author Sebastián
  */
 public class EditUsuarioController implements Initializable {
+    
+    @FXML
+    private ListView<Medidor> listViewMedidores;
 
     @FXML
     private TextField rutText;
     
     @FXML
-    private TextField nombreText;
+    private TextField nombresText;
+    
+    @FXML
+    private TextField apellidosText;
     
     @FXML
     private TextField direccionText;
     
     @FXML
     private TextField telefonoText;
+    
+    @FXML
+    private TextField idMedidorText;
     
     private TableView<Usuario> tableViewUsuarios;
     
@@ -56,16 +68,21 @@ public class EditUsuarioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.rutText.setText(usuarioEditable.getRut());
-        usuarioEditable.getRutColumnProperty().addListener((obs, oldRut, newRut) -> this.rutText.setText(newRut));
+        usuarioEditable.getRutProperty().addListener((obs, oldRut, newRut) -> this.rutText.setText(newRut));
         
-        this.nombreText.setText(usuarioEditable.getNombre());
-        usuarioEditable.getNombreColumnProperty().addListener((obs, oldNombre, newNombre) -> this.nombreText.setText(newNombre));
+        this.nombresText.setText(usuarioEditable.getNombres());
+        usuarioEditable.getNombresProperty().addListener((obs, oldNombre, newNombre) -> this.nombresText.setText(newNombre));
+        
+        this.apellidosText.setText(usuarioEditable.getApellidos());
+        usuarioEditable.getApellidosProperty().addListener((obs, oldApellidos, newApellidos) -> this.apellidosText.setText(newApellidos));
         
         this.direccionText.setText(usuarioEditable.getDireccion());
-        usuarioEditable.getDireccionColumnProperty().addListener((obs, oldDireccion, newDireccion) -> this.direccionText.setText(newDireccion));
+        usuarioEditable.getDireccionProperty().addListener((obs, oldDireccion, newDireccion) -> this.direccionText.setText(newDireccion));
 
         this.telefonoText.setText(usuarioEditable.getTelefono());
-        usuarioEditable.getTelefonoColumnProperty().addListener((obs, oldTelefono, newTelefono) -> this.telefonoText.setText(newTelefono));
+        usuarioEditable.getTelefonoProperty().addListener((obs, oldTelefono, newTelefono) -> this.telefonoText.setText(newTelefono));
+    
+        this.listViewMedidores.setItems(this.usuarioEditable.getMedidoresObservable());
     }
 
     public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
@@ -77,8 +94,17 @@ public class EditUsuarioController implements Initializable {
     }
     
     @FXML
+    private boolean agregaMedidorAction(ActionEvent event) {
+        Medidor medidor = new Medidor();
+        medidor.setId(this.idMedidorText.getText());
+        return this.usuarioEditable.getMedidoresObservable().add(medidor);
+    }
+
+    
+    @FXML
     public void editarUsuarioAction(ActionEvent event){
-        this.usuarioEditable.setNombre(nombreText.getText());
+        this.usuarioEditable.setNombres(nombresText.getText());
+        this.usuarioEditable.setApellidos(apellidosText.getText());
         this.usuarioEditable.setDireccion(direccionText.getText());
         this.usuarioEditable.setTelefono(telefonoText.getText());
         this.usuarioRepository.save(usuarioEditable);

@@ -9,12 +9,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -30,10 +30,15 @@ import main.java.aguapotablerural.model.Usuario;
 public class AddUsuarioController implements Initializable{
     
     @FXML
+    private ListView<Medidor> listViewMedidores;
+    
+    @FXML
     private TextField rutText;
     
     @FXML
-    private TextField nombreText;
+    private TextField nombresText;
+    @FXML
+    private TextField apellidosText;
     
     @FXML
     private TextField direccionText;
@@ -68,7 +73,7 @@ public class AddUsuarioController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //To change body of generated methods, choose Tools | Templates.
+        this.listViewMedidores.setItems(medidores);
     }
     @FXML
     private boolean registraUsuarioAction(ActionEvent event) {
@@ -77,14 +82,15 @@ public class AddUsuarioController implements Initializable{
             System.err.println("No se registró usuario pues campo Rut está vacío");
             return false;
         }
-         if (this.nombreText==null || this.nombreText.getText().isEmpty()) {
+         if (this.nombresText==null || this.nombresText.getText().isEmpty()) {
             System.err.println("No se registró usuario pues campo Nombre está vacío");
             return false;
         }
         
         Usuario usuario = new Usuario();
         usuario.setRut(rutText.getText());
-        usuario.setNombre(nombreText.getText());
+        usuario.setNombres(nombresText.getText());
+        usuario.setApellidos(apellidosText.getText());
         usuario.setDireccion(direccionText.getText());
         usuario.setTelefono(telefonoText.getText());
         usuario.addMedidores(medidores);
@@ -99,7 +105,6 @@ public class AddUsuarioController implements Initializable{
     private boolean agregaMedidorAction(ActionEvent event) {
         Medidor medidor = new Medidor();
         medidor.setId(this.idMedidorText.getText());
-        gridUsuarioForm.getChildren().add(new Label(medidor.getId()));
         return medidores.add(medidor);
     }
 

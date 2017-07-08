@@ -85,7 +85,9 @@ public class UsuariosController implements Initializable {
        telefonoColumn.setCellValueFactory(cellData -> cellData.getValue().getTelefonoProperty());
        
         usuarios.addAll(usuarioRepository.getActiveUsuarios());
+        tableViewUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableViewUsuarios.setItems(usuarios);
+        
        // Wrap ObservableList in a FilteredList
         FilteredList<Usuario> usuariosFiltrados = new FilteredList<>(usuarios,u -> true);
          //Set filter Predicate whenever the filter changes

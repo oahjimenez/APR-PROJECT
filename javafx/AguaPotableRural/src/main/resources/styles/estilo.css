@@ -35,6 +35,7 @@ and open the template in the editor.
     -fx-border-radius: 46;
     -fx-background-radius: 46;   
     -fx-alignment: CENTER;
+    -fx-cursor: hand;
 }
 
 /**etiqueta de inicio de sesion*/
@@ -63,7 +64,8 @@ and open the template in the editor.
 .texterr_app2{
     -fx-text-fill: #ff471a;
     -fx-font-size:12px;
-    -fx-font-style:italic;    
+    -fx-font-style:italic;
+    visibility:hidden;
 }
 
 .tab-header-area .tab-header-background {

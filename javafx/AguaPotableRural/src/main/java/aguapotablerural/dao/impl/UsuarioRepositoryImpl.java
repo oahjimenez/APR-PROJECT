@@ -153,6 +153,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
                 usuario.setApellidos(apellidos);
                 usuario.setDireccion(direccion);
                 usuario.setTelefono(telefono);
+                usuario.addMedidores(this.tieneMedidorRepository.getAllMedidores(usuario));
                 usuarios.add(usuario);
             }
             statement.close();

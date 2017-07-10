@@ -12,22 +12,19 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.function.UnaryOperator;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import main.java.aguapotablerural.dao.contract.UsuarioRepository;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
+import main.java.aguapotablerural.model.validator.MedidorValidator;
+import main.java.aguapotablerural.model.validator.UsuarioValidator;
 import main.java.aguapotablerural.ui.LimitedTextField;
 
 /**
@@ -76,12 +73,6 @@ public class EditUsuarioController implements Initializable {
     private Usuario usuarioEditable;
     private UsuarioRepository usuarioRepository;
 
-    private static final int RUT_MAXCHAR = 12;
-    private static final int NOMBRES_MAXCHAR = 40;
-    private static final int APELLIDOS_MAXCHAR = 40;
-    private static final int DIRECCION_MAXCHAR = 50;
-    private static final int TELEFONO_MAXCHAR = 8;
-
     private DecimalFormat formatter;
 
     public EditUsuarioController(Usuario usuarioEditable,UsuarioRepository usuarioRepository) {
@@ -104,64 +95,56 @@ public class EditUsuarioController implements Initializable {
         return formatter.format(new BigInteger(rut));
     }
     
-    private void validateAndSetRutText(String rut) {
-        rut = rut.replace(".","").replace("-","");
-        this.rutLabel.setVisible(!rut.matches("[0-9]*[kK]?"));
-        rutText.setText(this.formatRut(rut));
-    }
-    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.rutText.setMaxLength(RUT_MAXCHAR);
-        this.nombresText.setMaxLength(NOMBRES_MAXCHAR);
-        this.apellidosText.setMaxLength(APELLIDOS_MAXCHAR);
-        this.direccionText.setMaxLength(DIRECCION_MAXCHAR);
-        this.telefonoText.setMaxLength(TELEFONO_MAXCHAR);
+        this.rutText.setMaxLength(UsuarioValidator.RUT_MAXCHAR);
+        this.nombresText.setMaxLength(UsuarioValidator.NOMBRES_MAXCHAR);
+        this.apellidosText.setMaxLength(UsuarioValidator.APELLIDOS_MAXCHAR);
+        this.direccionText.setMaxLength(UsuarioValidator.DIRECCION_MAXCHAR);
+        this.telefonoText.setMaxLength(UsuarioValidator.TELEFONO_MAXCHAR);
 
         this.rutText.setText(usuarioEditable.getRut());
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
             try {
-                this.validateAndSetRutText(this.rutText.getText());
+                String rut = this.rutText.getText().replace(".","").replace("-","");
+                this.rutLabel.setVisible(!UsuarioValidator.isValidRut(rut));
+                rutText.setText(this.formatRut(rut));
             } catch (NumberFormatException e) {
                 this.rutLabel.setVisible(true);
             }
         });
         this.nombresText.setText(usuarioEditable.getNombres().toUpperCase());
         this.nombresText.textProperty().addListener((obs, oldNombre, newNombre) -> { 
-                this.nombreLabel.setVisible(newNombre.isEmpty());
+                this.nombreLabel.setVisible(!UsuarioValidator.isValidNombres(newNombre));
                 this.nombresText.setText(newNombre.toUpperCase().replaceAll(" +", " "));
         });
         
         this.apellidosText.setText(usuarioEditable.getApellidos().toUpperCase());
         this.apellidosText.textProperty().addListener((obs, oldApellidos, newApellidos) -> {
-            this.apellidosLabel.setVisible(newApellidos.isEmpty());
+            this.apellidosLabel.setVisible(!UsuarioValidator.isValidApellidos(newApellidos));
             this.apellidosText.setText(newApellidos.toUpperCase().replaceAll(" +", " "));
         });
         
         this.direccionText.setText(usuarioEditable.getDireccion().toUpperCase());
         this.direccionText.textProperty().addListener((obs, oldDireccion, newDireccion) -> {
-            this.direccionLabel.setVisible(newDireccion.isEmpty());
+            this.direccionLabel.setVisible(!UsuarioValidator.isValidDireccion(newDireccion));
             this.direccionText.setText(newDireccion.toUpperCase().replaceAll(" +", " "));
         });
 
         this.telefonoText.setText(usuarioEditable.getTelefono());
         this.telefonoText.textProperty().addListener((obs, oldTelefono, newTelefono) -> {
-            this.telefonoLabel.setVisible(newTelefono.isEmpty() || (newTelefono.length() != TELEFONO_MAXCHAR) || !newTelefono.matches("[0-9]*"));
+            this.telefonoLabel.setVisible(!UsuarioValidator.isValidTelefono(newTelefono));
             this.telefonoText.setText(newTelefono);
         });
         
         this.idMedidorText.textProperty().addListener((obs, oldTelefono, newIdMedidor) -> {
-            this.medidorLabel.setVisible(!isValidIdMedidor(newIdMedidor));
+            this.medidorLabel.setVisible(!MedidorValidator.isValidId(newIdMedidor));
             this.idMedidorText.setText(newIdMedidor);
         });
         this.listViewMedidores.setItems(this.usuarioEditable.getMedidoresObservable());
-    }
-    
-    private boolean isValidIdMedidor(String id) {
-        return !id.isEmpty() && id.matches("[0-9]+");
     }
 
     public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
@@ -174,10 +157,11 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     private boolean agregaMedidorAction(ActionEvent event) {
-        this.medidorLabel.setVisible(!isValidIdMedidor(this.idMedidorText.getText()));
+        boolean idMedidorValido = MedidorValidator.isValidId(this.idMedidorText.getText());
+        this.medidorLabel.setVisible(!idMedidorValido);
         Medidor medidor = new Medidor();
         medidor.setId(this.idMedidorText.getText());
-        if (this.isValidIdMedidor(this.idMedidorText.getText()) && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
+        if (idMedidorValido && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
             return this.usuarioEditable.getMedidoresObservable().add(medidor);
         }
         return false;
@@ -188,7 +172,6 @@ public class EditUsuarioController implements Initializable {
         Medidor medidor = this.listViewMedidores.getSelectionModel().getSelectedItem();
         return this.usuarioEditable.getMedidoresObservable().remove(medidor);
     }
-
     
     @FXML
     public void editarUsuarioAction(ActionEvent event){

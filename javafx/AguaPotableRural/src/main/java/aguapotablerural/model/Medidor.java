@@ -5,9 +5,7 @@
  */
 package main.java.aguapotablerural.model;
 
-import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.util.Objects;
 
 /**

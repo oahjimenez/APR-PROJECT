@@ -34,24 +34,25 @@ public class LimitedTextField extends TextField {
 
     @Override
     public void replaceText(int start, int end, String insertedText) {
-        if (this.getMaxLength() <= 0) {
-            // Default behavior, in case of no max length
-            super.replaceText(start, end, insertedText);
-            return;
-        }
-        // Get the text in the textfield, before the user enters something
-        String currentText = this.getText() == null ? "" : this.getText();
+        try {
+            if (this.getMaxLength() <= 0) {
+                // Default behavior, in case of no max length
+                super.replaceText(start, end, insertedText);
+                return;
+            }
+            // Get the text in the textfield, before the user enters something
+            String currentText = this.getText() == null ? "" : this.getText();
 
-        // Compute the text that should normally be in the textfield now
-        String finalText = currentText.substring(0, start) + insertedText + currentText.substring(end);
+            // Compute the text that should normally be in the textfield now
+            String finalText = currentText.substring(0, start) + insertedText + currentText.substring(end);
 
-        // If the max length is not excedeed
-        int numberOfexceedingCharacters = finalText.length() - this.getMaxLength();
-        if (numberOfexceedingCharacters <= 0) {
-            // Normal behavior
-            super.replaceText(start, end, insertedText);
-        }
-        else {
+            // If the max length is not excedeed
+            int numberOfexceedingCharacters = finalText.length() - this.getMaxLength();
+            if (numberOfexceedingCharacters <= 0) {
+                // Normal behavior
+                super.replaceText(start, end, insertedText);
+                return;
+            }
             // Otherwise, cut the the text that was going to be inserted
             String cutInsertedText = insertedText.substring(
                     0, 
@@ -60,6 +61,8 @@ public class LimitedTextField extends TextField {
 
             // And replace this text
             super.replaceText(start, end, cutInsertedText);
+        } catch (java.lang.IllegalArgumentException e) {
+            System.err.println(String.format("%s - replaceText(): Error de control UI %s - %s",this.getClass().getName(),e.getClass().getName(),e.getMessage()));
         }
     }
 }

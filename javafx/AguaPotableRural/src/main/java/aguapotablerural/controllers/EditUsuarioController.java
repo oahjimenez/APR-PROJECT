@@ -175,6 +175,10 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     public void editarUsuarioAction(ActionEvent event){
+        if (!UsuarioValidator.isValid(this.usuarioEditable)) {
+            System.err.println(String.format("%s - editarUsuarioAction(): fallo edicion de usuario. Datos invalidos %s.",this.getClass().getSimpleName(),this.usuarioEditable));
+            return;
+        }
         this.usuarioEditable.setNombres(nombresText.getText());
         this.usuarioEditable.setApellidos(apellidosText.getText());
         this.usuarioEditable.setDireccion(direccionText.getText());

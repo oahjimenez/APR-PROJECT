@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="541.0" prefWidth="600.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.AddLecturaController">
+   <children>
+      <AnchorPane id="AnchorPane" prefHeight="99.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="231.0" layoutY="27.0" styleClass="textb2_app" text="Sebastian Barahona" />
+            <Label layoutX="70.0" layoutY="57.0" styleClass="textb3_app" text="Guayacán L01, Valle de Tango. Rut: 18.056.807-7. Teléfono: 982028141" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="108.0" prefWidth="600.0">
+         <children>
+            <GridPane hgap="5.0" layoutX="109.0" layoutY="13.0" prefHeight="40.0" prefWidth="419.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="121.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="84.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="140.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="69.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Medidor ID: 2882" />
+                  <MenuButton mnemonicParsing="false" styleClass="button_app" text="Mes" GridPane.columnIndex="1">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <TextField prefHeight="25.0" prefWidth="175.0" promptText="Lectura" GridPane.columnIndex="2" />
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" styleClass="button_app" text="Guardar" GridPane.columnIndex="3">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="334.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="82.0" layoutY="6.0" text="Últimas Lecturas" />
+            <TableView layoutX="82.0" layoutY="38.0" prefHeight="196.0" prefWidth="448.0">
+              <columns>
+                <TableColumn prefWidth="93.0" text="Mes" />
+                <TableColumn minWidth="0.0" prefWidth="237.0" text="Medidor">
+                     <columns>
+                        <TableColumn prefWidth="75.0" text="Lectura" />
+                        <TableColumn prefWidth="75.0" text="A pagar" />
+                     </columns>
+                  </TableColumn>
+              </columns>
+            </TableView>
+            <Button layoutX="486.0" layoutY="267.0" mnemonicParsing="false" styleClass="button_app" text="Terminar" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

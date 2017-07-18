@@ -22,11 +22,15 @@ public class UsuarioValidator {
     public static final int APELLIDOS_MAXCHAR = 40;
     public static final int DIRECCION_MAXCHAR = 50;
     public static final int TELEFONO_MAXCHAR = 8;
-    
+
     public static boolean isValidRut(String rut) {
-        return (rut!=null) && (rut.matches(rutPattern)) && (rut.length() >= RUT_MINCHAR) && (rut.length()<= RUT_MAXCHAR ) && isValidDigitoVerificador(rut.substring(0,rut.length()-1),rut.substring(rut.length() - 1));
+        if (rut==null) {
+            return false;
+        }
+        rut = rut.replace(".","").replace("-","");
+        return (rut.matches(rutPattern)) && (rut.length() >= RUT_MINCHAR) && (rut.length()<= RUT_MAXCHAR ) && isValidDigitoVerificador(rut.substring(0,rut.length()-1),rut.substring(rut.length() - 1));
     }
-    
+
     public static boolean isValidNombres(String nombres) {
         return nombres!=null && !nombres.isEmpty() && nombres.length() <= NOMBRES_MAXCHAR;
     }

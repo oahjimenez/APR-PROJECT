@@ -119,19 +119,19 @@ public class EditUsuarioController implements Initializable {
         this.nombresText.setText(usuarioEditable.getNombres().toUpperCase());
         this.nombresText.textProperty().addListener((obs, oldNombre, newNombre) -> { 
                 this.nombreLabel.setVisible(!UsuarioValidator.isValidNombres(newNombre));
-                this.nombresText.setText(newNombre.toUpperCase().replaceAll(" +", " "));
+                this.nombresText.setText(newNombre.toUpperCase());
         });
         
         this.apellidosText.setText(usuarioEditable.getApellidos().toUpperCase());
         this.apellidosText.textProperty().addListener((obs, oldApellidos, newApellidos) -> {
             this.apellidosLabel.setVisible(!UsuarioValidator.isValidApellidos(newApellidos));
-            this.apellidosText.setText(newApellidos.toUpperCase().replaceAll(" +", " "));
+            this.apellidosText.setText(newApellidos.toUpperCase());
         });
         
         this.direccionText.setText(usuarioEditable.getDireccion().toUpperCase());
         this.direccionText.textProperty().addListener((obs, oldDireccion, newDireccion) -> {
             this.direccionLabel.setVisible(!UsuarioValidator.isValidDireccion(newDireccion));
-            this.direccionText.setText(newDireccion.toUpperCase().replaceAll(" +", " "));
+            this.direccionText.setText(newDireccion.toUpperCase());
         });
 
         this.telefonoText.setText(usuarioEditable.getTelefono());
@@ -157,14 +157,14 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     private boolean agregaMedidorAction(ActionEvent event) {
-        boolean idMedidorValido = MedidorValidator.isValidId(this.idMedidorText.getText());
-        this.medidorLabel.setVisible(!idMedidorValido);
+        boolean addedSucess = false;
         Medidor medidor = new Medidor();
         medidor.setId(this.idMedidorText.getText());
-        if (idMedidorValido && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
-            return this.usuarioEditable.getMedidoresObservable().add(medidor);
+        this.medidorLabel.setVisible(!MedidorValidator.isValid(medidor));
+        if (MedidorValidator.isValid(medidor) && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
+            addedSucess = this.usuarioEditable.getMedidoresObservable().add(medidor);
         }
-        return false;
+        return addedSucess;
     }
     
     @FXML
@@ -175,14 +175,15 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     public void editarUsuarioAction(ActionEvent event){
-        if (!UsuarioValidator.isValid(this.usuarioEditable)) {
-            System.err.println(String.format("%s - editarUsuarioAction(): fallo edicion de usuario. Datos invalidos %s.",this.getClass().getSimpleName(),this.usuarioEditable));
-            return;
-        }
         this.usuarioEditable.setNombres(nombresText.getText());
         this.usuarioEditable.setApellidos(apellidosText.getText());
         this.usuarioEditable.setDireccion(direccionText.getText());
         this.usuarioEditable.setTelefono(telefonoText.getText());
+        
+        if (!UsuarioValidator.isValid(this.usuarioEditable)) {
+            System.err.println(String.format("%s - editarUsuarioAction(): fallo edicion de usuario. Datos invalidos %s.",this.getClass().getSimpleName(),this.usuarioEditable));
+            return;
+        }
         this.usuarioRepository.save(usuarioEditable);
         Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
         stage.close();

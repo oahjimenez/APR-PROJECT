@@ -21,7 +21,7 @@
       <AnchorPane id="AnchorPane" prefHeight="368.0" prefWidth="600.0" stylesheets="@../styles/estilo.css">
          <children>
             <Button fx:id="usuarioViewButton" onAction="#openUsuarioLayoutAction" layoutX="211.0" layoutY="57.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="179.0" styleClass="button_app" text="Usuarios de Agua Potable" />
-            <Button layoutX="211.0" layoutY="117.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="179.0" styleClass="button_app" text="Ingreso de Lecturas Mensuales" />
+            <Button fx:id="reciboViewButton" onAction="#openRecibosLayoutAction" layoutX="211.0" layoutY="117.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="179.0" styleClass="button_app" text="Ingreso de Lecturas Mensuales" />
             <Button layoutX="211.0" layoutY="181.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="179.0" styleClass="button_app" text="Generación de Recibos" />
             <Button layoutX="211.0" layoutY="241.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="179.0" styleClass="button_app" text="Registro de Pagos" />
             <Accordion layoutX="14.0" layoutY="57.0" />

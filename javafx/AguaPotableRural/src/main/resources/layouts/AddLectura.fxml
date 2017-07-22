@@ -41,9 +41,19 @@
                   <Label text="Medidor ID: 2882" />
                   <MenuButton mnemonicParsing="false" styleClass="button_app" text="Mes" GridPane.columnIndex="1">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
+                <MenuItem mnemonicParsing="false" text="Enero" />
+                <MenuItem mnemonicParsing="false" text="Febrero" />
+                <MenuItem mnemonicParsing="false" text="Marzo" />
+                <MenuItem mnemonicParsing="false" text="Abril" />
+                <MenuItem mnemonicParsing="false" text="Mayo" />
+                <MenuItem mnemonicParsing="false" text="Junio" />
+                <MenuItem mnemonicParsing="false" text="Julio" />
+                <MenuItem mnemonicParsing="false" text="Agosto" />
+                <MenuItem mnemonicParsing="false" text="Septiembre" />
+                <MenuItem mnemonicParsing="false" text="Octubre" />
+                <MenuItem mnemonicParsing="false" text="Noviembre" />
+                <MenuItem mnemonicParsing="false" text="Diciembre" />
+              </items>
                   </MenuButton>
                   <TextField prefHeight="25.0" prefWidth="175.0" promptText="Lectura" GridPane.columnIndex="2" />
                   <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" styleClass="button_app" text="Guardar" GridPane.columnIndex="3">
@@ -66,7 +76,7 @@
                         <TableColumn prefWidth="75.0" text="Lectura" />
                         <TableColumn prefWidth="75.0" text="A pagar" />
                      </columns>
-                  </TableColumn>
+                </TableColumn>
               </columns>
             </TableView>
             <Button layoutX="486.0" layoutY="267.0" mnemonicParsing="false" styleClass="button_app" text="Terminar" />

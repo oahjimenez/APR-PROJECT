@@ -26,6 +26,9 @@ public class MainMenuController implements Initializable {
     @FXML
     public Button usuarioViewButton;
     
+    @FXML
+    public Button reciboViewButton;
+    
     /**
      * Initializes the controller class.
      */
@@ -48,5 +51,20 @@ public class MainMenuController implements Initializable {
            e.printStackTrace();
         }
     }
+
     
+    @FXML
+    private void openRecibosLayoutAction(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("main/resources/layouts/RecibosView.fxml"));
+            Parent root1 = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));  
+            Stage prevStage = (Stage) usuarioViewButton.getScene().getWindow();
+            prevStage.close();
+            stage.show();
+        } catch(Exception e) {
+           e.printStackTrace();
+        }
+    }    
 }

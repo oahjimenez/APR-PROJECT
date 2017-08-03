@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -7,14 +7,33 @@ package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import main.java.aguapotablerural.dao.contract.MedidorRepository;
+import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
+import main.java.aguapotablerural.dao.impl.UsuarioRepositoryImpl;
+import main.java.aguapotablerural.database.contract.DBDriverManager;
+import main.java.aguapotablerural.database.impl.SqliteDriverManager;
+import main.java.aguapotablerural.model.Medidor;
+import main.java.aguapotablerural.model.Usuario;
 
 /**
  * FXML Controller class
@@ -26,13 +45,120 @@ public class RecibosViewController implements Initializable {
     @FXML
     public Button lecturaViewButton;
     
-
+    @FXML
+    public ListView listViewUsuarios;
+    
+    @FXML 
+    public GridPane medidoresUsuarioMensual;
+    
+    @FXML
+    private TextField filtroUsuario;
+    
+    @FXML
+    public Label nombreLabel; 
+    
+    @FXML
+    public Label rutLabel;
+    
+     @FXML
+    public Label direccionLabel;
+     
+      @FXML
+    public Label telefonoLabel;
+    
+    private UsuarioRepository usuarioRepository;
+    private MedidorRepository medidorRepository;
+    
+    private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
+    
+    public RecibosViewController () {
+        DBDriverManager driverManager = new SqliteDriverManager();
+        this.usuarioRepository = new UsuarioRepositoryImpl(driverManager);
+        this.medidorRepository = new MedidorRepositoryImpl(driverManager);
+    }
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
+        this.listViewUsuarios.setCellFactory(cellFactory -> new ListCell<Usuario>() {
+            @Override
+            public void updateItem(Usuario item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    String text = new StringBuilder().append(item.getNombres()).append(" ").append(item.getApellidos()).toString();
+                    setText(text);
+                }
+            }
+        });
+        
+        // Wrap ObservableList in a FilteredList
+        FilteredList<Usuario> usuariosFiltrados = new FilteredList<>(usuarios,u -> true);
+         //Set filter Predicate whenever the filter changes
+        this.filtroUsuario.textProperty().addListener((observable, oldValue, newValue) -> {
+            usuariosFiltrados.setPredicate(usuario -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                return (usuario.getRut().toLowerCase().contains(lowerCaseFilter) || 
+                        usuario.getNombres().toLowerCase().contains(lowerCaseFilter) ||
+                        usuario.getApellidos().toLowerCase().contains(lowerCaseFilter) ||
+                        usuario.getDireccion().toLowerCase().contains(lowerCaseFilter));
+            });
+        });
+        
+        //Wrap FilteredList in a SortedList
+        SortedList<Usuario> usuariosOrdenados = new SortedList<>(usuariosFiltrados);
+        this.listViewUsuarios.setItems(usuariosOrdenados);
+        this.listViewUsuarios.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Usuario usuario = (Usuario)listViewUsuarios.getSelectionModel().getSelectedItem();
+                medidoresUsuarioMensual.getChildren().clear();
+                nombreLabel.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
+                rutLabel.setText(usuario.getRut());
+                direccionLabel.setText(usuario.getDireccion());
+                telefonoLabel.setText(usuario.getTelefono());
+                if (usuario.getMedidoresObservable().isEmpty()) {
+                    Label noPoseeMedidorLabel = new Label();
+                    noPoseeMedidorLabel.setText("Sin registros");
+                    medidoresUsuarioMensual.add(noPoseeMedidorLabel,0,0);
+                } else {
+                    for (int fila=0; fila < usuario.getMedidoresObservable().size(); fila++) {
+                        Medidor medidor = usuario.getMedidoresObservable().get(fila);
+                        Label medidorIndexLabel = new Label();
+                        medidorIndexLabel.setText(new StringBuilder().append(String.valueOf(fila+1)).append(".").toString());
+                        medidoresUsuarioMensual.add(medidorIndexLabel,0,fila);
+
+                        Label medidorIdLabel = new Label();
+                        medidorIdLabel.setText(new StringBuilder().append("Medidor ID").append(" ").append(medidor.getId()).toString());
+                        medidoresUsuarioMensual.add(medidorIdLabel,1,fila);
+
+                        TextField lecturaTextField = new TextField();
+                        medidoresUsuarioMensual.add(lecturaTextField,2,fila);
+
+                        Label pesosLabel = new Label();
+                        pesosLabel.setText("$ Sub Total");
+                        medidoresUsuarioMensual.add(pesosLabel,3,fila);           
+                    }
+
+                    Label totalLabel = new Label();
+                    totalLabel.setText("Total");
+                    medidoresUsuarioMensual.add(totalLabel,0,usuario.getMedidoresObservable().size());
+
+                    Label totalPesosLabel = new Label();
+                    totalPesosLabel.setText("$ TOTAL");
+                    medidoresUsuarioMensual.add(totalPesosLabel,3,usuario.getMedidoresObservable().size());
+                }
+             }
+        });
     }    
     
     @FXML

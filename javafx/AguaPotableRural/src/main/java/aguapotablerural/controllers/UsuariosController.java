@@ -88,9 +88,9 @@ public class UsuariosController implements Initializable {
         tableViewUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableViewUsuarios.setItems(usuarios);
         
-       // Wrap ObservableList in a FilteredList
+        // Wrap ObservableList in a FilteredList
         FilteredList<Usuario> usuariosFiltrados = new FilteredList<>(usuarios,u -> true);
-         //Set filter Predicate whenever the filter changes
+        //Set filter Predicate whenever the filter changes
         filtroText.textProperty().addListener((observable, oldValue, newValue) -> {
             usuariosFiltrados.setPredicate(usuario -> {
                 // If filter text is empty, display all persons.
@@ -98,20 +98,10 @@ public class UsuariosController implements Initializable {
                     return true;
                 }
                 String lowerCaseFilter = newValue.toLowerCase();
-
-                if (usuario.getRut().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; 
-                } 
-                if (usuario.getNombres().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; 
-                }
-                if (usuario.getApellidos().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; 
-                }
-                if (usuario.getDireccion().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; 
-                }
-                return false;
+                return (usuario.getRut().toLowerCase().contains(lowerCaseFilter) || 
+                        usuario.getNombres().toLowerCase().contains(lowerCaseFilter) ||
+                        usuario.getApellidos().toLowerCase().contains(lowerCaseFilter) ||
+                        usuario.getDireccion().toLowerCase().contains(lowerCaseFilter));
             });
         });
         

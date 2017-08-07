@@ -38,6 +38,7 @@ import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
+import main.java.aguapotablerural.services.MedidorService;
 
 /**
  * FXML Controller class
@@ -96,6 +97,9 @@ public class RecibosViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         LocalDateTime now = LocalDateTime.now();
+        MedidorService medidorService = new MedidorService();
+        
+        
         String mesName =now.format(DateTimeFormatter.ofPattern("MMMM",new Locale("es", "ES")));
         this.anoText.setText(String.valueOf(now.getYear()));
         this.mesText.setText(mesName);
@@ -140,6 +144,10 @@ public class RecibosViewController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Usuario usuario = (Usuario)listViewUsuarios.getSelectionModel().getSelectedItem();
+                for (Medidor medidor: medidorService.getMedidoresOf(usuario, LocalDateTime.now())) {
+                    System.out.println("Medidores del mes "+ medidor);
+                }
+                
                 medidoresUsuarioMensual.getChildren().clear();
                 nombreLabel.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
                 rutLabel.setText(usuario.getRut());

@@ -5,9 +5,9 @@
  */
 package main.java.aguapotablerural.dao.impl;
 
-import main.java.aguapotablerural.dao.contract.AdministradorRepository;
-import main.java.aguapotablerural.dao.contract.MedidorRepository;
-import main.java.aguapotablerural.dao.contract.RegistraMedidorRepository;
+import main.java.aguapotablerural.dao.repository.AdministradorRepository;
+import main.java.aguapotablerural.dao.repository.MedidorRepository;
+import main.java.aguapotablerural.dao.repository.RegistraMedidorRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.model.Administrador;
 import main.java.aguapotablerural.model.Medidor;

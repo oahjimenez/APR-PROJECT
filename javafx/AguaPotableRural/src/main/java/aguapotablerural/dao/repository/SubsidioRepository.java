@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.aguapotablerural.dao.contract;
+package main.java.aguapotablerural.dao.repository;
 
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Subsidio;

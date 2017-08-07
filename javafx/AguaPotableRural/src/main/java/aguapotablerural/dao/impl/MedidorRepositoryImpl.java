@@ -6,7 +6,7 @@
 package main.java.aguapotablerural.dao.impl;
 
 import java.sql.Date;
-import main.java.aguapotablerural.dao.contract.MedidorRepository;
+import main.java.aguapotablerural.dao.repository.MedidorRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Medidor;

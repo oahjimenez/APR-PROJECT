@@ -5,14 +5,15 @@
  */
 package main.java.aguapotablerural.dao.impl;
 
-import main.java.aguapotablerural.dao.contract.MedidorRepository;
-import main.java.aguapotablerural.dao.contract.TieneMedidorRepository;
-import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.dao.repository.MedidorRepository;
+import main.java.aguapotablerural.dao.repository.TieneMedidorRepository;
+import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -160,4 +161,8 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
         return allSaved;
     }
     
+    @Override
+    public Medidor getMedidorOf(Usuario usuario, YearMonth anoMes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

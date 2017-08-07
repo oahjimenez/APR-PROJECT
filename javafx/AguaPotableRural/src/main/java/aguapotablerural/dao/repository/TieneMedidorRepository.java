@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.aguapotablerural.dao.contract;
+package main.java.aguapotablerural.dao.repository;
 
+import java.time.YearMonth;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import java.util.Collection;
@@ -26,5 +27,8 @@ public interface TieneMedidorRepository {
     
     public boolean save(Usuario usuario,Medidor medidor);
     public boolean save(Usuario usuario,Collection<? extends Medidor> medidores);
+    
+    
+    public Medidor getMedidorOf(Usuario usuario,YearMonth anoMes);
     
 }

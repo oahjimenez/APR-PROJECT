@@ -5,7 +5,7 @@
  */
 package main.java.aguapotablerural.dao.impl;
 
-import main.java.aguapotablerural.dao.contract.LecturaMensualRepository;
+import main.java.aguapotablerural.dao.repository.LecturaMensualRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;

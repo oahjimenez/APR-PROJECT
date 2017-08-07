@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.aguapotablerural.dao.contract;
+package main.java.aguapotablerural.dao.repository;
 
 import main.java.aguapotablerural.model.Medidor;
 import java.util.Collection;
@@ -20,6 +20,5 @@ public interface MedidorRepository {
     public Collection<Medidor> getAll();
     public Collection<Medidor> getAllActive();
     public boolean saveAll(Collection<? extends Medidor> medidores);
-
     
 }

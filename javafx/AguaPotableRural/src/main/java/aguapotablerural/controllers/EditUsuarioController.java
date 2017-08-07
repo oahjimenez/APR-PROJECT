@@ -20,7 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import main.java.aguapotablerural.model.validator.MedidorValidator;

@@ -5,7 +5,7 @@
  */
 package main.java.aguapotablerural.dao.impl;
 
-import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Administrador;
@@ -16,8 +16,8 @@ import java.sql.ResultSet;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import main.java.aguapotablerural.dao.contract.MedidorRepository;
-import main.java.aguapotablerural.dao.contract.TieneMedidorRepository;
+import main.java.aguapotablerural.dao.repository.MedidorRepository;
+import main.java.aguapotablerural.dao.repository.TieneMedidorRepository;
 
 /**
  *

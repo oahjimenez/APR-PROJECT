@@ -6,6 +6,9 @@
 package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,12 +25,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import main.java.aguapotablerural.dao.contract.MedidorRepository;
-import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.dao.repository.MedidorRepository;
+import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
 import main.java.aguapotablerural.dao.impl.UsuarioRepositoryImpl;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
@@ -48,6 +52,15 @@ public class RecibosViewController implements Initializable {
     @FXML
     public ListView listViewUsuarios;
     
+    @FXML
+    private TextField anoText;
+    
+    @FXML
+    private TextField mesText;
+    
+    @FXML
+    private Tab mesTab;
+    
     @FXML 
     public GridPane medidoresUsuarioMensual;
     
@@ -60,10 +73,10 @@ public class RecibosViewController implements Initializable {
     @FXML
     public Label rutLabel;
     
-     @FXML
+    @FXML
     public Label direccionLabel;
      
-      @FXML
+    @FXML
     public Label telefonoLabel;
     
     private UsuarioRepository usuarioRepository;
@@ -82,6 +95,12 @@ public class RecibosViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        LocalDateTime now = LocalDateTime.now();
+        String mesName =now.format(DateTimeFormatter.ofPattern("MMMM",new Locale("es", "ES")));
+        this.anoText.setText(String.valueOf(now.getYear()));
+        this.mesText.setText(mesName);
+        this.mesTab.setText(mesName);
+        
         this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
         this.listViewUsuarios.setCellFactory(cellFactory -> new ListCell<Usuario>() {
             @Override

@@ -5,8 +5,8 @@
  */
 package main.java.aguapotablerural;
 
-import main.java.aguapotablerural.dao.contract.AdministradorRepository;
-import main.java.aguapotablerural.dao.contract.UsuarioRepository;
+import main.java.aguapotablerural.dao.repository.AdministradorRepository;
+import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.dao.impl.AdministradorRepositoryImpl;
 import main.java.aguapotablerural.dao.impl.UsuarioRepositoryImpl;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;

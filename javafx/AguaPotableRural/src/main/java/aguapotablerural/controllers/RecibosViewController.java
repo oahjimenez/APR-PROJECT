@@ -8,6 +8,8 @@ package main.java.aguapotablerural.controllers;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.TemporalAccessor;
@@ -148,6 +150,9 @@ public class RecibosViewController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Usuario usuario = (Usuario)listViewUsuarios.getSelectionModel().getSelectedItem();
+                if (usuario==null) {
+                    return;
+                }
                 List<? extends Medidor> medidoresDelMes = medidorService.getMedidoresOf(usuario,getMonthYear());
                 medidoresUsuarioMensual.getChildren().clear();
                 nombreLabel.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
@@ -190,8 +195,15 @@ public class RecibosViewController implements Initializable {
     }    
     
     private LocalDate getMonthYear() {
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MMMM yyyy").parseCaseInsensitive().toFormatter(new Locale("es", "ES"));
-        return LocalDate.from(formatter.parse(String.format("%s %s", this.mesText.getText(),this.anoText.getText())));
+        if (this.mesText.getText().isEmpty() || this.anoText.getText().isEmpty()) {
+            return null;
+        }
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .append(DateTimeFormatter.ofPattern("MMMM yyyy"))
+            .toFormatter(new Locale("es", "ES"));
+        TemporalAccessor parsed = formatter.parse(String.format("%s %s", this.mesText.getText(),this.anoText.getText()));
+        return YearMonth.from(parsed).atEndOfMonth();
     }
     
     @FXML

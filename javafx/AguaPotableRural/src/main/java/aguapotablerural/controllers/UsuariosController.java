@@ -11,6 +11,7 @@ import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Usuario;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -23,7 +24,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -137,18 +141,20 @@ public class UsuariosController implements Initializable {
     
     @FXML
     private void eliminaUsuarioAction(ActionEvent event) {
-        Usuario usuario = this.tableViewUsuarios.getSelectionModel().getSelectedItem();
-        usuarios.remove(usuario);
-        usuarioRepository.delete(usuario);
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Estás seguro de eliminar a este usuario? Esto es irreversible");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            Usuario usuario = this.tableViewUsuarios.getSelectionModel().getSelectedItem();
+            usuarios.remove(usuario);
+            usuarioRepository.delete(usuario);
+        } else {
+            System.out.println("usuario cancela eliminacion");
+        }
     }
     
-    
-    @FXML
-    private void registraUsuarioAction(ActionEvent event) {
-        Usuario usuario = this.tableViewUsuarios.getSelectionModel().getSelectedItem();
-        usuarios.remove(usuario);
-        usuarioRepository.delete(usuario);
-    }
     
     @FXML
     private void openAddUsuarioLayoutAction(ActionEvent event) {

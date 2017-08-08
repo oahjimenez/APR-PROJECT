@@ -17,6 +17,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -155,7 +157,7 @@ public class AddUsuarioController implements Initializable{
         this.listViewMedidores.setItems(this.newUsuario.getMedidoresObservable());
     }
     @FXML
-    private boolean registraUsuarioAction(ActionEvent event) {
+    private boolean registraUsuarioAction(ActionEvent event) {        
         this.newUsuario.setRut(rutText.getText());
         this.newUsuario.setNombres(nombresText.getText());
         this.newUsuario.setApellidos(apellidosText.getText());
@@ -163,6 +165,11 @@ public class AddUsuarioController implements Initializable{
         this.newUsuario.setTelefono(telefonoText.getText());
         
         if (!(UsuarioValidator.isValid(this.newUsuario))) {
+            Alert alert= new Alert(AlertType.WARNING);
+            alert.setTitle("Advertencia");
+            alert.setHeaderText(null);
+            alert.setContentText("Existen datos incompletos o mal ingresados");
+            alert.showAndWait();
             System.err.println("Usuario es invalido. No se registro en la base de datos");
             return false;
         }

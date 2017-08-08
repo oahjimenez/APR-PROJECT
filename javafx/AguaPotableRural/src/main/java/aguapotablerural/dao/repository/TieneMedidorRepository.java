@@ -5,10 +5,11 @@
  */
 package main.java.aguapotablerural.dao.repository;
 
-import java.time.YearMonth;
+import java.time.LocalDate;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -29,6 +30,6 @@ public interface TieneMedidorRepository {
     public boolean save(Usuario usuario,Collection<? extends Medidor> medidores);
     
     
-    public Medidor getMedidorOf(Usuario usuario,YearMonth anoMes);
+    public List<? extends Medidor> getMedidorOf(Usuario usuario,LocalDate fecha);
     
 }

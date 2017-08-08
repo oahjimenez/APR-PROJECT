@@ -9,6 +9,7 @@ import main.java.aguapotablerural.database.contract.DBDriverManager;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.io.File;
 
 /**
  *
@@ -50,7 +51,7 @@ public class SqliteDriverManager implements DBDriverManager {
         }
         try {
             // db parameters
-            String url = "jdbc:sqlite:C:/gitrepo/APR-PROJECT/sqlite3/AGUA_POTABLE_RURAL.db";
+            String url =  "jdbc:sqlite:C:/Users/carlo/Desktop/Monitoreo remoto/gitrepo/APR-PROJECT/sqlite3/AGUA_POTABLE_RURAL.db";
             // create a connection to the database
             this.connection = DriverManager.getConnection(url);
             

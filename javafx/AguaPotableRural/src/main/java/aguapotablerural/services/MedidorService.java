@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 package main.java.aguapotablerural.services;
-import java.time.LocalDateTime;
-import java.util.Collection;
+import java.time.LocalDate;
+import java.util.List;
 import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
 import main.java.aguapotablerural.dao.impl.TieneMedidorRepositoryImpl;
 import main.java.aguapotablerural.dao.impl.UsuarioRepositoryImpl;
@@ -34,8 +34,8 @@ public class MedidorService {
         this.tieneMedidorRepository = new TieneMedidorRepositoryImpl(driver,this.usuarioRepository,this.medidorRepository);
     }
     
-    public Collection<? extends Medidor> getMedidoresOf(Usuario usuario,LocalDateTime anoMes) {
-        return tieneMedidorRepository.getMedidorOf(usuario, anoMes);
+    public List<? extends Medidor> getMedidoresOf(Usuario usuario,LocalDate fecha) {
+        return tieneMedidorRepository.getMedidorOf(usuario, fecha);
     }
     
 }

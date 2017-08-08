@@ -6,8 +6,12 @@
 package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.TemporalAccessor;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -144,22 +148,19 @@ public class RecibosViewController implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 Usuario usuario = (Usuario)listViewUsuarios.getSelectionModel().getSelectedItem();
-                for (Medidor medidor: medidorService.getMedidoresOf(usuario, LocalDateTime.now())) {
-                    System.out.println("Medidores del mes "+ medidor);
-                }
-                
+                List<? extends Medidor> medidoresDelMes = medidorService.getMedidoresOf(usuario,getMonthYear());
                 medidoresUsuarioMensual.getChildren().clear();
                 nombreLabel.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
                 rutLabel.setText(usuario.getRut());
                 direccionLabel.setText(usuario.getDireccion());
                 telefonoLabel.setText(usuario.getTelefono());
-                if (usuario.getMedidoresObservable().isEmpty()) {
+                if (medidoresDelMes.isEmpty()) {
                     Label noPoseeMedidorLabel = new Label();
                     noPoseeMedidorLabel.setText("Sin registros");
                     medidoresUsuarioMensual.add(noPoseeMedidorLabel,0,0);
                 } else {
-                    for (int fila=0; fila < usuario.getMedidoresObservable().size(); fila++) {
-                        Medidor medidor = usuario.getMedidoresObservable().get(fila);
+                    for (int fila=0; fila < medidoresDelMes.size(); fila++) {
+                        Medidor medidor = medidoresDelMes.get(fila);
                         Label medidorIndexLabel = new Label();
                         medidorIndexLabel.setText(new StringBuilder().append(String.valueOf(fila+1)).append(".").toString());
                         medidoresUsuarioMensual.add(medidorIndexLabel,0,fila);
@@ -187,6 +188,11 @@ public class RecibosViewController implements Initializable {
              }
         });
     }    
+    
+    private LocalDate getMonthYear() {
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MMMM yyyy").parseCaseInsensitive().toFormatter(new Locale("es", "ES"));
+        return LocalDate.from(formatter.parse(String.format("%s %s", this.mesText.getText(),this.anoText.getText())));
+    }
     
     @FXML
     private void addLecturaButton(ActionEvent event) {

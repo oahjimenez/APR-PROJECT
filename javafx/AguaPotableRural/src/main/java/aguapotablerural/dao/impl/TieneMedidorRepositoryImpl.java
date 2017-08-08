@@ -13,9 +13,10 @@ import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -162,12 +163,13 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     }
     
     @Override
-    public Collection<? extends Medidor> getMedidorOf(Usuario usuario, LocalDateTime anoMes) {
-      Collection<Medidor> medidores = new ArrayList();
+    public List<? extends Medidor> getMedidorOf(Usuario usuario, LocalDate fecha) {
+        List<Medidor> medidores = new ArrayList();
         try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_RUT = ? AND FECHA_ADQUISICION = ?;");
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_RUT = ? AND CAST(strftime('%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%Y',fecha_adquisicion) as integer) = ?;");
             statement.setString(1,usuario.getRut());
-            statement.setDate(2,java.sql.Date.valueOf(anoMes.toLocalDate()));
+            statement.setInt(2,fecha.getMonthValue());
+            statement.setInt(3,fecha.getYear());
             
             ResultSet medidoresRs = statement.executeQuery();
             

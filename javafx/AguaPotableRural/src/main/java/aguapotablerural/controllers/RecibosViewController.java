@@ -104,6 +104,7 @@ public class RecibosViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.clearMedidoresUsuarioMensual();
         LocalDateTime now = LocalDateTime.now();
         
         
@@ -227,6 +228,13 @@ public class RecibosViewController implements Initializable {
     
     private String capitalize(String text) {
         return new StringBuilder().append(text.substring(0, 1).toUpperCase()).append(text.substring(1)).toString();
+    }
+    
+    private void clearMedidoresUsuarioMensual() {
+        medidoresUsuarioMensual.getChildren().clear();
+        Label noPoseeMedidorLabel = new Label();
+        noPoseeMedidorLabel.setText("Sin registros");
+        medidoresUsuarioMensual.add(noPoseeMedidorLabel,0,0);
     }
     
     @FXML

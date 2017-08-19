@@ -13,14 +13,21 @@ and open the template in the editor.
 }
 
 .background_app2{
-    -fx-background-color: #d9d9d9; 
+    //#d2d5e0;
+    -fx-background-color:#e1e3ea;
 }
 
 .background_app3{
-    -fx-background-color: #e6eeff; 
+    -fx-background-color: #ff944d; 
+}
+.background_app4{
+    -fx-background-color: #5e6887; 
 }
 
+/*amarillo:#dfff80;*/
+
 /* cajas de texto */
+
 .text_app{
     -fx-background-color: #e5e6e7;
     -fx-text-fill: #000;

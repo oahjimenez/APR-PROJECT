@@ -3,6 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -48,10 +50,37 @@
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="38.0" layoutY="21.0" text="Año" />
-                        <TextField fx:id="anoText" layoutX="83.0" layoutY="17.0" />
-                        <TextField fx:id="mesText" layoutX="301.0" layoutY="17.0" />
+                        <Label layoutX="41.0" layoutY="21.0" text="Año" />
                         <Label layoutX="263.0" layoutY="21.0" text="Mes" />
+                        <MenuButton layoutX="84.0" layoutY="17.0" mnemonicParsing="false" text="Año">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="2017" />
+                            <MenuItem mnemonicParsing="false" text="2018" />
+                            <MenuItem mnemonicParsing="false" text="2019" />
+                            <MenuItem mnemonicParsing="false" text="2020" />
+                            <MenuItem mnemonicParsing="false" text="2021" />
+                            <MenuItem mnemonicParsing="false" text="2022" />
+                            <MenuItem mnemonicParsing="false" text="2023" />
+                            <MenuItem mnemonicParsing="false" text="2024" />
+
+                          </items>
+                        </MenuButton>
+                        <MenuButton layoutX="303.0" layoutY="17.0" mnemonicParsing="false" text="Mes">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Enero" />
+                              <MenuItem mnemonicParsing="false" text="Febrero" />
+                              <MenuItem mnemonicParsing="false" text="Marzo" />
+                              <MenuItem mnemonicParsing="false" text="Abril" />
+                              <MenuItem mnemonicParsing="false" text="Mayo" />
+                              <MenuItem mnemonicParsing="false" text="Junio" />
+                              <MenuItem mnemonicParsing="false" text="Julio" />
+                              <MenuItem mnemonicParsing="false" text="Agosto" />
+                              <MenuItem mnemonicParsing="false" text="Septiembre" />
+                              <MenuItem mnemonicParsing="false" text="Octubre" />
+                              <MenuItem mnemonicParsing="false" text="Noviembre" />
+                              <MenuItem mnemonicParsing="false" text="Diciembre" />
+                           </items>
+                        </MenuButton>
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="493.0" prefWidth="515.0">

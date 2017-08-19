@@ -52,7 +52,7 @@
                      <children>
                         <Label layoutX="41.0" layoutY="21.0" text="Año" />
                         <Label layoutX="263.0" layoutY="21.0" text="Mes" />
-                        <MenuButton layoutX="84.0" layoutY="17.0" mnemonicParsing="false" text="Año">
+                        <MenuButton fx:id="anoMenu" layoutX="84.0" layoutY="17.0" mnemonicParsing="false" text="Año">
                           <items>
                             <MenuItem mnemonicParsing="false" text="2017" />
                             <MenuItem mnemonicParsing="false" text="2018" />
@@ -65,7 +65,7 @@
 
                           </items>
                         </MenuButton>
-                        <MenuButton layoutX="303.0" layoutY="17.0" mnemonicParsing="false" text="Mes">
+                        <MenuButton fx:id="mesMenu" layoutX="303.0" layoutY="17.0" mnemonicParsing="false" text="Mes">
                            <items>
                               <MenuItem mnemonicParsing="false" text="Enero" />
                               <MenuItem mnemonicParsing="false" text="Febrero" />

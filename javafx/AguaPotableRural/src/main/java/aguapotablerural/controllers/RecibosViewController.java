@@ -8,7 +8,6 @@ package main.java.aguapotablerural.controllers;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -31,6 +30,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -60,10 +61,10 @@ public class RecibosViewController implements Initializable {
     public ListView listViewUsuarios;
     
     @FXML
-    private TextField anoText;
+    private MenuButton anoMenu;
     
     @FXML
-    private TextField mesText;
+    private MenuButton mesMenu;
     
     @FXML
     private Tab mesTab;
@@ -87,14 +88,15 @@ public class RecibosViewController implements Initializable {
     public Label telefonoLabel;
     
     private UsuarioRepository usuarioRepository;
-    private MedidorRepository medidorRepository;
     
     private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
+    
+    private MedidorService medidorService;
     
     public RecibosViewController () {
         DBDriverManager driverManager = new SqliteDriverManager();
         this.usuarioRepository = new UsuarioRepositoryImpl(driverManager);
-        this.medidorRepository = new MedidorRepositoryImpl(driverManager);
+        this.medidorService = new MedidorService();
     }
     
     /**
@@ -103,13 +105,26 @@ public class RecibosViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         LocalDateTime now = LocalDateTime.now();
-        MedidorService medidorService = new MedidorService();
         
         
         String mesName =now.format(DateTimeFormatter.ofPattern("MMMM",new Locale("es", "ES")));
-        this.anoText.setText(String.valueOf(now.getYear()));
-        this.mesText.setText(mesName);
-        this.mesTab.setText(mesName);
+        this.mesMenu.setText(this.capitalize(mesName));
+        this.anoMenu.setText(String.valueOf(now.getYear()));
+        this.mesTab.setText(this.mesMenu.getText());
+        for (MenuItem ano : this.anoMenu.getItems()){
+            ano.setOnAction(action->{
+                this.anoMenu.setText(ano.getText());
+                this.mesTab.setText(String.format("%s %s",this.mesMenu.getText(),ano.getText()));
+                this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+            });
+        }
+        for (MenuItem mes: this.mesMenu.getItems()) {
+            mes.setOnAction(action-> {
+                this.mesMenu.setText(mes.getText());
+                this.mesTab.setText(String.format("%s %s",mes.getText(),this.anoMenu.getText()));
+                this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+            });
+        }
         
         this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
         this.listViewUsuarios.setCellFactory(cellFactory -> new ListCell<Usuario>() {
@@ -149,7 +164,25 @@ public class RecibosViewController implements Initializable {
         this.listViewUsuarios.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Usuario usuario = (Usuario)listViewUsuarios.getSelectionModel().getSelectedItem();
+                actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+             }
+        });
+    }    
+    
+    private LocalDate getMonthYear() {
+        if (this.mesMenu.getText().isEmpty() || this.anoMenu.getText().isEmpty()) {
+            return null;
+        }
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .append(DateTimeFormatter.ofPattern("MMMM yyyy"))
+            .toFormatter(new Locale("es", "ES"));
+        TemporalAccessor parsed = formatter.parse(String.format("%s %s", this.mesMenu.getText(),this.anoMenu.getText()));
+        return YearMonth.from(parsed).atEndOfMonth();
+    }
+    
+    private void actualizarMedidoresAnoMes(Usuario usuario) {
+        
                 if (usuario==null) {
                     return;
                 }
@@ -190,20 +223,10 @@ public class RecibosViewController implements Initializable {
                     totalPesosLabel.setText("$ TOTAL");
                     medidoresUsuarioMensual.add(totalPesosLabel,3,usuario.getMedidoresObservable().size());
                 }
-             }
-        });
-    }    
+    }
     
-    private LocalDate getMonthYear() {
-        if (this.mesText.getText().isEmpty() || this.anoText.getText().isEmpty()) {
-            return null;
-        }
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-            .parseCaseInsensitive()
-            .append(DateTimeFormatter.ofPattern("MMMM yyyy"))
-            .toFormatter(new Locale("es", "ES"));
-        TemporalAccessor parsed = formatter.parse(String.format("%s %s", this.mesText.getText(),this.anoText.getText()));
-        return YearMonth.from(parsed).atEndOfMonth();
+    private String capitalize(String text) {
+        return new StringBuilder().append(text.substring(0, 1).toUpperCase()).append(text.substring(1)).toString();
     }
     
     @FXML

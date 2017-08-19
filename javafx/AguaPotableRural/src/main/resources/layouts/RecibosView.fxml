@@ -83,6 +83,41 @@
             </VBox>
             <VBox>
                <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="41.0" layoutY="21.0" text="Año" />
+                        <Label layoutX="263.0" layoutY="21.0" text="Mes" />
+                        <MenuButton fx:id="anoMenu" layoutX="84.0" layoutY="17.0" mnemonicParsing="false" text="Año">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="2017" />
+                            <MenuItem mnemonicParsing="false" text="2018" />
+                            <MenuItem mnemonicParsing="false" text="2019" />
+                            <MenuItem mnemonicParsing="false" text="2020" />
+                            <MenuItem mnemonicParsing="false" text="2021" />
+                            <MenuItem mnemonicParsing="false" text="2022" />
+                            <MenuItem mnemonicParsing="false" text="2023" />
+                            <MenuItem mnemonicParsing="false" text="2024" />
+
+                          </items>
+                        </MenuButton>
+                        <MenuButton fx:id="mesMenu" layoutX="303.0" layoutY="17.0" mnemonicParsing="false" text="Mes">
+                           <items>
+                              <MenuItem mnemonicParsing="false" text="Enero" />
+                              <MenuItem mnemonicParsing="false" text="Febrero" />
+                              <MenuItem mnemonicParsing="false" text="Marzo" />
+                              <MenuItem mnemonicParsing="false" text="Abril" />
+                              <MenuItem mnemonicParsing="false" text="Mayo" />
+                              <MenuItem mnemonicParsing="false" text="Junio" />
+                              <MenuItem mnemonicParsing="false" text="Julio" />
+                              <MenuItem mnemonicParsing="false" text="Agosto" />
+                              <MenuItem mnemonicParsing="false" text="Septiembre" />
+                              <MenuItem mnemonicParsing="false" text="Octubre" />
+                              <MenuItem mnemonicParsing="false" text="Noviembre" />
+                              <MenuItem mnemonicParsing="false" text="Diciembre" />
+                           </items>
+                        </MenuButton>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane prefHeight="493.0" prefWidth="515.0">
                      <children>
                         <Label fx:id="nombreLabel" layoutX="68.0" layoutY="40.0" text="Seleccione un usuario de la lista de usuarios para visualizar sus detalles de lectura." />

@@ -12,6 +12,7 @@ import main.java.aguapotablerural.model.Usuario;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 
 /**
  *
@@ -83,5 +84,30 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
         }
         return lecturaMensual;  
      }
+
+    @Override
+    public boolean save(Usuario usuario,Medidor medidor, LocalDate fecha, double lectura) {
+       try {
+           //update or insertS
+            String upsertSql = "UPDATE LECTURA_MENSUAL SET VALOR=? WHERE USUARIO_RUT=? AND CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?; INSERT INTO LECTURA_MENSUAL(USUARIO_RUT,MEDIDOR_ID,FECHA,VALOR) SELECT ?,(SELECT RUT),? WHERE (Select Changes() = 0);";
+            
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement(upsertSql);
+            statement.setDouble(1,lectura);
+            statement.setString(2,usuario.getRut());
+            statement.setInt(3,fecha.getMonthValue());
+            statement.setInt(4,fecha.getYear());
+            
+            statement.setString(5,usuario.getRut());
+            statement.setString(6,medidor.getId());
+            statement.setDate(7,Date.valueOf(fecha));
+            statement.setDouble(8,lectura);
+            int rowsAffected = statement.executeUpdate();
+            statement.close();
+            return rowsAffected==1;
+        }catch (Exception e){
+            System.err.println(String.format("%s - save(): %s %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
+        }
+       return false;
+    }
     
 }

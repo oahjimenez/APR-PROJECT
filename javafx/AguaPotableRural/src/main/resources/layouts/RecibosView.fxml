@@ -138,7 +138,8 @@
                                                 <Label text="\$ Sub Total" GridPane.columnIndex="3" />
                                                 <Label text="\$ Sub Total" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                                 <Label text="Total" GridPane.rowIndex="2" />
-                                                <Label text="\$ TOTAL" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                <Label fx:id="totalMensualLabel" text="\$ TOTAL" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                
                                              </children>
                                           </GridPane>
                                        </children>

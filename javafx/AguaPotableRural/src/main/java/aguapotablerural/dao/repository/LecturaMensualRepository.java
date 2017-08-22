@@ -8,6 +8,7 @@ package main.java.aguapotablerural.dao.repository;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -18,5 +19,6 @@ public interface LecturaMensualRepository {
         public double getLecturaMensual(Medidor medidor,Date fecha);
         public double getLecturaMensual(Usuario usuario,Date fecha);
         public double getLecturaMensual(Usuario usuario,Medidor medidor,Date fecha);
+        public boolean save(Usuario usuario,Medidor medidor,LocalDate fecha,double lectura);
     
 }

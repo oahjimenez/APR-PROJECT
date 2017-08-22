@@ -37,14 +37,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import main.java.aguapotablerural.dao.repository.MedidorRepository;
 import main.java.aguapotablerural.dao.repository.UsuarioRepository;
-import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
 import main.java.aguapotablerural.dao.impl.UsuarioRepositoryImpl;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
+import main.java.aguapotablerural.services.LecturaService;
 import main.java.aguapotablerural.services.MedidorService;
 
 /**
@@ -87,16 +86,21 @@ public class RecibosViewController implements Initializable {
     @FXML
     public Label telefonoLabel;
     
+    @FXML
+    public Label totalMensualLabel;
+    
     private UsuarioRepository usuarioRepository;
     
     private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
     
     private MedidorService medidorService;
+    private LecturaService lecturaService;
     
     public RecibosViewController () {
         DBDriverManager driverManager = new SqliteDriverManager();
         this.usuarioRepository = new UsuarioRepositoryImpl(driverManager);
         this.medidorService = new MedidorService();
+        this.lecturaService = new LecturaService();
     }
     
     /**
@@ -210,6 +214,12 @@ public class RecibosViewController implements Initializable {
 
                         TextField lecturaTextField = new TextField();
                         medidoresUsuarioMensual.add(lecturaTextField,2,fila);
+                        lecturaTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                            double lecturaTotal = 0;
+                            lecturaTotal = ("$ TOTAL".equals(lecturaTextField.getText()) || "$ TOTAL".equals(lecturaTextField.getText())) ? 0 : Double.parseDouble(totalMensualLabel.getText());
+                            double lectura = Double.parseDouble(totalMensualLabel.getText());
+                            totalMensualLabel.setText(String.valueOf(lecturaTotal + lectura));
+                        });
 
                         Label pesosLabel = new Label();
                         pesosLabel.setText("$ Sub Total");

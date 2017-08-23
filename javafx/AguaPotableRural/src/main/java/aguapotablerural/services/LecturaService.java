@@ -16,6 +16,7 @@ import main.java.aguapotablerural.dao.repository.TieneMedidorRepository;
 import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
+import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 
 /**
@@ -36,7 +37,7 @@ public class LecturaService {
         this.tieneMedidorRepository = new TieneMedidorRepositoryImpl(driver,this.usuarioRepository,this.medidorRepository);
    }
    
-   public boolean guardarLectura(Usuario usuario,LocalDate fecha,double lectura){
-       return this.lecturaMensualRepository.save(usuario,this.tieneMedidorRepository.getActiveMedidor(usuario), fecha, lectura);
+   public boolean guardarLectura(Usuario usuario,Medidor medidor,LocalDate fecha,double lectura){
+       return this.lecturaMensualRepository.save(usuario,medidor, fecha, lectura);
    }
 }

@@ -88,19 +88,13 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
     @Override
     public boolean save(Usuario usuario,Medidor medidor, LocalDate fecha, double lectura) {
        try {
-           //update or insertS
-            String upsertSql = "UPDATE LECTURA_MENSUAL SET VALOR=? WHERE USUARIO_RUT=? AND CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?; INSERT INTO LECTURA_MENSUAL(USUARIO_RUT,MEDIDOR_ID,FECHA,VALOR) SELECT ?,(SELECT RUT),? WHERE (Select Changes() = 0);";
+            String upsertSql = "INSERT OR REPLACE INTO LECTURA_MENSUAL(USUARIO_RUT,MEDIDOR_ID,FECHA,VALOR) VALUES (?,?,?,?);";
             
             PreparedStatement statement = this.driverManager.getConnection().prepareStatement(upsertSql);
-            statement.setDouble(1,lectura);
-            statement.setString(2,usuario.getRut());
-            statement.setInt(3,fecha.getMonthValue());
-            statement.setInt(4,fecha.getYear());
-            
-            statement.setString(5,usuario.getRut());
-            statement.setString(6,medidor.getId());
-            statement.setDate(7,Date.valueOf(fecha));
-            statement.setDouble(8,lectura);
+            statement.setString(1,usuario.getRut());
+            statement.setString(2,medidor.getId());
+            statement.setDate(3,Date.valueOf(fecha));
+            statement.setDouble(4,lectura);
             int rowsAffected = statement.executeUpdate();
             statement.close();
             return rowsAffected==1;

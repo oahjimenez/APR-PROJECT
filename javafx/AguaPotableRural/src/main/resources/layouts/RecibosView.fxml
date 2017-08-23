@@ -161,7 +161,7 @@
       </HBox>
       <AnchorPane prefHeight="52.0" prefWidth="750.0" styleClass="background_app3">
          <children>
-            <Button layoutX="621.0" layoutY="10.0" mnemonicParsing="false" styleClass="button_app" text="Guardar" />
+            <Button fx:id="guardarLecturasMensualesButton" onAction="#guardarLecturasMensualesAction" layoutX="621.0" layoutY="10.0" mnemonicParsing="false" styleClass="button_app" text="Guardar" />
          </children>
       </AnchorPane>
    </children>

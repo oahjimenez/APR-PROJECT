@@ -15,10 +15,7 @@ import java.time.LocalDate;
  * @author carlo
  */
 public interface LecturaMensualRepository {
-        
-        public double getLecturaMensual(Medidor medidor,Date fecha);
-        public double getLecturaMensual(Usuario usuario,Date fecha);
-        public double getLecturaMensual(Usuario usuario,Medidor medidor,Date fecha);
+        public double getLecturaMensual(Usuario usuario,Medidor medidor,LocalDate fecha);
         public boolean save(Usuario usuario,Medidor medidor,LocalDate fecha,double lectura);
     
 }

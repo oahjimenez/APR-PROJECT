@@ -37,7 +37,11 @@ public class LecturaService {
         this.tieneMedidorRepository = new TieneMedidorRepositoryImpl(driver,this.usuarioRepository,this.medidorRepository);
    }
    
-   public boolean guardarLectura(Usuario usuario,Medidor medidor,LocalDate fecha,double lectura){
+    public boolean guardarLectura(Usuario usuario,Medidor medidor,LocalDate fecha,double lectura){
        return this.lecturaMensualRepository.save(usuario,medidor, fecha, lectura);
+   }
+   
+    public double obtenerLectura(Usuario usuario,Medidor medidor,LocalDate fecha){
+       return this.lecturaMensualRepository.getLecturaMensual(usuario,medidor, fecha);
    }
 }

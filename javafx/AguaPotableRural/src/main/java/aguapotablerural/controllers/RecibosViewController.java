@@ -62,6 +62,10 @@ public class RecibosViewController implements Initializable {
     @FXML
     public ListView listViewUsuarios;
     
+    
+    @FXML
+    public ListView listViewUsuariosIngresados;
+    
     @FXML
     private MenuButton anoMenu;
     
@@ -155,6 +159,18 @@ public class RecibosViewController implements Initializable {
                 }
             }
         });
+        this.listViewUsuariosIngresados.setCellFactory(cellFactory -> new ListCell<Usuario>() {
+            @Override
+            public void updateItem(Usuario item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    String text = new StringBuilder().append(item.getNombres()).append(" ").append(item.getApellidos()).toString();
+                    setText(text);
+                }
+            }
+        });
         
         // Wrap ObservableList in a FilteredList
         FilteredList<Usuario> usuariosFiltrados = new FilteredList<>(usuarios,u -> true);
@@ -183,9 +199,15 @@ public class RecibosViewController implements Initializable {
                 actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
         });
+        this.listViewUsuariosIngresados.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                actualizarMedidoresAnoMes(getUsuarioSeleccionado());
+             }
+        });
     }    
     
-    private LocalDate getMonthYear() {
+    private LocalDate getSelectedMonthYear() {
         if (this.mesMenu.getText().isEmpty() || this.anoMenu.getText().isEmpty()) {
             return null;
         }
@@ -202,7 +224,7 @@ public class RecibosViewController implements Initializable {
                 if (usuario==null) {
                     return;
                 }
-                medidoresDelMes = medidorService.getMedidoresOf(usuario,getMonthYear());
+                medidoresDelMes = medidorService.getMedidoresOf(usuario,getSelectedMonthYear());
                 medidoresUsuarioMensual.getChildren().clear();
                 nombreLabel.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
                 rutLabel.setText(usuario.getRut());
@@ -236,7 +258,11 @@ public class RecibosViewController implements Initializable {
                             System.out.println(String.format("lectura%s total%s final %s,lectura",lectura,lecturaTotal,String.valueOf(lecturaTotal + lectura)+"$"));
                             totalMensualLabel.setText(String.format("%s %s",String.valueOf(lecturaTotal + lectura),unidadMedicion));
                         });
-
+                        double lecturaMedidor = lecturaService.obtenerLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(fila),getSelectedMonthYear());
+                        if (lecturaMedidor!=-1) {
+                            lecturaTextField.setText(String.valueOf(lecturaMedidor));
+                        }
+                        
                         Label pesosLabel = new Label();
                         pesosLabel.setText(String.format("%s %s","Sub Total",unidadMedicion));
                         medidoresUsuarioMensual.add(pesosLabel,3,fila);           
@@ -286,7 +312,11 @@ public class RecibosViewController implements Initializable {
     public void guardarLecturasMensualesAction(ActionEvent event){
         for (int i=0; i < this.medidoresDelMes.size(); i++) {
             if (this.lecturasMedidoresTextFields.get(i).getText().isEmpty()) continue;
-            lecturaService.guardarLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(i),getMonthYear(),Double.parseDouble(this.lecturasMedidoresTextFields.get(i).getText()));
+            if (lecturaService.guardarLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(i),getSelectedMonthYear(),Double.parseDouble(this.lecturasMedidoresTextFields.get(i).getText()))) {
+                if (!this.listViewUsuariosIngresados.getItems().contains(getUsuarioSeleccionado())) {
+                    this.listViewUsuariosIngresados.getItems().add(getUsuarioSeleccionado());
+                }
+            }
         }
     }
     

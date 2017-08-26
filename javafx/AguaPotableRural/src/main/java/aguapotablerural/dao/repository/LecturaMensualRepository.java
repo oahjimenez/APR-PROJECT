@@ -9,6 +9,7 @@ import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -17,5 +18,5 @@ import java.time.LocalDate;
 public interface LecturaMensualRepository {
         public double getLecturaMensual(Usuario usuario,Medidor medidor,LocalDate fecha);
         public boolean save(Usuario usuario,Medidor medidor,LocalDate fecha,double lectura);
-    
+        public List<String> getRutUsuariosConLecturaMensual(LocalDate fecha);   
 }

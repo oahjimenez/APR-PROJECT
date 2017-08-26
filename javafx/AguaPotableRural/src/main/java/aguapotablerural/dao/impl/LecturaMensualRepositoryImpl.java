@@ -13,6 +13,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -63,6 +65,23 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
             System.err.println(String.format("%s - save(): %s %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
         }
        return false;
+    }
+
+    @Override
+    public List<String> getRutUsuariosConLecturaMensual(LocalDate fecha) {
+        List<String> ruts = new ArrayList();
+        try {
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_RUT FROM LECTURA_MENSUAL WHERE FECHA = ?;");
+            statement.setDate(1,Date.valueOf(fecha));
+            ResultSet rutsRs = statement.executeQuery();
+            while (rutsRs.next()) {
+                ruts.add(rutsRs.getString("USUARIO_RUT"));
+            }
+            statement.close();
+        }catch (Exception e){
+            System.err.println(String.format("%s - getRutUsuariosConLecturaMensual(): %s - %s",this.getClass().getSimpleName(),e.getClass().getName(),e.getMessage() ));
+        }
+        return ruts; 
     }
     
 }

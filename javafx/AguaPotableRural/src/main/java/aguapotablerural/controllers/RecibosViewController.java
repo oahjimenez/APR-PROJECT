@@ -136,6 +136,7 @@ public class RecibosViewController implements Initializable {
                 this.anoMenu.setText(ano.getText());
                 this.mesTab.setText(String.format("%s %s",this.mesMenu.getText(),ano.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
             });
         }
         for (MenuItem mes: this.mesMenu.getItems()) {
@@ -143,6 +144,7 @@ public class RecibosViewController implements Initializable {
                 this.mesMenu.setText(mes.getText());
                 this.mesTab.setText(String.format("%s %s",mes.getText(),this.anoMenu.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
             });
         }
         
@@ -205,6 +207,7 @@ public class RecibosViewController implements Initializable {
                 actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
         });
+        this.actualizarUsuariosIngresados(getSelectedMonthYear());
     }    
     
     private LocalDate getSelectedMonthYear() {
@@ -318,6 +321,19 @@ public class RecibosViewController implements Initializable {
                 }
             }
         }
+    }
+    
+    private void actualizarUsuariosIngresados(LocalDate fecha) {
+        this.listViewUsuariosIngresados.getItems().clear();
+        List<String> ruts = lecturaService.getRutUsuariosConLecturaMensual(fecha);
+        ruts.forEach(rut-> {
+            Usuario usuarioLectura = new Usuario();
+            usuarioLectura.setRut(rut);
+            int index = -1;
+            if (((index = this.usuarios.indexOf(usuarioLectura)) != -1) && !this.listViewUsuariosIngresados.getItems().contains(this.usuarios.get(index))){
+               this.listViewUsuariosIngresados.getItems().add(this.usuarios.get(index));
+            }
+        });
     }
     
     private boolean isNumeric(String charset) {

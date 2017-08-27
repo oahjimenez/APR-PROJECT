@@ -119,12 +119,11 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="437.0">
                                        <children>
-                                          <TableView fx:id="medidoresUsuarioMensual" prefHeight="233.0" prefWidth="525.0">
+                                          <TableView fx:id="lecturasMensualesTableView" prefHeight="233.0" prefWidth="525.0">
                                             <columns>
-                                              <TableColumn prefWidth="75.0" text="Medidor" />
-                                              <TableColumn prefWidth="75.0" text="ID" />
-                                                <TableColumn prefWidth="75.0" text="Lectura" />
-                                                <TableColumn prefWidth="75.0" text="Costo" />
+                                              <TableColumn  fx:id="medidorIdTableColumn" prefWidth="75.0" text="Medidor ID" />
+                                                <TableColumn fx:id="lecturaTableColumn" prefWidth="75.0" text="Lectura" />
+                                                <TableColumn fx:id="costoTableColumn" prefWidth="75.0" text="Costo" />
                                             </columns>
                                           </TableView>
                                        </children>
@@ -138,7 +137,8 @@
                             </Tab>
                           </tabs>
                         </TabPane>
-                        <Label fx:id="totalMensualLabel"  layoutX="362.0" layoutY="484.0" text="Total a Pagar :" />
+                        <Label  layoutX="362.0" layoutY="484.0" text="Total a Pagar :" />
+                        <Label fx:id="totalMensualLabel"  layoutX="450.0" layoutY="484.0" text="" />
                      </children>
                   </AnchorPane>
                </children>

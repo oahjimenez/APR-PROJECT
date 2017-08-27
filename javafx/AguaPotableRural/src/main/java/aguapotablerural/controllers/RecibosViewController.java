@@ -12,6 +12,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -37,14 +38,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import main.java.aguapotablerural.dao.repository.MedidorRepository;
 import main.java.aguapotablerural.dao.repository.UsuarioRepository;
-import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
 import main.java.aguapotablerural.dao.impl.UsuarioRepositoryImpl;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
+import main.java.aguapotablerural.services.LecturaService;
 import main.java.aguapotablerural.services.MedidorService;
 
 /**
@@ -54,11 +54,17 @@ import main.java.aguapotablerural.services.MedidorService;
  */
 public class RecibosViewController implements Initializable {
     
+    private final static String unidadMedicion = "(m3)";
+    
     @FXML
     public Button lecturaViewButton;
     
     @FXML
     public ListView listViewUsuarios;
+    
+    
+    @FXML
+    public ListView listViewUsuariosIngresados;
     
     @FXML
     private MenuButton anoMenu;
@@ -87,16 +93,29 @@ public class RecibosViewController implements Initializable {
     @FXML
     public Label telefonoLabel;
     
+    @FXML
+    public Label totalMensualLabel;
+    
+    @FXML
+    public Button guardarLecturasMensualesButton;
+    
     private UsuarioRepository usuarioRepository;
     
     private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
     
     private MedidorService medidorService;
+    private LecturaService lecturaService;
+    
+    private List<TextField> lecturasMedidoresTextFields;
+    
+    private List<? extends Medidor> medidoresDelMes;
     
     public RecibosViewController () {
         DBDriverManager driverManager = new SqliteDriverManager();
         this.usuarioRepository = new UsuarioRepositoryImpl(driverManager);
         this.medidorService = new MedidorService();
+        this.lecturaService = new LecturaService();
+        this.lecturasMedidoresTextFields = new ArrayList<>();
     }
     
     /**
@@ -117,6 +136,7 @@ public class RecibosViewController implements Initializable {
                 this.anoMenu.setText(ano.getText());
                 this.mesTab.setText(String.format("%s %s",this.mesMenu.getText(),ano.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
             });
         }
         for (MenuItem mes: this.mesMenu.getItems()) {
@@ -124,11 +144,24 @@ public class RecibosViewController implements Initializable {
                 this.mesMenu.setText(mes.getText());
                 this.mesTab.setText(String.format("%s %s",mes.getText(),this.anoMenu.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
             });
         }
         
         this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
         this.listViewUsuarios.setCellFactory(cellFactory -> new ListCell<Usuario>() {
+            @Override
+            public void updateItem(Usuario item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    String text = new StringBuilder().append(item.getNombres()).append(" ").append(item.getApellidos()).toString();
+                    setText(text);
+                }
+            }
+        });
+        this.listViewUsuariosIngresados.setCellFactory(cellFactory -> new ListCell<Usuario>() {
             @Override
             public void updateItem(Usuario item, boolean empty) {
                 super.updateItem(item, empty);
@@ -165,12 +198,19 @@ public class RecibosViewController implements Initializable {
         this.listViewUsuarios.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+                actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
         });
+        this.listViewUsuariosIngresados.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                actualizarMedidoresAnoMes(getUsuarioIngresadoSeleccionado());
+             }
+        });
+        this.actualizarUsuariosIngresados(getSelectedMonthYear());
     }    
     
-    private LocalDate getMonthYear() {
+    private LocalDate getSelectedMonthYear() {
         if (this.mesMenu.getText().isEmpty() || this.anoMenu.getText().isEmpty()) {
             return null;
         }
@@ -187,7 +227,7 @@ public class RecibosViewController implements Initializable {
                 if (usuario==null) {
                     return;
                 }
-                List<? extends Medidor> medidoresDelMes = medidorService.getMedidoresOf(usuario,getMonthYear());
+                medidoresDelMes = medidorService.getMedidoresOf(usuario,getSelectedMonthYear());
                 medidoresUsuarioMensual.getChildren().clear();
                 nombreLabel.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
                 rutLabel.setText(usuario.getRut());
@@ -198,6 +238,7 @@ public class RecibosViewController implements Initializable {
                     noPoseeMedidorLabel.setText("Sin registros");
                     medidoresUsuarioMensual.add(noPoseeMedidorLabel,0,0);
                 } else {
+                    double totalMensual = 0.0;
                     for (int fila=0; fila < medidoresDelMes.size(); fila++) {
                         Medidor medidor = medidoresDelMes.get(fila);
                         Label medidorIndexLabel = new Label();
@@ -209,10 +250,24 @@ public class RecibosViewController implements Initializable {
                         medidoresUsuarioMensual.add(medidorIdLabel,1,fila);
 
                         TextField lecturaTextField = new TextField();
+                        this.lecturasMedidoresTextFields.add(lecturaTextField);
                         medidoresUsuarioMensual.add(lecturaTextField,2,fila);
-
+                        lecturaTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                            double lecturaOld = !this.isNumeric(oldValue) ? 0.0 : Double.parseDouble(oldValue);
+                            double lecturaNew = !this.isNumeric(newValue) ? 0.0 : Double.parseDouble(newValue);;
+                            String lecturaTotalStr = totalMensualLabel.getText().replace(unidadMedicion,"").trim();
+                            double lecturaTotal = !this.isNumeric(lecturaTotalStr) ? 0 : Double.parseDouble(lecturaTotalStr);
+                            System.out.println(String.format("old:%snew%s",oldValue,newValue));
+                            totalMensualLabel.setText(String.format("%s %s",String.valueOf(lecturaTotal - lecturaOld + lecturaNew),unidadMedicion));
+                        });
+                        double lecturaMedidor = lecturaService.obtenerLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(fila),getSelectedMonthYear());
+                        if (lecturaMedidor!=-1) {
+                            totalMensual+=lecturaMedidor;
+                            lecturaTextField.setText(String.valueOf(lecturaMedidor));
+                        }
+                        
                         Label pesosLabel = new Label();
-                        pesosLabel.setText("$ Sub Total");
+                        pesosLabel.setText(String.format("%s %s","Sub Total",unidadMedicion));
                         medidoresUsuarioMensual.add(pesosLabel,3,fila);           
                     }
 
@@ -220,9 +275,14 @@ public class RecibosViewController implements Initializable {
                     totalLabel.setText("Total");
                     medidoresUsuarioMensual.add(totalLabel,0,usuario.getMedidoresObservable().size());
 
-                    Label totalPesosLabel = new Label();
-                    totalPesosLabel.setText("$ TOTAL");
-                    medidoresUsuarioMensual.add(totalPesosLabel,3,usuario.getMedidoresObservable().size());
+                    totalMensualLabel = new Label();
+                    if (totalMensual==0.0) {
+                        totalMensualLabel.setText(String.format("%s %s",unidadMedicion,"TOTAL"));
+                    } else {
+                        totalMensualLabel.setText(String.format("%s %s",String.valueOf(totalMensual),unidadMedicion));
+                    }
+                    medidoresUsuarioMensual.add(totalMensualLabel,3,usuario.getMedidoresObservable().size());
+                
                 }
     }
     
@@ -250,6 +310,43 @@ public class RecibosViewController implements Initializable {
         } catch(Exception e) {
            e.printStackTrace();
         }
-    } 
+    }
+    
+    private Usuario getUsuarioSeleccionado() {
+        return (Usuario)this.listViewUsuarios.getSelectionModel().getSelectedItem();
+    }
+        
+    private Usuario getUsuarioIngresadoSeleccionado() {
+        return (Usuario)this.listViewUsuariosIngresados.getSelectionModel().getSelectedItem();
+    }
+    
+    @FXML
+    public void guardarLecturasMensualesAction(ActionEvent event){
+        for (int i=0; i < this.medidoresDelMes.size(); i++) {
+            if (this.lecturasMedidoresTextFields.get(i).getText().isEmpty()) continue;
+            if (lecturaService.guardarLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(i),getSelectedMonthYear(),Double.parseDouble(this.lecturasMedidoresTextFields.get(i).getText()))) {
+                if (!this.listViewUsuariosIngresados.getItems().contains(getUsuarioSeleccionado())) {
+                    this.listViewUsuariosIngresados.getItems().add(getUsuarioSeleccionado());
+                }
+            }
+        }
+    }
+    
+    private void actualizarUsuariosIngresados(LocalDate fecha) {
+        this.listViewUsuariosIngresados.getItems().clear();
+        List<String> ruts = lecturaService.getRutUsuariosConLecturaMensual(fecha);
+        ruts.forEach(rut-> {
+            Usuario usuarioLectura = new Usuario();
+            usuarioLectura.setRut(rut);
+            int index = -1;
+            if (((index = this.usuarios.indexOf(usuarioLectura)) != -1) && !this.listViewUsuariosIngresados.getItems().contains(this.usuarios.get(index))){
+               this.listViewUsuariosIngresados.getItems().add(this.usuarios.get(index));
+            }
+        });
+    }
+    
+    private boolean isNumeric(String charset) {
+        return charset.matches("-?\\d+(\\.\\d*)?");  //match a number with optional '-' and decimal.
+    }
     
 }

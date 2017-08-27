@@ -77,8 +77,10 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="306.0" prefWidth="196.0">
                      <children>
+
                         <Label layoutX="67.0" layoutY="25.0" text="Lecturas Ingresadas" />
-                        <ListView layoutX="46.0" layoutY="59.0" prefHeight="183.0" prefWidth="222.0" />
+                        <ListView fx:id="listViewUsuariosIngresados"  layoutX="46.0" layoutY="59.0" prefHeight="183.0" prefWidth="222.0" />
+
                      </children>
                   </AnchorPane>
                </children>
@@ -117,12 +119,12 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="437.0">
                                        <children>
-                                          <TableView prefHeight="233.0" prefWidth="525.0">
+                                          <TableView fx:id="medidoresUsuarioMensual" prefHeight="233.0" prefWidth="525.0">
                                             <columns>
                                               <TableColumn prefWidth="75.0" text="Medidor" />
                                               <TableColumn prefWidth="75.0" text="ID" />
                                                 <TableColumn prefWidth="75.0" text="Lectura" />
-                                                <TableColumn prefWidth="75.0" text="Subtotal" />
+                                                <TableColumn prefWidth="75.0" text="Costo" />
                                             </columns>
                                           </TableView>
                                        </children>
@@ -136,7 +138,7 @@
                             </Tab>
                           </tabs>
                         </TabPane>
-                        <Label layoutX="362.0" layoutY="484.0" text="Total a Pagar :" />
+                        <Label fx:id="totalMensualLabel"  layoutX="362.0" layoutY="484.0" text="Total a Pagar :" />
                      </children>
                   </AnchorPane>
                </children>
@@ -145,7 +147,8 @@
       </HBox>
       <AnchorPane prefHeight="52.0" prefWidth="750.0" styleClass="background_app3">
          <children>
-            <Button layoutX="818.0" layoutY="12.0" mnemonicParsing="false" styleClass="button_app" text="Guardar" />
+
+            <Button fx:id="guardarLecturasMensualesButton" onAction="#guardarLecturasMensualesAction"  layoutX="818.0" layoutY="12.0" mnemonicParsing="false" styleClass="button_app" text="Guardar"  />
          </children>
       </AnchorPane>
    </children>

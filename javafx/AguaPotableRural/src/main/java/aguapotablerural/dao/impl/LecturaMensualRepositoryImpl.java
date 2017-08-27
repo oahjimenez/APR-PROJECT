@@ -12,6 +12,12 @@ import main.java.aguapotablerural.model.Usuario;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,64 +30,69 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
     public LecturaMensualRepositoryImpl(DBDriverManager driverManager) {
         this.driverManager = driverManager;
     }
-    
-    
-    @Override
-    public double getLecturaMensual(Medidor medidor, Date fecha) {
-       double lecturaMensual = -1;
-       try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where MEDIDOR_ID = ? AND FECHA = ?;");
-            statement.setString(1,medidor.getId());
-            statement.setDate(1,fecha);
-
-            ResultSet lecturaRs = statement.executeQuery();
-
-            lecturaMensual = lecturaRs.getDouble("VALOR");
-            statement.close();
-            return lecturaMensual;
-        }catch (Exception e){
-            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
-        }
-        return lecturaMensual;
-      }
 
     @Override
-    public double getLecturaMensual(Usuario usuario, Date fecha) {
+    public double getLecturaMensual(Usuario usuario, Medidor medidor,LocalDate fecha) {
         double lecturaMensual = -1;
+        PreparedStatement statement = null;
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_RUT = ? AND FECHA = ?;");
-            statement.setString(1,usuario.getRut());
-            statement.setDate(2,fecha);
-           
-            ResultSet lecturaRs = statement.executeQuery();
-            lecturaMensual = lecturaRs.getDouble("VALOR");
-            
-            statement.close();
-            return lecturaMensual;
-        }catch (Exception e){
-            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
-        }
-        return lecturaMensual;  
-   }
-
-    @Override
-    public double getLecturaMensual(Usuario usuario, Medidor medidor,Date fecha) {
-        double lecturaMensual = -1;
-        try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_RUT = ? AND MEDIDOR_ID = ? AND FECHA = ?;");
+            statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_RUT = ? AND MEDIDOR_ID = ? AND FECHA = ?;");
             statement.setString(1,usuario.getRut());
             statement.setString(2,medidor.getId());
-            statement.setDate(3,fecha);
+            statement.setDate(3,Date.valueOf(fecha));
            
             ResultSet lecturaRs = statement.executeQuery();
-            lecturaMensual = lecturaRs.getDouble("VALOR");
             
-            statement.close();
+            while (lecturaRs.next()) {
+                lecturaMensual = lecturaRs.getDouble("VALOR");
+            }
             return lecturaMensual;
         }catch (Exception e){
-            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(String.format("%s - getLecturaMensual() : %s %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(LecturaMensualRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return lecturaMensual;  
      }
+
+    @Override
+    public boolean save(Usuario usuario,Medidor medidor, LocalDate fecha, double lectura) {
+       try {
+            String upsertSql = "INSERT OR REPLACE INTO LECTURA_MENSUAL(USUARIO_RUT,MEDIDOR_ID,FECHA,VALOR) VALUES (?,?,?,?);";
+            
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement(upsertSql);
+            statement.setString(1,usuario.getRut());
+            statement.setString(2,medidor.getId());
+            statement.setDate(3,Date.valueOf(fecha));
+            statement.setDouble(4,lectura);
+            int rowsAffected = statement.executeUpdate();
+            statement.close();
+            return rowsAffected==1;
+        }catch (Exception e){
+            System.err.println(String.format("%s - save(): %s %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
+        }
+       return false;
+    }
+
+    @Override
+    public List<String> getRutUsuariosConLecturaMensual(LocalDate fecha) {
+        List<String> ruts = new ArrayList();
+        try {
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_RUT FROM LECTURA_MENSUAL WHERE FECHA = ?;");
+            statement.setDate(1,Date.valueOf(fecha));
+            ResultSet rutsRs = statement.executeQuery();
+            while (rutsRs.next()) {
+                ruts.add(rutsRs.getString("USUARIO_RUT"));
+            }
+            statement.close();
+        }catch (Exception e){
+            System.err.println(String.format("%s - getRutUsuariosConLecturaMensual(): %s - %s",this.getClass().getSimpleName(),e.getClass().getName(),e.getMessage() ));
+        }
+        return ruts; 
+    }
     
 }

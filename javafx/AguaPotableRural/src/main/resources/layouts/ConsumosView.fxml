@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="692.0" prefWidth="963.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.RecibosViewController">
+   <children>
+      <AnchorPane id="AnchorPane" prefHeight="73.0" prefWidth="600.0" styleClass="background_app">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="336.0" layoutX="328.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/rpi5.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <AnchorPane prefHeight="51.0" prefWidth="750.0" styleClass="background_app4">
+         <children>
+            <Label layoutX="624.0" layoutY="15.0" text="Año" />
+            <Label layoutX="777.0" layoutY="15.0" text="Mes" />
+            <MenuButton fx:id="anoMenu" layoutX="667.0" layoutY="11.0" mnemonicParsing="false" text="Año">
+              <items>
+                <MenuItem mnemonicParsing="false" text="2017" />
+                <MenuItem mnemonicParsing="false" text="2018" />
+                <MenuItem mnemonicParsing="false" text="2019" />
+                <MenuItem mnemonicParsing="false" text="2020" />
+                <MenuItem mnemonicParsing="false" text="2021" />
+                <MenuItem mnemonicParsing="false" text="2022" />
+                <MenuItem mnemonicParsing="false" text="2023" />
+                <MenuItem mnemonicParsing="false" text="2024" />
+
+                                      </items>
+            </MenuButton>
+            <MenuButton fx:id="mesMenu" layoutX="817.0" layoutY="11.0" mnemonicParsing="false" text="Mes">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Enero" />
+                  <MenuItem mnemonicParsing="false" text="Febrero" />
+                  <MenuItem mnemonicParsing="false" text="Marzo" />
+                  <MenuItem mnemonicParsing="false" text="Abril" />
+                  <MenuItem mnemonicParsing="false" text="Mayo" />
+                  <MenuItem mnemonicParsing="false" text="Junio" />
+                  <MenuItem mnemonicParsing="false" text="Julio" />
+                  <MenuItem mnemonicParsing="false" text="Agosto" />
+                  <MenuItem mnemonicParsing="false" text="Septiembre" />
+                  <MenuItem mnemonicParsing="false" text="Octubre" />
+                  <MenuItem mnemonicParsing="false" text="Noviembre" />
+                  <MenuItem mnemonicParsing="false" text="Diciembre" />
+               </items>
+            </MenuButton>
+         </children>
+      </AnchorPane>
+      <HBox prefHeight="495.0" prefWidth="963.0">
+         <children>
+            <VBox prefHeight="492.0" prefWidth="964.0">
+               <children>
+                  <AnchorPane prefHeight="509.0" prefWidth="964.0">
+                     <children>
+                        <Label fx:id="nombreLabel" layoutX="393.0" layoutY="41.0" text="Lista de Lecturas Ingresadas Mes - Año" />
+                        <TableView layoutX="157.0" layoutY="125.0" prefHeight="338.0" prefWidth="664.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Seleccionar" />
+                              <TableColumn prefWidth="75.0" text="Usuario" />
+                              <TableColumn prefWidth="108.33331298828125" text="Total a Pagar" />
+                              <TableColumn prefWidth="92.3333740234375" text="Ver detalle" />
+                          </columns>
+                        </TableView>
+                        <TabPane layoutX="159.0" layoutY="65.0" prefHeight="55.0" prefWidth="659.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="Buscador">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <TextField prefHeight="25.0" prefWidth="658.0" />
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <AnchorPane prefHeight="74.0" prefWidth="963.0" styleClass="background_app3">
+         <children>
+            <Button layoutX="608.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="208.0" styleClass="button_app" text="Imprimir sólo los seleccionados" />
+            <Button layoutX="442.0" layoutY="9.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" styleClass="button_app" text="Impresión Masiva" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

@@ -7,6 +7,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -17,11 +19,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="692.0" prefWidth="750.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.RecibosViewController">
+<VBox prefHeight="692.0" prefWidth="963.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.RecibosViewController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="73.0" prefWidth="600.0" styleClass="background_app">
          <children>
-            <ImageView fitHeight="60.0" fitWidth="336.0" layoutX="207.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="60.0" fitWidth="336.0" layoutX="328.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/rpi4.png" />
                </image>
@@ -29,9 +31,9 @@
          </children></AnchorPane>
       <AnchorPane prefHeight="51.0" prefWidth="750.0" styleClass="background_app4">
          <children>
-            <Label layoutX="477.0" layoutY="16.0" text="Año" />
-            <Label layoutX="630.0" layoutY="16.0" text="Mes" />
-            <MenuButton fx:id="anoMenu" layoutX="520.0" layoutY="12.0" mnemonicParsing="false" text="Año">
+            <Label layoutX="624.0" layoutY="15.0" text="Año" />
+            <Label layoutX="777.0" layoutY="15.0" text="Mes" />
+            <MenuButton fx:id="anoMenu" layoutX="667.0" layoutY="11.0" mnemonicParsing="false" text="Año">
               <items>
                 <MenuItem mnemonicParsing="false" text="2017" />
                 <MenuItem mnemonicParsing="false" text="2018" />
@@ -44,7 +46,7 @@
 
                                       </items>
             </MenuButton>
-            <MenuButton fx:id="mesMenu" layoutX="670.0" layoutY="12.0" mnemonicParsing="false" text="Mes">
+            <MenuButton fx:id="mesMenu" layoutX="817.0" layoutY="11.0" mnemonicParsing="false" text="Mes">
                <items>
                   <MenuItem mnemonicParsing="false" text="Enero" />
                   <MenuItem mnemonicParsing="false" text="Febrero" />
@@ -64,29 +66,29 @@
       </AnchorPane>
       <HBox prefHeight="523.0" prefWidth="750.0">
          <children>
-            <VBox prefHeight="493.0" prefWidth="241.0" styleClass="background_app2">
+            <VBox prefHeight="521.0" prefWidth="314.0" styleClass="background_app2">
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="47.0" layoutY="24.0" text="Lista de Usuarios" />
-                        <TextField fx:id="filtroUsuario" layoutX="30.0" layoutY="49.0" prefHeight="25.0" prefWidth="169.0" />
-                        <ListView fx:id="listViewUsuarios" layoutX="30.0" layoutY="84.0" prefHeight="143.0" prefWidth="169.0" />
+                        <Label layoutX="67.0" layoutY="24.0" text="Lista de Usuarios" />
+                        <TextField fx:id="filtroUsuario" layoutX="50.0" layoutY="49.0" prefHeight="25.0" prefWidth="169.0" />
+                        <ListView fx:id="listViewUsuarios" layoutX="50.0" layoutY="84.0" prefHeight="143.0" prefWidth="214.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="306.0" prefWidth="196.0">
                      <children>
-                        <Label layoutX="47.0" layoutY="25.0" text="Lecturas Ingresadas" />
-                        <ListView layoutX="26.0" layoutY="59.0" prefHeight="183.0" prefWidth="169.0" />
+                        <Label layoutX="67.0" layoutY="25.0" text="Lecturas Ingresadas" />
+                        <ListView layoutX="46.0" layoutY="59.0" prefHeight="183.0" prefWidth="222.0" />
                      </children>
                   </AnchorPane>
                </children>
             </VBox>
             <VBox>
                <children>
-                  <AnchorPane prefHeight="493.0" prefWidth="515.0">
+                  <AnchorPane prefHeight="518.0" prefWidth="625.0">
                      <children>
                         <Label fx:id="nombreLabel" layoutX="68.0" layoutY="40.0" text="Seleccione un usuario de la lista de usuarios para visualizar sus detalles de lectura." />
-                        <GridPane layoutX="35.0" layoutY="84.0" prefHeight="90.0" prefWidth="419.0">
+                        <GridPane layoutX="43.0" layoutY="81.0" prefHeight="93.0" prefWidth="411.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.0" minWidth="10.0" prefWidth="73.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="21.0" />
@@ -109,38 +111,20 @@
                               <Label text=":" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
-                        <TabPane layoutX="35.0" layoutY="224.0" prefHeight="211.0" prefWidth="437.0" styleClass="tab-header-background" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane layoutX="41.0" layoutY="209.0" prefHeight="258.0" prefWidth="524.0" styleClass="tab-header-background" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab fx:id="mesTab" text="Mes">
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="437.0">
                                        <children>
-                                          <GridPane fx:id="medidoresUsuarioMensual" layoutX="19.0" layoutY="36.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                             <children>
-                                                 
-                                                <Label text="Medidor 1" />
-                                                <Label text="Medidor 2" GridPane.rowIndex="1" />
-                                                <Label text="Medidor ID" GridPane.columnIndex="1" />
-                                                <Label text="Medidor ID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField promptText="Lectura" GridPane.columnIndex="2" />
-                                                <TextField promptText="Lectura" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                                <Label text="\$ Sub Total" GridPane.columnIndex="3" />
-                                                <Label text="\$ Sub Total" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                                <Label text="Total" GridPane.rowIndex="2" />
-                                                <Label text="\$ TOTAL" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                             </children>
-                                          </GridPane>
+                                          <TableView prefHeight="233.0" prefWidth="525.0">
+                                            <columns>
+                                              <TableColumn prefWidth="75.0" text="Medidor" />
+                                              <TableColumn prefWidth="75.0" text="ID" />
+                                                <TableColumn prefWidth="75.0" text="Lectura" />
+                                                <TableColumn prefWidth="75.0" text="Subtotal" />
+                                            </columns>
+                                          </TableView>
                                        </children>
                                     </AnchorPane>
                               </content>
@@ -152,6 +136,7 @@
                             </Tab>
                           </tabs>
                         </TabPane>
+                        <Label layoutX="362.0" layoutY="484.0" text="Total a Pagar :" />
                      </children>
                   </AnchorPane>
                </children>
@@ -160,7 +145,7 @@
       </HBox>
       <AnchorPane prefHeight="52.0" prefWidth="750.0" styleClass="background_app3">
          <children>
-            <Button layoutX="621.0" layoutY="10.0" mnemonicParsing="false" styleClass="button_app" text="Guardar" />
+            <Button layoutX="818.0" layoutY="12.0" mnemonicParsing="false" styleClass="button_app" text="Guardar" />
          </children>
       </AnchorPane>
    </children>

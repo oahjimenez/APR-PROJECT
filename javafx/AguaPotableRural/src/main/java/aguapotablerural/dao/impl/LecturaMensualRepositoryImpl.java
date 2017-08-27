@@ -12,9 +12,12 @@ import main.java.aguapotablerural.model.Usuario;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -31,19 +34,27 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
     @Override
     public double getLecturaMensual(Usuario usuario, Medidor medidor,LocalDate fecha) {
         double lecturaMensual = -1;
+        PreparedStatement statement = null;
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_RUT = ? AND MEDIDOR_ID = ? AND FECHA = ?;");
+            statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_RUT = ? AND MEDIDOR_ID = ? AND FECHA = ?;");
             statement.setString(1,usuario.getRut());
             statement.setString(2,medidor.getId());
             statement.setDate(3,Date.valueOf(fecha));
            
             ResultSet lecturaRs = statement.executeQuery();
-            lecturaMensual = lecturaRs.getDouble("VALOR");
             
-            statement.close();
+            while (lecturaRs.next()) {
+                lecturaMensual = lecturaRs.getDouble("VALOR");
+            }
             return lecturaMensual;
         }catch (Exception e){
-            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(String.format("%s - getLecturaMensual() : %s %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(LecturaMensualRepositoryImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return lecturaMensual;  
      }

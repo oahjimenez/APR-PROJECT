@@ -125,6 +125,8 @@ public class RecibosViewController implements Initializable {
     
     private List<? extends Medidor> medidoresDelMes;
     
+    private Usuario usuarioSeleccionado;
+    
     public RecibosViewController () {
         DBDriverManager driverManager = new SqliteDriverManager();
         this.usuarioRepository = new UsuarioRepositoryImpl(driverManager);
@@ -150,6 +152,7 @@ public class RecibosViewController implements Initializable {
         lecturaTableColumn.setOnEditCommit(t -> {
             double lecturaOld = !isNumeric(t.getOldValue()) ? 0.0 : Double.parseDouble(t.getOldValue());
             double lecturaNew = !isNumeric(t.getNewValue()) ? 0.0 : Double.parseDouble(t.getNewValue());
+            t.getRowValue().setLectura(lecturaNew);
             String lecturaTotalStr = totalMensualLabel.getText().replace(UNIDAD_PAGO,"").trim();
             double lecturaTotal = !isNumeric(lecturaTotalStr) ? 0 : Double.parseDouble(lecturaTotalStr);
             System.out.println(String.format("old:%snew%s",t.getOldValue(),t.getNewValue()));
@@ -233,13 +236,15 @@ public class RecibosViewController implements Initializable {
         this.listViewUsuarios.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                setUsuarioSeleccionado((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
                 actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
         });
         this.listViewUsuariosIngresados.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                actualizarMedidoresAnoMes(getUsuarioIngresadoSeleccionado());
+                setUsuarioSeleccionado((Usuario)listViewUsuariosIngresados.getSelectionModel().getSelectedItem());
+                actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
         });
         this.actualizarUsuariosIngresados(getSelectedMonthYear());
@@ -278,7 +283,7 @@ public class RecibosViewController implements Initializable {
                         lecturas.add(lecturaMensual);
                         Medidor medidor = medidoresDelMes.get(fila);
                         lecturaMensual.setMedidor(medidor);
-                        double lecturaMedidor = lecturaService.obtenerLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(fila),getSelectedMonthYear());
+                        double lecturaMedidor = lecturaService.obtenerLectura(getUsuarioSeleccionado(),medidor,getSelectedMonthYear());
                         if (lecturaMedidor!=-1) {
                             lecturaMensual.setLectura(lecturaMedidor);
                             totalMensual+=lecturaMedidor;
@@ -334,19 +339,20 @@ public class RecibosViewController implements Initializable {
         }
     }
     
-    private Usuario getUsuarioSeleccionado() {
-        return (Usuario)this.listViewUsuarios.getSelectionModel().getSelectedItem();
+    private void setUsuarioSeleccionado(Usuario usuario) {
+        this.usuarioSeleccionado = usuario;
     }
+    
+    private Usuario getUsuarioSeleccionado() {
+        return this.usuarioSeleccionado;
         
-    private Usuario getUsuarioIngresadoSeleccionado() {
-        return (Usuario)this.listViewUsuariosIngresados.getSelectionModel().getSelectedItem();
     }
     
     @FXML
     public void guardarLecturasMensualesAction(ActionEvent event){
-        for (int i=0; i < this.medidoresDelMes.size(); i++) {
-            if (this.lecturasMedidoresTextFields.get(i).getText().isEmpty()) continue;
-            if (lecturaService.guardarLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(i),getSelectedMonthYear(),Double.parseDouble(this.lecturasMedidoresTextFields.get(i).getText()))) {
+        for (LecturaMensual lectura : this.lecturas) {
+            if (lecturaService.guardarLectura(getUsuarioSeleccionado(),lectura.getMedidor(),getSelectedMonthYear(),lectura.getLectura())) {
+                System.out.println(String.format("%s - guardarLecturasMensualesAction() : Guardando datos user<%s> medidor<%s> fecha<%s> lectura<%s>",this.getClass().getSimpleName(),getUsuarioSeleccionado().getNombres(),lectura.getMedidor().getId(),getSelectedMonthYear(),lectura.getLectura()));
                 if (!this.listViewUsuariosIngresados.getItems().contains(getUsuarioSeleccionado())) {
                     this.listViewUsuariosIngresados.getItems().add(getUsuarioSeleccionado());
                 }

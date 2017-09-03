@@ -63,7 +63,7 @@ public class EditUsuarioController implements Initializable {
     public Label telefonoLabel;
     
     @FXML
-    public Label medidorLabel;
+    public Label idMedidorLabel;
     
     @FXML
     public Button editUsuarioButton;
@@ -107,12 +107,6 @@ public class EditUsuarioController implements Initializable {
         this.direccionText.setMaxLength(UsuarioValidator.DIRECCION_MAXCHAR);
         this.telefonoText.setMaxLength(UsuarioValidator.TELEFONO_MAXCHAR);
 
-        boolean widgetVisible = false;
-        this.nombreLabel.setVisible(widgetVisible);
-        this.apellidosLabel.setVisible(widgetVisible);
-        this.direccionLabel.setVisible(widgetVisible);
-        this.telefonoLabel.setVisible(widgetVisible);
-        this.medidorLabel.setVisible(widgetVisible);
         this.rutText.setText(usuarioEditable.getRut());
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
             try {
@@ -148,9 +142,16 @@ public class EditUsuarioController implements Initializable {
         });
         
         this.idMedidorText.textProperty().addListener((obs, oldTelefono, newIdMedidor) -> {
-            this.medidorLabel.setVisible(!MedidorValidator.isValidId(newIdMedidor));
+            this.idMedidorLabel.setVisible(!MedidorValidator.isValidId(newIdMedidor));
             this.idMedidorText.setText(newIdMedidor);
         });
+      
+        this.rutLabel.setVisible(!UsuarioValidator.isValidRut(this.rutText.getText()));
+        this.nombreLabel.setVisible(!UsuarioValidator.isValidNombres(this.nombresText.getText()));
+        this.apellidosLabel.setVisible(!UsuarioValidator.isValidApellidos(this.apellidosText.getText()));
+        this.direccionLabel.setVisible(!UsuarioValidator.isValidDireccion(this.direccionText.getText()));
+        this.telefonoLabel.setVisible(!UsuarioValidator.isValidTelefono(this.telefonoText.getText()));   
+        this.idMedidorLabel.setVisible(false); //porque es opcional
         this.listViewMedidores.setItems(this.usuarioEditable.getMedidoresObservable());
     }
 
@@ -167,7 +168,7 @@ public class EditUsuarioController implements Initializable {
         boolean addedSucess = false;
         Medidor medidor = new Medidor();
         medidor.setId(this.idMedidorText.getText());
-        this.medidorLabel.setVisible(!MedidorValidator.isValid(medidor));
+        this.idMedidorLabel.setVisible(!MedidorValidator.isValid(medidor));
         if (MedidorValidator.isValid(medidor) && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
             addedSucess = this.usuarioEditable.getMedidoresObservable().add(medidor);
         }

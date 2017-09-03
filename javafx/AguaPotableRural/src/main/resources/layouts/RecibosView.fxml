@@ -78,7 +78,7 @@
                   <AnchorPane prefHeight="306.0" prefWidth="196.0">
                      <children>
 
-                        <Label layoutX="67.0" layoutY="25.0" text="Lecturas Ingresadas" />
+                        <Label fx:id="lecturasIngrsadasLabel" layoutX="67.0" layoutY="25.0" text="Lecturas Ingresadas" />
                         <ListView fx:id="listViewUsuariosIngresados"  layoutX="46.0" layoutY="59.0" prefHeight="183.0" prefWidth="222.0" />
 
                      </children>

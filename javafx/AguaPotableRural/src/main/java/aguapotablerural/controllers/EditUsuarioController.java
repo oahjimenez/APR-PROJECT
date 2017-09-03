@@ -107,6 +107,12 @@ public class EditUsuarioController implements Initializable {
         this.direccionText.setMaxLength(UsuarioValidator.DIRECCION_MAXCHAR);
         this.telefonoText.setMaxLength(UsuarioValidator.TELEFONO_MAXCHAR);
 
+        boolean widgetVisible = false;
+        this.nombreLabel.setVisible(widgetVisible);
+        this.apellidosLabel.setVisible(widgetVisible);
+        this.direccionLabel.setVisible(widgetVisible);
+        this.telefonoLabel.setVisible(widgetVisible);
+        this.medidorLabel.setVisible(widgetVisible);
         this.rutText.setText(usuarioEditable.getRut());
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
             try {
@@ -188,6 +194,11 @@ public class EditUsuarioController implements Initializable {
             alert.setContentText("Existen datos incompletos o mal ingresados");
             alert.showAndWait();
             System.err.println(String.format("%s - editarUsuarioAction(): fallo edicion de usuario. Datos invalidos %s.",this.getClass().getSimpleName(),this.usuarioEditable));
+            System.err.println(String.format("rut valido?%s",UsuarioValidator.isValidRut(rutText.getText())));
+            System.err.println(String.format("nombre valido?%s",UsuarioValidator.isValidNombres(nombresText.getText())));
+            System.err.println(String.format("apellidos valido?%s",UsuarioValidator.isValidApellidos(apellidosText.getText())));
+            System.err.println(String.format("direccion valido?%s",UsuarioValidator.isValidDireccion(direccionText.getText())));
+            System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(direccionText.getText())));
             return;
         }
         this.usuarioRepository.save(usuarioEditable);

@@ -134,6 +134,13 @@ public class AddUsuarioController implements Initializable{
                 this.rutLabel.setVisible(true);
             }
         });
+        boolean widgetVisible = false;
+        this.rutLabel.setVisible(widgetVisible);
+        this.nombreLabel.setVisible(widgetVisible);
+        this.apellidosLabel.setVisible(widgetVisible);
+        this.direccionLabel.setVisible(widgetVisible);
+        this.telefonoLabel.setVisible(widgetVisible);
+        this.medidorLabel.setVisible(widgetVisible);
         this.nombresText.textProperty().addListener((obs, oldNombre, newNombre) -> { 
                 this.nombreLabel.setVisible(!UsuarioValidator.isValidNombres(newNombre));
                 this.nombresText.setText(newNombre.toUpperCase());
@@ -171,6 +178,13 @@ public class AddUsuarioController implements Initializable{
             alert.setContentText("Existen datos incompletos o mal ingresados");
             alert.showAndWait();
             System.err.println("Usuario es invalido. No se registro en la base de datos");
+            System.err.println(String.format("%s - editarUsuarioAction(): fallo edicion de usuario. Datos invalidos %s.",this.getClass().getSimpleName(),this.newUsuario));
+            System.err.println(String.format("rut valido?%s",UsuarioValidator.isValidRut(rutText.getText())));
+            System.err.println(String.format("nombre valido?%s",UsuarioValidator.isValidNombres(nombresText.getText())));
+            System.err.println(String.format("apellidos valido?%s",UsuarioValidator.isValidApellidos(apellidosText.getText())));
+            System.err.println(String.format("direccion valido?%s",UsuarioValidator.isValidDireccion(direccionText.getText())));
+            System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(direccionText.getText())));
+           
             return false;
         }
         boolean registradoConExito = usuarioRepository.save(this.newUsuario) && usuarios.add(this.newUsuario);

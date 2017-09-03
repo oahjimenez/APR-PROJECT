@@ -55,8 +55,8 @@
 
                 <TableColumn fx:id="nombresColumn" prefWidth="75.0" text="Nombres" />
                   <TableColumn fx:id="apellidosColumn" prefWidth="75.0" text="Apellidos" />
-                  <TableColumn fx:id="direccionColumn" prefWidth="75.0" text="Direccion" />
-                  <TableColumn fx:id="telefonoColumn" minWidth="-1.0" prefWidth="75.0" text="Telefono" />
+                  <TableColumn fx:id="direccionColumn" prefWidth="75.0" text="Dirección" />
+                  <TableColumn fx:id="telefonoColumn" minWidth="-1.0" prefWidth="75.0" text="Teléfono" />
 
               </columns>
             </TableView>

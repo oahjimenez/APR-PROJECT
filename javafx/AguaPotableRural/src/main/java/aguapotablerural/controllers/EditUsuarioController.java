@@ -183,6 +183,7 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     public void editarUsuarioAction(ActionEvent event){
+        this.usuarioEditable.setRut(rutText.getText());
         this.usuarioEditable.setNombres(nombresText.getText());
         this.usuarioEditable.setApellidos(apellidosText.getText());
         this.usuarioEditable.setDireccion(direccionText.getText());
@@ -199,7 +200,8 @@ public class EditUsuarioController implements Initializable {
             System.err.println(String.format("nombre valido?%s",UsuarioValidator.isValidNombres(nombresText.getText())));
             System.err.println(String.format("apellidos valido?%s",UsuarioValidator.isValidApellidos(apellidosText.getText())));
             System.err.println(String.format("direccion valido?%s",UsuarioValidator.isValidDireccion(direccionText.getText())));
-            System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(direccionText.getText())));
+            System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(telefonoText.getText())));
+            System.err.println("usuario valid?"+UsuarioValidator.isValid(this.usuarioEditable));
             return;
         }
         this.usuarioRepository.save(usuarioEditable);

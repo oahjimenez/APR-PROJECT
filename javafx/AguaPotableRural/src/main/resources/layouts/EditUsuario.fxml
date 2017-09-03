@@ -59,7 +59,7 @@
                   <Label fx:id="rutLabel" styleClass="texterr_app2" text="Rut inválido." GridPane.columnIndex="3" GridPane.rowIndex="2" />
                   <Label fx:id="direccionLabel" styleClass="texterr_app2" text="Información obligatoria." GridPane.columnIndex="3" GridPane.rowIndex="3" />
                   <Label fx:id="telefonoLabel" styleClass="texterr_app2" text="Ingresar teléfono válido." GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <Label fx:id="medidorLabel" styleClass="texterr_app2" text="Ingresar Id válido." GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <Label fx:id="idMedidorLabel" styleClass="texterr_app2" text="Ingresar Id válido." GridPane.columnIndex="3" GridPane.rowIndex="5" />
 
                </children>
             </GridPane>

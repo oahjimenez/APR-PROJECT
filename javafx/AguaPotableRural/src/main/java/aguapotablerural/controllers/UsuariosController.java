@@ -29,6 +29,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -90,6 +91,16 @@ public class UsuariosController implements Initializable {
        
         usuarios.addAll(usuarioRepository.getActiveUsuarios());
         tableViewUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+         this.tableViewUsuarios.setRowFactory( tv -> {
+            TableRow<Usuario> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    openEditUsuarioLayout();
+                }
+            });
+            return row ;
+        });
+                
         tableViewUsuarios.setItems(usuarios);
         
         // Wrap ObservableList in a FilteredList
@@ -173,6 +184,10 @@ public class UsuariosController implements Initializable {
     
     @FXML
     private void openEditUsuarioLayoutAction(ActionEvent event) {
+        this.openEditUsuarioLayout();
+    }
+    
+    private void openEditUsuarioLayout() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("main/resources/layouts/EditUsuario.fxml"));
             fxmlLoader.setControllerFactory(controllerFactory);

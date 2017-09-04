@@ -16,7 +16,7 @@ public class MedidorValidator {
     
     
     public static boolean isValidId(String id) {
-        return (id!=null) && (!id.isEmpty()) && (id.length() <= ID_MAXCHAR) && (id.matches("[0-9]+"));
+        return (id!=null)  && (id.length() <= ID_MAXCHAR) && (id.matches("[0-9]*"));
     }
     
     public static boolean isValid(Medidor medidor) {

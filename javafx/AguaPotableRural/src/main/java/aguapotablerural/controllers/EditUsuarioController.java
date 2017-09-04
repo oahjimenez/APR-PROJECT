@@ -36,6 +36,10 @@ import main.java.aguapotablerural.ui.LimitedTextField;
  */
 public class EditUsuarioController implements Initializable {
     
+    private static final String ERROR_MSG_RUT_EXISTENTE="Rut ya existente";
+    private static final String ERROR_MSG_CAMPO_OBLIGATORIO="Información obligatoria.";
+    private static final String ERROR_MSG_RUT_INVALIDO="Rut inválido.";
+    
     @FXML
     private ListView<Medidor> listViewMedidores;
     @FXML
@@ -116,6 +120,9 @@ public class EditUsuarioController implements Initializable {
             try {
                 String rut = newRut.replace(".","").replace("-","");
                 this.rutLabel.setVisible(!UsuarioValidator.isValidRut(rut));
+                if (this.rutLabel.isVisible()) { //necesario para restituir mesaje de rut invalido cuando se arroja error cuando rut ya existe
+                    this.rutLabel.setText(ERROR_MSG_RUT_INVALIDO);
+                }
                 rutText.setText(this.formatRut(rut));
             } catch (NumberFormatException e) {
                 this.rutLabel.setVisible(true);
@@ -175,6 +182,9 @@ public class EditUsuarioController implements Initializable {
         this.idMedidorLabel.setVisible(!MedidorValidator.isValid(medidor));
         if (MedidorValidator.isValid(medidor) && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
             addedSucess = this.usuarioEditable.getMedidoresObservable().add(medidor);
+            if (addedSucess) { 
+                this.idMedidorText.setText(""); 
+            } //limpia campo de id medidor despues de ingresado
         }
         return addedSucess;
     }
@@ -202,7 +212,7 @@ public class EditUsuarioController implements Initializable {
         System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+usuarioEditable.getId());
         System.err.println("query usuario:"+usuarioRut);
         if (existeOtroUsuarioConRut) {
-            this.rutLabel.setText("Rut ya existente");
+            this.rutLabel.setText(ERROR_MSG_RUT_EXISTENTE);
             this.rutLabel.setVisible(true);
         } 
         this.rutLabel.setVisible(existeOtroUsuarioConRut);

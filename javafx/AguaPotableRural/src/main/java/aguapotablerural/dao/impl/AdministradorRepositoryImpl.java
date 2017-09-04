@@ -29,21 +29,23 @@ public class AdministradorRepositoryImpl extends UsuarioRepositoryImpl implement
 
     @Override
     public Administrador get(String rut) {
+        Administrador administrador = null;
         Usuario usuario = super.get(rut);
         try {
             PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT * FROM ADMINISTRADOR where rut = ?;");
             statement.setString(1,rut);
             ResultSet administradorRs = statement.executeQuery();
 
-            String password = administradorRs.getString("password");
-            Administrador administrador = new Administrador();
-            administrador.copyFromUsuario(usuario);
+            if (administradorRs.next()) {
+                String password = administradorRs.getString("password");
+                administrador = new Administrador();
+                administrador.copyFromUsuario(usuario);
+            }
             statement.close();
-            return administrador;
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
-        return null;
+        return administrador;
     }
 
     @Override

@@ -26,6 +26,7 @@ import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import main.java.aguapotablerural.model.validator.MedidorValidator;
 import main.java.aguapotablerural.model.validator.UsuarioValidator;
+import main.java.aguapotablerural.services.UsuarioService;
 import main.java.aguapotablerural.ui.LimitedTextField;
 
 /**
@@ -75,10 +76,13 @@ public class EditUsuarioController implements Initializable {
     private UsuarioRepository usuarioRepository;
 
     private DecimalFormat formatter;
+    
+    private UsuarioService usuarioService;
 
     public EditUsuarioController(Usuario usuarioEditable,UsuarioRepository usuarioRepository) {
         this.usuarioEditable = usuarioEditable;
         this.usuarioRepository = usuarioRepository;
+        this.usuarioService = new UsuarioService();
         
         formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -110,7 +114,7 @@ public class EditUsuarioController implements Initializable {
         this.rutText.setText(usuarioEditable.getRut());
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
             try {
-                String rut = this.rutText.getText().replace(".","").replace("-","");
+                String rut = newRut.replace(".","").replace("-","");
                 this.rutLabel.setVisible(!UsuarioValidator.isValidRut(rut));
                 rutText.setText(this.formatRut(rut));
             } catch (NumberFormatException e) {
@@ -159,7 +163,7 @@ public class EditUsuarioController implements Initializable {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public void setUsuarioEditable(Usuario usuarioEditble) {
+    public void setUsuarioEditable(Usuario usuarioEditable) {
         this.usuarioEditable = usuarioEditable;
     }
     
@@ -181,15 +185,29 @@ public class EditUsuarioController implements Initializable {
         return this.usuarioEditable.getMedidoresObservable().remove(medidor);
     }
     
+    private String cleanRut(String rut){
+        return rut.replace(".","");
+    }
+    
     @FXML
     public void editarUsuarioAction(ActionEvent event){
-        this.usuarioEditable.setRut(rutText.getText());
+        this.usuarioEditable.setRut(cleanRut(rutText.getText()));
         this.usuarioEditable.setNombres(nombresText.getText());
         this.usuarioEditable.setApellidos(apellidosText.getText());
         this.usuarioEditable.setDireccion(direccionText.getText());
         this.usuarioEditable.setTelefono(telefonoText.getText());
-       
-        if (!UsuarioValidator.isValid(this.usuarioEditable)) {
+        
+        Usuario usuarioRut = usuarioService.getUsuario(this.usuarioEditable.getRut());
+        boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.usuarioEditable.getId()!=usuarioRut.getId());
+        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+usuarioEditable.getId());
+        System.err.println("query usuario:"+usuarioRut);
+        if (existeOtroUsuarioConRut) {
+            this.rutLabel.setText("Rut ya existente");
+            this.rutLabel.setVisible(true);
+        } 
+        this.rutLabel.setVisible(existeOtroUsuarioConRut);
+        
+        if (!UsuarioValidator.isValid(this.usuarioEditable) || existeOtroUsuarioConRut) {
             Alert alert= new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText(null);
@@ -204,6 +222,8 @@ public class EditUsuarioController implements Initializable {
             System.err.println("usuario valid?"+UsuarioValidator.isValid(this.usuarioEditable));
             return;
         }
+        
+        
         this.usuarioRepository.save(usuarioEditable);
         Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
         stage.close();

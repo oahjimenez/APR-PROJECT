@@ -15,6 +15,10 @@ import java.sql.PreparedStatement;
 public class Administrador extends Usuario {
     
     private String password;
+    
+    public Administrador() {
+        super();
+    }
 
     public String getPassword() {
         return password;
@@ -25,6 +29,7 @@ public class Administrador extends Usuario {
     }
     
     public void copyFromUsuario(Usuario usuario) {
+        this.setId(usuario.getId());
         this.setRut(usuario.getRut());
         this.setNombres(usuario.getNombres());
         this.setDireccion(usuario.getDireccion());

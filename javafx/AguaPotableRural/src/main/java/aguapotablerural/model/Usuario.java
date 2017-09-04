@@ -21,6 +21,10 @@ import javafx.collections.ObservableList;
  */
 public class Usuario implements Comparable{
     
+    private static final int DEFAULT_ID = -1;
+    
+    private int id;
+    
     private final SimpleStringProperty rutProperty;
     private final SimpleStringProperty nombresProperty;
     private final SimpleStringProperty apellidosProperty;
@@ -32,15 +36,28 @@ public class Usuario implements Comparable{
     private Date fechaRetiro;
 
     public Usuario () {
-        this(null,null,null,null,null);
+        this(DEFAULT_ID,null,null,null,null,null);
     }
     
-    public Usuario(String rut,String nombres,String apellidos,String direccion, String telefono) {
+    public Usuario(int id,String rut,String nombres,String apellidos,String direccion, String telefono) {
+        this.id = id;
         this.rutProperty = new SimpleStringProperty(rut);
         this.nombresProperty = new SimpleStringProperty(nombres);
         this.apellidosProperty = new SimpleStringProperty(apellidos);
         this.direccionProperty  = new SimpleStringProperty(direccion);
         this.telefonoProperty = new SimpleStringProperty(telefono);
+    }
+    
+    public void setId(int id) {
+        /* Solo se cambia el id si no habia sido inicializado (tiene valor por defecto)*/
+        if (this.id!=DEFAULT_ID) {
+            throw new RuntimeException("Id para usuario no puede ser modificado");
+        }
+        this.id = id;
+    }
+    
+    public int getId() {
+        return this.id;
     }
     
     public String getRut() {

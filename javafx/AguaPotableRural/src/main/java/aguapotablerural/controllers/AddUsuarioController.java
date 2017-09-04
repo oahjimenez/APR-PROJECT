@@ -31,6 +31,7 @@ import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
 import main.java.aguapotablerural.model.validator.MedidorValidator;
 import main.java.aguapotablerural.model.validator.UsuarioValidator;
+import main.java.aguapotablerural.services.UsuarioService;
 import main.java.aguapotablerural.ui.LimitedTextField;
 
 /**
@@ -92,6 +93,7 @@ public class AddUsuarioController implements Initializable{
     
     
     private DecimalFormat formatter;
+    private UsuarioService usuarioService;
 
     
     public AddUsuarioController(ObservableList<Usuario> usuarios,UsuarioRepository usuarioRepository,MedidorRepository medidorRepository) {
@@ -99,6 +101,7 @@ public class AddUsuarioController implements Initializable{
         this.newUsuario = new Usuario();
         this.usuarioRepository = usuarioRepository;
         this.medidorRepository = medidorRepository;
+        this.usuarioService = new UsuarioService();
         
         formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -170,9 +173,17 @@ public class AddUsuarioController implements Initializable{
         this.newUsuario.setApellidos(apellidosText.getText());
         this.newUsuario.setDireccion(direccionText.getText());
         this.newUsuario.setTelefono(telefonoText.getText());
+         Usuario usuarioRut = usuarioService.getUsuario(this.newUsuario.getRut());
+        boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.newUsuario.getId()!=usuarioRut.getId());
+        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id newuser:"+newUsuario.getId());
+        System.err.println("query usuario:"+usuarioRut);
+        if (existeOtroUsuarioConRut) {
+            this.rutLabel.setText("Rut ya existente");
+            this.rutLabel.setVisible(true);
+        } 
+        this.rutLabel.setVisible(existeOtroUsuarioConRut);
         
-        if (!(UsuarioValidator.isValid(this.newUsuario))) {
-            Alert alert= new Alert(AlertType.WARNING);
+        if (!UsuarioValidator.isValid(this.newUsuario) || existeOtroUsuarioConRut) {     Alert alert= new Alert(AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText(null);
             alert.setContentText("Existen datos incompletos o mal ingresados");

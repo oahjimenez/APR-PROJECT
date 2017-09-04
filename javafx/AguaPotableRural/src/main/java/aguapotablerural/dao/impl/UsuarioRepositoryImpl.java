@@ -43,24 +43,28 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
         
        Usuario usuario = null;
        try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT * FROM USUARIO where rut = ? AND FECHA_RETIRO IS NULL;");
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,NOMBRES,APELLIDOS,DIRECCION,TELEFONO,FECHA_REGISTRO,FECHA_RETIRO FROM USUARIO where rut = ?;");
             statement.setString(1,rut);
             ResultSet usuarioRs = statement.executeQuery();
-
-            String nombres = usuarioRs.getString("nombres");
-            String apellidos = usuarioRs.getString("apellidos");
-            String direccion = usuarioRs.getString("direccion");
-            String telefono = usuarioRs.getString("telefono");
-            Date fechaRegistro = usuarioRs.getDate("fecha_registro");
-            Date fechaRetiro = usuarioRs.getDate("fecha_retiro");
-            usuario = new Usuario();
-            usuario.setRut(rut);
-            usuario.setNombres(nombres);
-            usuario.setApellidos(apellidos);
-            usuario.setDireccion(direccion);
-            usuario.setTelefono(telefono);
-            usuario.setFechaRegistro(fechaRegistro);
-            usuario.setFechaRetiro(fechaRetiro);
+            if (usuarioRs.next()) {
+                int id = usuarioRs.getInt("id");
+                String nombres = usuarioRs.getString("nombres");
+                String apellidos = usuarioRs.getString("apellidos");
+                String direccion = usuarioRs.getString("direccion");
+                String telefono = usuarioRs.getString("telefono");
+                //TODO parsear fechas correctamente
+                //Date fechaRegistro = usuarioRs.getDate("fecha_registro");
+                //Date fechaRetiro = usuarioRs.getDate("fecha_retiro");
+                usuario = new Usuario();
+                usuario.setId(id);
+                usuario.setRut(rut);
+                usuario.setNombres(nombres);
+                usuario.setApellidos(apellidos);
+                usuario.setDireccion(direccion);
+                usuario.setTelefono(telefono);
+                //usuario.setFechaRegistro(fechaRegistro);
+                //usuario.setFechaRetiro(fechaRetiro);
+            }
             statement.close();
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
@@ -114,12 +118,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             ResultSet usuariosRs = statement.executeQuery();
             
             while (usuariosRs.next()) {
+                int id = usuariosRs.getInt("id");
                 String rut = usuariosRs.getString("rut");
                 String nombre = usuariosRs.getString("nombres");
                 String apellidos = usuariosRs.getString("apellidos");
                 String direccion = usuariosRs.getString("direccion");
                 String telefono = usuariosRs.getString("telefono");
                 Usuario usuario = new Usuario();
+                usuario.setId(id);
                 usuario.setRut(rut);
                 usuario.setNombres(nombre);
                 usuario.setApellidos(apellidos);
@@ -142,12 +148,14 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             ResultSet usuariosRs = statement.executeQuery();
             
             while (usuariosRs.next()) {
+                int id = usuariosRs.getInt("id");
                 String rut = usuariosRs.getString("rut");
                 String nombre = usuariosRs.getString("nombres");
                 String apellidos = usuariosRs.getString("apellidos");
                 String direccion = usuariosRs.getString("direccion");
                 String telefono = usuariosRs.getString("telefono");
                 Usuario usuario = new Usuario();
+                usuario.setId(id);
                 usuario.setRut(rut);
                 usuario.setNombres(nombre);
                 usuario.setApellidos(apellidos);

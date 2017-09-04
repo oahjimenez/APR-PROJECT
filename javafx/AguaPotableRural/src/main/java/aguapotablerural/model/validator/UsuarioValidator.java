@@ -28,7 +28,7 @@ public class UsuarioValidator {
             return false;
         }
         rut = rut.replace(".","").replace("-","");
-        return (rut.matches(rutPattern)) && (rut.length() >= RUT_MINCHAR) && (rut.length()<= RUT_MAXCHAR ) && isValidDigitoVerificador(rut.substring(0,rut.length()-1),rut.substring(rut.length() - 1));
+        return ((rut.matches(rutPattern)) && (rut.length() >= RUT_MINCHAR) && (rut.length()<= RUT_MAXCHAR ) && isValidDigitoVerificador(rut.substring(0,rut.length()-1),rut.substring(rut.length() - 1)));
     }
 
     public static boolean isValidNombres(String nombres) {
@@ -49,7 +49,7 @@ public class UsuarioValidator {
     }
     
     public static boolean isValid(Usuario usuario) {
-        return usuario!=null && isValidRut(usuario.getRut()) && isValidNombres(usuario.getNombres()) && isValidApellidos(usuario.getApellidos()) && isValidDireccion(usuario.getDireccion()) && isValidTelefono(usuario.getTelefono());
+        return usuario!=null && isValidRut(usuario.getRut())  && isValidNombres(usuario.getNombres()) && isValidApellidos(usuario.getApellidos()) && isValidDireccion(usuario.getDireccion()) && isValidTelefono(usuario.getTelefono());
     }
     
     public static boolean isValidDigitoVerificador(String rut, String digitoVerificador) {

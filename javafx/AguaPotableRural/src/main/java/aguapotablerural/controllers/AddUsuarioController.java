@@ -194,7 +194,7 @@ public class AddUsuarioController implements Initializable{
             System.err.println(String.format("nombre valido?%s",UsuarioValidator.isValidNombres(nombresText.getText())));
             System.err.println(String.format("apellidos valido?%s",UsuarioValidator.isValidApellidos(apellidosText.getText())));
             System.err.println(String.format("direccion valido?%s",UsuarioValidator.isValidDireccion(direccionText.getText())));
-            System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(direccionText.getText())));
+            System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(telefonoText.getText())));
            
             return false;
         }

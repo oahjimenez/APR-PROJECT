@@ -68,14 +68,14 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     public Collection<Usuario> getAllUsuarios(Medidor medidor) {
      Collection<Usuario> usuarios = new ArrayList();
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_RUT FROM TIENE_MEDIDOR WHERE MEDIDOR_ID = ?;");
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_ID FROM TIENE_MEDIDOR WHERE MEDIDOR_ID = ?;");
             statement.setString(1,medidor.getId());
             
             ResultSet usuariosRs = statement.executeQuery();
             
             while (usuariosRs.next()) {
                 Usuario usuario;
-                if ((usuario = this.usuarioRepository.get(usuariosRs.getString("USUARIO_RUT"))) != null) {
+                if ((usuario = this.usuarioRepository.get(usuariosRs.getString("USUARIO_ID"))) != null) {
                     usuarios.add(usuario);
                 }
             }
@@ -90,8 +90,8 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     public Collection<Medidor> getAllMedidores(Usuario usuario) {
       Collection<Medidor> medidores = new ArrayList();
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_RUT = ?;");
-            statement.setString(1,usuario.getRut());
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_ID = ?;");
+            statement.setInt(1,usuario.getId());
             
             ResultSet medidoresRs = statement.executeQuery();
             
@@ -112,11 +112,11 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     public Usuario getMostRecentUsuario(Medidor medidor) {
     Usuario usuario = null;
        try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT TOP 1 USUARIO_RUT FROM TIENE_MEDIDOR where MEDIDOR_ID = ? ;");
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT TOP 1 USUARIO_ID FROM TIENE_MEDIDOR where MEDIDOR_ID = ? ;");
             statement.setString(1,medidor.getId());
             ResultSet usuarioRs = statement.executeQuery();
             statement.close(); 
-            return this.usuarioRepository.get(usuarioRs.getString("USUARIO_RUT"));
+            return this.usuarioRepository.get(usuarioRs.getString("USUARIO_ID"));
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
@@ -127,8 +127,8 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     public Medidor getMostRecentMedidor(Usuario usuario) {
         Medidor medidor = null;
        try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT TOP 1 MEDIDOR_ID FROM TIENE_MEDIDOR where USUARIO_RUT = ? ");
-            statement.setString(1,usuario.getRut());
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT TOP 1 MEDIDOR_ID FROM TIENE_MEDIDOR where USUARIO_ID = ? ");
+            statement.setInt(1,usuario.getId());
             ResultSet medidorRs = statement.executeQuery();
             statement.close(); 
             return this.medidorRepository.get(medidorRs.getString("MEDIDOR_ID"));
@@ -141,8 +141,8 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     @Override
     public boolean save(Usuario usuario, Medidor medidor) {
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO TIENE_MEDIDOR (USUARIO_RUT,MEDIDOR_ID,FECHA_ADQUISICION)  VALUES (?, ? , CURRENT_DATE );");
-            statement.setString(1,usuario.getRut());
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO TIENE_MEDIDOR (USUARIO_ID,MEDIDOR_ID,FECHA_ADQUISICION)  VALUES (?, ? , CURRENT_DATE );");
+            statement.setInt(1,usuario.getId());
             statement.setString(2,medidor.getId());
             int rowsAffected = statement.executeUpdate();
             statement.close();
@@ -166,8 +166,8 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     public List<? extends Medidor> getMedidorOf(Usuario usuario, LocalDate fecha) {
         List<Medidor> medidores = new ArrayList();
         try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_RUT = ? AND CAST(strftime('%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%Y',fecha_adquisicion) as integer) = ?;");
-            statement.setString(1,usuario.getRut());
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_ID = ? AND CAST(strftime('%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%Y',fecha_adquisicion) as integer) = ?;");
+            statement.setInt(1,usuario.getId());
             statement.setInt(2,fecha.getMonthValue());
             statement.setInt(3,fecha.getYear());
             

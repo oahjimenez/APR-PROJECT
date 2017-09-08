@@ -55,8 +55,8 @@ public class AdministradorRepositoryImpl extends UsuarioRepositoryImpl implement
             return !saved;
         }
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO ADMINISTRADOR (rut,password)  VALUES (?, ?);");
-            statement.setString(1,admin.getRut());
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO ADMINISTRADOR (ID,password)  VALUES (?, ?);");
+            statement.setInt(1,admin.getId());
             statement.setString(2,admin.getPassword());
             int rowsAffected = statement.executeUpdate();
             statement.close();

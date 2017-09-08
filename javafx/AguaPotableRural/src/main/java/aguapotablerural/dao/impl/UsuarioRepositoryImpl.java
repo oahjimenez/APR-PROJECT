@@ -74,47 +74,52 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
 
     @Override
     public boolean save(Usuario usuario) {
+      boolean guardadoConExito = false;
       try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (rut,nombres,apellidos,direccion,telefono,fecha_registro) VALUES (?, ? , ?, ?, ? , CURRENT_DATE );");
-            statement.setString(1,usuario.getRut());
-            statement.setString(2,usuario.getNombres());
-            statement.setString(3,usuario.getApellidos());
-            statement.setString(4,usuario.getDireccion());
-            statement.setString(5,usuario.getTelefono());
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (id,rut,nombres,apellidos,direccion,telefono,fecha_registro) VALUES (?,?, ? , ?, ?, ? , CURRENT_DATE );");
+            statement.setInt(1,usuario.getId());
+            statement.setString(2,usuario.getRut());
+            statement.setString(3,usuario.getNombres());
+            statement.setString(4,usuario.getApellidos());
+            statement.setString(5,usuario.getDireccion());
+            statement.setString(6,usuario.getTelefono());
             int rowsAffected = statement.executeUpdate();
             statement.close();
             
             if (!(rowsAffected>0)){
-                return false;
+                guardadoConExito = this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
+                this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
+            } else {
+               System.err.println("Error al guardar mas de un registro encontrado con id"+usuario.getId());
+
             }
-            return this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
-            this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
         }  
-        return false;
+        return guardadoConExito;
     }
 
     @Override
     public boolean delete(Usuario usuario) {
+       boolean borradoConExito = false;
        try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("UPDATE USUARIO SET FECHA_RETIRO = CURRENT_DATE WHERE rut = ?;");
-            statement.setString(1,usuario.getRut());
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("UPDATE USUARIO SET FECHA_RETIRO = CURRENT_DATE WHERE ID = ?;");
+            statement.setInt(1,usuario.getId());
             statement.executeUpdate();
             int rowsAffected = statement.executeUpdate();
             statement.close();
-            return rowsAffected>0;
+            borradoConExito = (rowsAffected==1);
         }catch (Exception e){
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }
-       return false;
+       return borradoConExito;
     }
 
     @Override
     public Collection<Usuario> getAllUsuarios() {
         List<Usuario> usuarios = new LinkedList();
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT * FROM USUARIO;");
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT ID,RUT,NOMBRES,APELLIDOS,DIRECCION,TELEFONO FROM USUARIO;");
             ResultSet usuariosRs = statement.executeQuery();
             
             while (usuariosRs.next()) {
@@ -144,7 +149,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
     public Collection<Usuario> getActiveUsuarios() {
        List<Usuario> usuarios = new LinkedList();
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT * FROM USUARIO WHERE FECHA_RETIRO IS NULL;");
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT ID,RUT,NOMBRES,APELLIDOS,DIRECCION,TELEFONO FROM USUARIO WHERE FECHA_RETIRO IS NULL;");
             ResultSet usuariosRs = statement.executeQuery();
             
             while (usuariosRs.next()) {

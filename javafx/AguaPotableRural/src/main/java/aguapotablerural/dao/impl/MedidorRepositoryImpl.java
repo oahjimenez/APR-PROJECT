@@ -39,19 +39,20 @@ public class MedidorRepositoryImpl implements MedidorRepository {
             PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT * FROM MEDIDOR where ID = ? AND FECHA_RETIRO IS NULL;");
             statement.setString(1,id);
             ResultSet medidorRs = statement.executeQuery();
-
-            String medidorId = medidorRs.getString("id");
-            String descripcion = medidorRs.getString("descripcion");
-            //Date fechaRegistro = java.sql.Date.valueOf( medidorRs.getObject("fecha_registro", LocalDate.class ) );
-            //Date fechaRetiro = medidorRs.getDate("fecha_retiro");
-            medidor = new Medidor();
-            medidor.setId(medidorId);
-            medidor.setDescripcion(descripcion);
-           // medidor.setFechaRegistro(fechaRegistro);
-           // medidor.setFechaRetiro(fechaRetiro);
+            if (medidorRs.next()) {
+                String medidorId = medidorRs.getString("id");
+                String descripcion = medidorRs.getString("descripcion");
+                //Date fechaRegistro = java.sql.Date.valueOf( medidorRs.getObject("fecha_registro", LocalDate.class ) );
+                //Date fechaRetiro = medidorRs.getDate("fecha_retiro");
+                medidor = new Medidor();
+                medidor.setId(medidorId);
+                medidor.setDescripcion(descripcion);
+               // medidor.setFechaRegistro(fechaRegistro);
+               // medidor.setFechaRetiro(fechaRetiro);
+            }
             statement.close();
         }catch (Exception e){
-            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(String.format("%s - get() : %s - %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
         }
         return medidor;
     }
@@ -68,7 +69,7 @@ public class MedidorRepositoryImpl implements MedidorRepository {
             statement.close();
             return rowsAffected>0;
         }catch (Exception e){
-            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(String.format("%s - save() : %s - %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
         }
        return false;
     }
@@ -92,7 +93,7 @@ public class MedidorRepositoryImpl implements MedidorRepository {
             statement.close();
             return rowsAffected > 0;
         }catch (Exception e){
-            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.err.println(String.format("%s - delete() : %s - %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
         }
         return false;
     }

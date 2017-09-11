@@ -27,4 +27,8 @@ public class UsuarioService {
         return this.usuarioRepository.get(rut);
     }
     
+    public boolean crearUsuario(Usuario usuario) {
+        return this.usuarioRepository.create(usuario);
+    }
+    
 }

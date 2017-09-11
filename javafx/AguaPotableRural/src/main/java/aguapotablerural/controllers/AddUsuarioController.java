@@ -122,6 +122,11 @@ public class AddUsuarioController implements Initializable{
         }
         return formatter.format(new BigInteger(rut));
     }
+     
+         
+    private String cleanRut(String rut){
+        return rut.replace(".","");
+    }
     
     
     @Override
@@ -174,13 +179,15 @@ public class AddUsuarioController implements Initializable{
         this.listViewMedidores.setItems(this.newUsuario.getMedidoresObservable());
     }
     @FXML
-    private boolean registraUsuarioAction(ActionEvent event) {        
-        this.newUsuario.setRut(rutText.getText());
-        this.newUsuario.setNombres(nombresText.getText());
-        this.newUsuario.setApellidos(apellidosText.getText());
-        this.newUsuario.setDireccion(direccionText.getText());
-        this.newUsuario.setTelefono(telefonoText.getText());
-         Usuario usuarioRut = usuarioService.getUsuario(this.newUsuario.getRut());
+    private boolean registraUsuarioAction(ActionEvent event) {      
+        boolean registradoConExito = false;
+        Usuario newUsuario = new Usuario();
+        newUsuario.setRut(this.cleanRut(rutText.getText()));
+        newUsuario.setNombres(nombresText.getText());
+        newUsuario.setApellidos(apellidosText.getText());
+        newUsuario.setDireccion(direccionText.getText());
+        newUsuario.setTelefono(telefonoText.getText());  
+        Usuario usuarioRut = usuarioService.getUsuario(this.cleanRut(rutText.getText()));
         boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.newUsuario.getId()!=usuarioRut.getId());
         System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id newuser:"+newUsuario.getId());
         System.err.println("query usuario:"+usuarioRut);
@@ -190,7 +197,18 @@ public class AddUsuarioController implements Initializable{
         } 
         this.rutLabel.setVisible(existeOtroUsuarioConRut);
         
-        if (!UsuarioValidator.isValid(this.newUsuario) || existeOtroUsuarioConRut) {     Alert alert= new Alert(AlertType.WARNING);
+        if (UsuarioValidator.isValid(newUsuario) && !existeOtroUsuarioConRut) {   
+            this.newUsuario.setRut(newUsuario.getRut());
+            this.newUsuario.setNombres(newUsuario.getNombres());
+            this.newUsuario.setApellidos(newUsuario.getApellidos());
+            this.newUsuario.setDireccion(newUsuario.getDireccion());
+            this.newUsuario.setTelefono(newUsuario.getTelefono());  
+            registradoConExito = usuarioService.crearUsuario(this.newUsuario)&& usuarios.add(this.newUsuario);
+            Stage stage = (Stage) addUsuarioButton.getScene().getWindow();
+            stage.close();
+        }
+            else {
+            Alert alert= new Alert(AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText(null);
             alert.setContentText("Existen datos incompletos o mal ingresados");
@@ -202,12 +220,7 @@ public class AddUsuarioController implements Initializable{
             System.err.println(String.format("apellidos valido?%s",UsuarioValidator.isValidApellidos(apellidosText.getText())));
             System.err.println(String.format("direccion valido?%s",UsuarioValidator.isValidDireccion(direccionText.getText())));
             System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(telefonoText.getText())));
-           
-            return false;
         }
-        boolean registradoConExito = usuarioRepository.save(this.newUsuario) && usuarios.add(this.newUsuario);
-        Stage stage = (Stage) addUsuarioButton.getScene().getWindow();
-        stage.close();
         return registradoConExito;
     }
     

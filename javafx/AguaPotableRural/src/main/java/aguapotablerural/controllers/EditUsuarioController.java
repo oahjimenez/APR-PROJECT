@@ -200,14 +200,8 @@ public class EditUsuarioController implements Initializable {
     }
     
     @FXML
-    public void editarUsuarioAction(ActionEvent event){
-        this.usuarioEditable.setRut(cleanRut(rutText.getText()));
-        this.usuarioEditable.setNombres(nombresText.getText());
-        this.usuarioEditable.setApellidos(apellidosText.getText());
-        this.usuarioEditable.setDireccion(direccionText.getText());
-        this.usuarioEditable.setTelefono(telefonoText.getText());
-        
-        Usuario usuarioRut = usuarioService.getUsuario(this.usuarioEditable.getRut());
+    public void editarUsuarioAction(ActionEvent event){        
+        Usuario usuarioRut = usuarioService.getUsuario(cleanRut(rutText.getText()));
         boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.usuarioEditable.getId()!=usuarioRut.getId());
         System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+usuarioEditable.getId());
         System.err.println("query usuario:"+usuarioRut);
@@ -217,7 +211,16 @@ public class EditUsuarioController implements Initializable {
         } 
         this.rutLabel.setVisible(existeOtroUsuarioConRut);
         
-        if (!UsuarioValidator.isValid(this.usuarioEditable) || existeOtroUsuarioConRut) {
+        if (UsuarioValidator.isValid(this.usuarioEditable) && !existeOtroUsuarioConRut) {    
+            this.usuarioEditable.setRut(cleanRut(rutText.getText()));
+            this.usuarioEditable.setNombres(nombresText.getText());
+            this.usuarioEditable.setApellidos(apellidosText.getText());
+            this.usuarioEditable.setDireccion(direccionText.getText());
+            this.usuarioEditable.setTelefono(telefonoText.getText());
+            this.usuarioRepository.save(usuarioEditable);
+            Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
+            stage.close();
+        } else {
             Alert alert= new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText(null);
@@ -230,12 +233,6 @@ public class EditUsuarioController implements Initializable {
             System.err.println(String.format("direccion valido?%s",UsuarioValidator.isValidDireccion(direccionText.getText())));
             System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(telefonoText.getText())));
             System.err.println("usuario valid?"+UsuarioValidator.isValid(this.usuarioEditable));
-            return;
         }
-        
-        
-        this.usuarioRepository.save(usuarioEditable);
-        Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
-        stage.close();
     }
 }

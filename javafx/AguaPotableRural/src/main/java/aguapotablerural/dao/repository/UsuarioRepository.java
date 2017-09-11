@@ -18,5 +18,6 @@ public interface UsuarioRepository {
     public boolean delete(Usuario usuario);
     public Collection<Usuario> getAllUsuarios();
     public Collection<Usuario> getActiveUsuarios();
+    public boolean create(Usuario usuario);
     
 }

@@ -98,6 +98,32 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
         }  
         return guardadoConExito;
     }
+    
+    @Override
+    public boolean create(Usuario usuario) {
+      boolean guardadoConExito = false;
+      try {
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT INTO USUARIO (rut,nombres,apellidos,direccion,telefono,fecha_registro) VALUES (?, ? , ?, ?, ? , CURRENT_DATE );");
+            statement.setString(1,usuario.getRut());
+            statement.setString(2,usuario.getNombres());
+            statement.setString(3,usuario.getApellidos());
+            statement.setString(4,usuario.getDireccion());
+            statement.setString(5,usuario.getTelefono());
+            int rowsAffected = statement.executeUpdate();
+            statement.close();
+            
+            if (!(rowsAffected>0)){
+                guardadoConExito = this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
+                this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
+            } else {
+               System.err.println("Error al guardar mas de un registro encontrado con id"+usuario.getId());
+
+            }
+        }catch (Exception e){
+            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
+        }  
+        return guardadoConExito;
+    }
 
     @Override
     public boolean delete(Usuario usuario) {

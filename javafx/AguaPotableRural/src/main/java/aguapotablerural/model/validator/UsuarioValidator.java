@@ -27,7 +27,11 @@ public class UsuarioValidator {
     public static final int APELLIDOS_MAXCHAR = 40;
     public static final int DIRECCION_MAXCHAR = 50;
     public static final int TELEFONO_MAXCHAR = 8;
-    private boolean isRutMandatory;
+    private boolean isRutMandatory = false;
+    private boolean isNombresMandatory = false;
+    private boolean isApellidosMandatory = false;
+    private boolean isDireccionMandatory = false;
+    private boolean isTelefonoMandatory = false;
     
     public UsuarioValidator() {
         
@@ -36,8 +40,24 @@ public class UsuarioValidator {
     public void setRutMandatory(boolean isRutMandatory) {
         this.isRutMandatory = isRutMandatory;
     }
+    
+     public void setNombresMandatory(boolean isNombresMandatory) {
+        this.isNombresMandatory = isNombresMandatory;
+    }
+     
+    public void setApellidosMandatory(boolean isApellidosMandatory) {
+        this.isApellidosMandatory = isApellidosMandatory;
+    }
+    
+    public void setDireccionMandatory(boolean isDireccionMandatory) {
+        this.isDireccionMandatory = isDireccionMandatory;
+    }
 
-    public static boolean isValidRut(String rut) {
+    public void setTelefonoMandatory(boolean isTelefonoMandatory) {
+        this.isTelefonoMandatory = isTelefonoMandatory;
+    }
+
+    public boolean isValidRut(String rut) {
         if (rut==null) {
             return false;
         }
@@ -45,32 +65,32 @@ public class UsuarioValidator {
         return ((rut.matches(rutPattern)) && (rut.length() >= RUT_MINCHAR) && (rut.length()<= RUT_MAXCHAR ) && isValidDigitoVerificador(rut.substring(0,rut.length()-1),rut.substring(rut.length() - 1)));
     }
 
-    public static boolean isValidNombres(String nombres) {
+    public boolean isValidNombres(String nombres) {
         return nombres!=null && !nombres.isEmpty() && nombres.length() <= NOMBRES_MAXCHAR;
     }
     
-    public static boolean isValidApellidos(String apellidos) {
+    public boolean isValidApellidos(String apellidos) {
         return apellidos!=null && !apellidos.isEmpty() && apellidos.length() <= APELLIDOS_MAXCHAR;
 
     }
     
-    public static boolean isValidDireccion(String direccion) {
+    public boolean isValidDireccion(String direccion) {
         return direccion!=null && !direccion.isEmpty() && direccion.length() <= DIRECCION_MAXCHAR;
 
     }
-    public static boolean isValidTelefono(String telefono) {
+    public boolean isValidTelefono(String telefono) {
         return telefono!=null && !telefono.isEmpty() && telefono.length() == TELEFONO_MAXCHAR && telefono.matches(digitPattern);
     }
     
-    public static boolean isValid(Usuario usuario) {
+    public boolean isValid(Usuario usuario) {
         return usuario!=null && isValidRut(usuario.getRut())  && isValidNombres(usuario.getNombres()) && isValidApellidos(usuario.getApellidos()) && isValidDireccion(usuario.getDireccion()) && isValidTelefono(usuario.getTelefono());
     }
     
-    public static boolean isValidDigitoVerificador(String rut, String digitoVerificador) {
+    public boolean isValidDigitoVerificador(String rut, String digitoVerificador) {
        return digitoVerificador.equalsIgnoreCase(String.valueOf(getDigitoVerificador(Integer.parseInt(rut))));
     }
     
-    public static char getDigitoVerificador(int rut) {
+    public char getDigitoVerificador(int rut) {
         int m = 0, s = 1;
         int asciiKValue = 75;
         for (; rut != 0; rut /= 10) {
@@ -79,7 +99,7 @@ public class UsuarioValidator {
         return ((char) (s != 0 ? s + 47 : asciiKValue));
     }
     
-    public static String formatRut(String rut){
+    public String formatRut(String rut){
         rut = rut.replace(".","").replace("-","");
         StringBuilder builder = new StringBuilder();
         DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);

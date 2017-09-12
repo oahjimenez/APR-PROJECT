@@ -75,18 +75,21 @@ public class UsuariosController implements Initializable {
     
     private Callback<Class<?>, Object> controllerFactory;
     
+    private UsuarioValidator usuarioValidator;
+    
     
     private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
     public UsuariosController() {
         DBDriverManager driverManager = new SqliteDriverManager();
-        usuarioRepository = new UsuarioRepositoryImpl(driverManager);
-        medidorRepository = new MedidorRepositoryImpl(driverManager);
+        this.usuarioRepository = new UsuarioRepositoryImpl(driverManager);
+        this.medidorRepository = new MedidorRepositoryImpl(driverManager);
+        this.usuarioValidator = new UsuarioValidator();
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        rutColumn.setCellValueFactory(cellData -> {
-           return new SimpleStringProperty(UsuarioValidator.formatRut(cellData.getValue().getRut()));
+           return new SimpleStringProperty(this.usuarioValidator.formatRut(cellData.getValue().getRut()));
        });
        nombresColumn.setCellValueFactory(cellData -> cellData.getValue().getNombresProperty());
        apellidosColumn.setCellValueFactory(cellData -> cellData.getValue().getApellidosProperty());

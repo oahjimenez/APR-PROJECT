@@ -82,11 +82,13 @@ public class EditUsuarioController implements Initializable {
     private DecimalFormat formatter;
     
     private UsuarioService usuarioService;
-
+    private UsuarioValidator usuarioValidator;
+    
     public EditUsuarioController(Usuario usuarioEditable,UsuarioRepository usuarioRepository) {
         this.usuarioEditable = usuarioEditable;
         this.usuarioRepository = usuarioRepository;
         this.usuarioService = new UsuarioService();
+        this.usuarioValidator = new UsuarioValidator();
         
         formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -119,7 +121,7 @@ public class EditUsuarioController implements Initializable {
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
             try {
                 String rut = newRut.replace(".","").replace("-","");
-                this.rutLabel.setVisible(!UsuarioValidator.isValidRut(rut));
+                this.rutLabel.setVisible(!this.usuarioValidator.isValidRut(rut));
                 if (this.rutLabel.isVisible()) { //necesario para restituir mesaje de rut invalido cuando se arroja error cuando rut ya existe
                     this.rutLabel.setText(ERROR_MSG_RUT_INVALIDO);
                 }
@@ -130,25 +132,25 @@ public class EditUsuarioController implements Initializable {
         });
         this.nombresText.setText(usuarioEditable.getNombres().toUpperCase());
         this.nombresText.textProperty().addListener((obs, oldNombre, newNombre) -> { 
-                this.nombreLabel.setVisible(!UsuarioValidator.isValidNombres(newNombre));
+                this.nombreLabel.setVisible(!this.usuarioValidator.isValidNombres(newNombre));
                 this.nombresText.setText(newNombre.toUpperCase());
         });
         
         this.apellidosText.setText(usuarioEditable.getApellidos().toUpperCase());
         this.apellidosText.textProperty().addListener((obs, oldApellidos, newApellidos) -> {
-            this.apellidosLabel.setVisible(!UsuarioValidator.isValidApellidos(newApellidos));
+            this.apellidosLabel.setVisible(!this.usuarioValidator.isValidApellidos(newApellidos));
             this.apellidosText.setText(newApellidos.toUpperCase());
         });
         
         this.direccionText.setText(usuarioEditable.getDireccion().toUpperCase());
         this.direccionText.textProperty().addListener((obs, oldDireccion, newDireccion) -> {
-            this.direccionLabel.setVisible(!UsuarioValidator.isValidDireccion(newDireccion));
+            this.direccionLabel.setVisible(!this.usuarioValidator.isValidDireccion(newDireccion));
             this.direccionText.setText(newDireccion.toUpperCase());
         });
 
         this.telefonoText.setText(usuarioEditable.getTelefono());
         this.telefonoText.textProperty().addListener((obs, oldTelefono, newTelefono) -> {
-            this.telefonoLabel.setVisible(!UsuarioValidator.isValidTelefono(newTelefono));
+            this.telefonoLabel.setVisible(!this.usuarioValidator.isValidTelefono(newTelefono));
             this.telefonoText.setText(newTelefono);
         });
         
@@ -157,11 +159,11 @@ public class EditUsuarioController implements Initializable {
             this.idMedidorText.setText(newIdMedidor);
         });
       
-        this.rutLabel.setVisible(!UsuarioValidator.isValidRut(this.rutText.getText()));
-        this.nombreLabel.setVisible(!UsuarioValidator.isValidNombres(this.nombresText.getText()));
-        this.apellidosLabel.setVisible(!UsuarioValidator.isValidApellidos(this.apellidosText.getText()));
-        this.direccionLabel.setVisible(!UsuarioValidator.isValidDireccion(this.direccionText.getText()));
-        this.telefonoLabel.setVisible(!UsuarioValidator.isValidTelefono(this.telefonoText.getText()));   
+        this.rutLabel.setVisible(!this.usuarioValidator.isValidRut(this.rutText.getText()));
+        this.nombreLabel.setVisible(!this.usuarioValidator.isValidNombres(this.nombresText.getText()));
+        this.apellidosLabel.setVisible(!this.usuarioValidator.isValidApellidos(this.apellidosText.getText()));
+        this.direccionLabel.setVisible(!this.usuarioValidator.isValidDireccion(this.direccionText.getText()));
+        this.telefonoLabel.setVisible(!this.usuarioValidator.isValidTelefono(this.telefonoText.getText()));   
         this.idMedidorLabel.setVisible(false); //porque es opcional
         this.listViewMedidores.setItems(this.usuarioEditable.getMedidoresObservable());
     }
@@ -215,9 +217,9 @@ public class EditUsuarioController implements Initializable {
             this.rutLabel.setText(ERROR_MSG_RUT_EXISTENTE);
             this.rutLabel.setVisible(true);
         } 
-        this.rutLabel.setVisible(existeOtroUsuarioConRut || !UsuarioValidator.isValidRut(usuarioEditable.getRut()));
+        this.rutLabel.setVisible(existeOtroUsuarioConRut || !this.usuarioValidator.isValidRut(usuarioEditable.getRut()));
         
-        if (UsuarioValidator.isValid(usuarioEditable) && !existeOtroUsuarioConRut) {    
+        if (this.usuarioValidator.isValid(usuarioEditable) && !existeOtroUsuarioConRut) {    
             this.usuarioEditable.setRut(usuarioEditable.getRut());
             this.usuarioEditable.setNombres(usuarioEditable.getNombres());
             this.usuarioEditable.setApellidos(usuarioEditable.getApellidos());
@@ -233,12 +235,12 @@ public class EditUsuarioController implements Initializable {
             alert.setContentText("Existen datos incompletos o mal ingresados");
             alert.showAndWait();
             System.err.println(String.format("%s - editarUsuarioAction(): fallo edicion de usuario. Datos invalidos %s.",this.getClass().getSimpleName(),this.usuarioEditable));
-            System.err.println(String.format("rut valido?%s",UsuarioValidator.isValidRut(rutText.getText())));
-            System.err.println(String.format("nombre valido?%s",UsuarioValidator.isValidNombres(nombresText.getText())));
-            System.err.println(String.format("apellidos valido?%s",UsuarioValidator.isValidApellidos(apellidosText.getText())));
-            System.err.println(String.format("direccion valido?%s",UsuarioValidator.isValidDireccion(direccionText.getText())));
-            System.err.println(String.format("telefono valido?%s",UsuarioValidator.isValidTelefono(telefonoText.getText())));
-            System.err.println("usuario valid?"+UsuarioValidator.isValid(this.usuarioEditable));
+            System.err.println(String.format("rut valido?%s",this.usuarioValidator.isValidRut(rutText.getText())));
+            System.err.println(String.format("nombre valido?%s",this.usuarioValidator.isValidNombres(nombresText.getText())));
+            System.err.println(String.format("apellidos valido?%s",this.usuarioValidator.isValidApellidos(apellidosText.getText())));
+            System.err.println(String.format("direccion valido?%s",this.usuarioValidator.isValidDireccion(direccionText.getText())));
+            System.err.println(String.format("telefono valido?%s",this.usuarioValidator.isValidTelefono(telefonoText.getText())));
+            System.err.println("usuario valid?"+this.usuarioValidator.isValid(this.usuarioEditable));
         }
     }
 }

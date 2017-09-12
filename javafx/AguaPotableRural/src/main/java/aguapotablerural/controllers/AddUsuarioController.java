@@ -106,6 +106,9 @@ public class AddUsuarioController implements Initializable{
         this.medidorRepository = medidorRepository;
         this.usuarioService = new UsuarioService();
         this.usuarioValidator = new UsuarioValidator();
+        this.usuarioValidator.setRutMandatory(true);
+        this.usuarioValidator.setNombresMandatory(true);
+        this.usuarioValidator.setApellidosMandatory(true);
         
         formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -181,33 +184,48 @@ public class AddUsuarioController implements Initializable{
     @FXML
     private boolean registraUsuarioAction(ActionEvent event) {      
         boolean registradoConExito = false;
-        Usuario newUsuario = new Usuario();
-        newUsuario.setRut(this.cleanRut(rutText.getText()));
-        newUsuario.setNombres(nombresText.getText());
-        newUsuario.setApellidos(apellidosText.getText());
-        newUsuario.setDireccion(direccionText.getText());
-        newUsuario.setTelefono(telefonoText.getText());  
+        Usuario _newUsuario = new Usuario();
+        _newUsuario.setRut(this.cleanRut(rutText.getText()));
+        _newUsuario.setNombres(nombresText.getText());
+        _newUsuario.setApellidos(apellidosText.getText());
+        _newUsuario.setDireccion(direccionText.getText());
+        _newUsuario.setTelefono(telefonoText.getText());  
         Usuario usuarioRut = usuarioService.getUsuario(this.cleanRut(rutText.getText()));
         boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.newUsuario.getId()!=usuarioRut.getId());
-        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id newuser:"+newUsuario.getId());
+        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id newuser:"+_newUsuario.getId());
         System.err.println("query usuario:"+usuarioRut);
         if (existeOtroUsuarioConRut) {
             this.rutLabel.setText(ERROR_MSG_RUT_EXISTENTE);
             this.rutLabel.setVisible(true);
         } 
-        this.rutLabel.setVisible(existeOtroUsuarioConRut || !this.usuarioValidator.isValidRut(newUsuario.getRut()));
+        this.rutLabel.setVisible(existeOtroUsuarioConRut || !this.usuarioValidator.isValidRut(_newUsuario.getRut()));
         
-        if (this.usuarioValidator.isValid(newUsuario) && !existeOtroUsuarioConRut) {   
-            this.newUsuario.setRut(newUsuario.getRut());
-            this.newUsuario.setNombres(newUsuario.getNombres());
-            this.newUsuario.setApellidos(newUsuario.getApellidos());
-            this.newUsuario.setDireccion(newUsuario.getDireccion());
-            this.newUsuario.setTelefono(newUsuario.getTelefono());  
+        if (this.usuarioValidator.isValid(_newUsuario) && !existeOtroUsuarioConRut) {   
+            this.newUsuario.setRut(_newUsuario.getRut());
+            this.newUsuario.setNombres(_newUsuario.getNombres());
+            this.newUsuario.setApellidos(_newUsuario.getApellidos());
+            this.newUsuario.setDireccion(_newUsuario.getDireccion());
+            this.newUsuario.setTelefono(_newUsuario.getTelefono());  
             registradoConExito = usuarioService.crearUsuario(this.newUsuario)&& usuarios.add(this.newUsuario);
             Stage stage = (Stage) addUsuarioButton.getScene().getWindow();
             stage.close();
         }
-            else {
+        else {
+            if ((_newUsuario.getRut()==null || _newUsuario.getRut().isEmpty()) && this.usuarioValidator.isRutMandatory()) {
+                this.rutLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
+                this.rutLabel.setVisible(true);
+            }
+            
+            if ((_newUsuario.getNombres()==null || _newUsuario.getNombres().isEmpty()) && this.usuarioValidator.isNombresMandatory()) {
+                this.nombreLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
+                this.nombreLabel.setVisible(true);
+            }
+            
+            if ((_newUsuario.getApellidos()==null || _newUsuario.getApellidos().isEmpty()) && this.usuarioValidator.isApellidosMandatory()) {
+                this.apellidosLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
+                this.apellidosLabel.setVisible(true);
+            }
+            
             Alert alert= new Alert(AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText(null);

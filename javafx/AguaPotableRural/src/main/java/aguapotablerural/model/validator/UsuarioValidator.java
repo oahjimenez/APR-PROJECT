@@ -41,45 +41,79 @@ public class UsuarioValidator {
         this.isRutMandatory = isRutMandatory;
     }
     
+    public boolean isRutMandatory() {
+        return this.isRutMandatory;
+    }
+    
      public void setNombresMandatory(boolean isNombresMandatory) {
         this.isNombresMandatory = isNombresMandatory;
     }
      
+    public boolean isNombresMandatory() {
+        return this.isNombresMandatory;
+    }
+     
+
     public void setApellidosMandatory(boolean isApellidosMandatory) {
         this.isApellidosMandatory = isApellidosMandatory;
     }
+    
+    public boolean isApellidosMandatory() {
+        return this.isApellidosMandatory;
+    }
+     
     
     public void setDireccionMandatory(boolean isDireccionMandatory) {
         this.isDireccionMandatory = isDireccionMandatory;
     }
 
+    public boolean isDireccionMandatory() {
+        return this.isDireccionMandatory;
+    }
+    
     public void setTelefonoMandatory(boolean isTelefonoMandatory) {
         this.isTelefonoMandatory = isTelefonoMandatory;
     }
+    
+    public boolean isTelefonoMandatory() {
+        return this.isTelefonoMandatory;
+    }
 
     public boolean isValidRut(String rut) {
-        if (rut==null) {
-            return false;
+        if (rut==null || rut.isEmpty()) {
+            return !this.isRutMandatory();
         }
         rut = rut.replace(".","").replace("-","");
         return ((rut.matches(rutPattern)) && (rut.length() >= RUT_MINCHAR) && (rut.length()<= RUT_MAXCHAR ) && isValidDigitoVerificador(rut.substring(0,rut.length()-1),rut.substring(rut.length() - 1)));
     }
 
     public boolean isValidNombres(String nombres) {
-        return nombres!=null && !nombres.isEmpty() && nombres.length() <= NOMBRES_MAXCHAR;
+        if (nombres==null || nombres.isEmpty()) {
+            return !this.isNombresMandatory();
+        }
+        return nombres.length() <= NOMBRES_MAXCHAR;
     }
     
     public boolean isValidApellidos(String apellidos) {
-        return apellidos!=null && !apellidos.isEmpty() && apellidos.length() <= APELLIDOS_MAXCHAR;
+        if (apellidos==null || apellidos.isEmpty()){
+            return !this.isApellidosMandatory();
+        }
+        return apellidos.length() <= APELLIDOS_MAXCHAR;
 
     }
     
     public boolean isValidDireccion(String direccion) {
-        return direccion!=null && !direccion.isEmpty() && direccion.length() <= DIRECCION_MAXCHAR;
+        if (direccion==null || direccion.isEmpty()) {
+            return !this.isDireccionMandatory();
+        }
+        return direccion.length() <= DIRECCION_MAXCHAR;
 
     }
     public boolean isValidTelefono(String telefono) {
-        return telefono!=null && !telefono.isEmpty() && telefono.length() == TELEFONO_MAXCHAR && telefono.matches(digitPattern);
+        if (telefono==null || telefono.isEmpty()) {
+            return !this.isTelefonoMandatory();
+        }
+        return telefono.length() == TELEFONO_MAXCHAR && telefono.matches(digitPattern);
     }
     
     public boolean isValid(Usuario usuario) {

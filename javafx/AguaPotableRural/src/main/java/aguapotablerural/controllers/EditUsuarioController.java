@@ -89,6 +89,9 @@ public class EditUsuarioController implements Initializable {
         this.usuarioRepository = usuarioRepository;
         this.usuarioService = new UsuarioService();
         this.usuarioValidator = new UsuarioValidator();
+        this.usuarioValidator.setRutMandatory(true);
+        this.usuarioValidator.setNombresMandatory(true);
+        this.usuarioValidator.setApellidosMandatory(true);
         
         formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();

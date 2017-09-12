@@ -193,7 +193,7 @@ public class AddUsuarioController implements Initializable{
             this.rutLabel.setText(ERROR_MSG_RUT_EXISTENTE);
             this.rutLabel.setVisible(true);
         } 
-        this.rutLabel.setVisible(existeOtroUsuarioConRut);
+        this.rutLabel.setVisible(existeOtroUsuarioConRut || !UsuarioValidator.isValidRut(newUsuario.getRut()));
         
         if (UsuarioValidator.isValid(newUsuario) && !existeOtroUsuarioConRut) {   
             this.newUsuario.setRut(newUsuario.getRut());

@@ -206,32 +206,47 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     public void editarUsuarioAction(ActionEvent event){        
-        Usuario usuarioEditable = new Usuario();
-        usuarioEditable.setRut(cleanRut(rutText.getText()));
-        usuarioEditable.setNombres(nombresText.getText());
-        usuarioEditable.setApellidos(apellidosText.getText());
-        usuarioEditable.setDireccion(direccionText.getText());
-        usuarioEditable.setTelefono(telefonoText.getText());
+        Usuario _usuarioEditable = new Usuario();
+        _usuarioEditable.setRut(cleanRut(rutText.getText()));
+        _usuarioEditable.setNombres(nombresText.getText());
+        _usuarioEditable.setApellidos(apellidosText.getText());
+        _usuarioEditable.setDireccion(direccionText.getText());
+        _usuarioEditable.setTelefono(telefonoText.getText());
         Usuario usuarioRut = usuarioService.getUsuario(cleanRut(rutText.getText()));
         boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.usuarioEditable.getId()!=usuarioRut.getId());
-        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+usuarioEditable.getId());
+        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+_usuarioEditable.getId());
         System.err.println("query usuario:"+usuarioRut);
         if (existeOtroUsuarioConRut) {
             this.rutLabel.setText(ERROR_MSG_RUT_EXISTENTE);
             this.rutLabel.setVisible(true);
         } 
-        this.rutLabel.setVisible(existeOtroUsuarioConRut || !this.usuarioValidator.isValidRut(usuarioEditable.getRut()));
+        this.rutLabel.setVisible(existeOtroUsuarioConRut || !this.usuarioValidator.isValidRut(_usuarioEditable.getRut()));
         
-        if (this.usuarioValidator.isValid(usuarioEditable) && !existeOtroUsuarioConRut) {    
-            this.usuarioEditable.setRut(usuarioEditable.getRut());
-            this.usuarioEditable.setNombres(usuarioEditable.getNombres());
-            this.usuarioEditable.setApellidos(usuarioEditable.getApellidos());
-            this.usuarioEditable.setDireccion(usuarioEditable.getDireccion());
-            this.usuarioEditable.setTelefono(usuarioEditable.getTelefono());
-            this.usuarioRepository.save(usuarioEditable);
+        if (this.usuarioValidator.isValid(_usuarioEditable) && !existeOtroUsuarioConRut) {    
+            this.usuarioEditable.setRut(_usuarioEditable.getRut());
+            this.usuarioEditable.setNombres(_usuarioEditable.getNombres());
+            this.usuarioEditable.setApellidos(_usuarioEditable.getApellidos());
+            this.usuarioEditable.setDireccion(_usuarioEditable.getDireccion());
+            this.usuarioEditable.setTelefono(_usuarioEditable.getTelefono());
+            this.usuarioRepository.save(_usuarioEditable);
             Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
             stage.close();
         } else {
+            if ((_usuarioEditable.getRut()==null || _usuarioEditable.getRut().isEmpty()) && this.usuarioValidator.isRutMandatory()) {
+                this.rutLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
+                this.rutLabel.setVisible(true);
+            }
+            
+            if ((_usuarioEditable.getNombres()==null || _usuarioEditable.getNombres().isEmpty()) && this.usuarioValidator.isNombresMandatory()) {
+                this.nombreLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
+                this.nombreLabel.setVisible(true);
+            }
+            
+            if ((_usuarioEditable.getApellidos()==null || _usuarioEditable.getApellidos().isEmpty()) && this.usuarioValidator.isApellidosMandatory()) {
+                this.apellidosLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
+                this.apellidosLabel.setVisible(true);
+            }
+            
             Alert alert= new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Advertencia");
             alert.setHeaderText(null);

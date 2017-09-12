@@ -100,6 +100,7 @@ public class EditUsuarioController implements Initializable {
     }
     
     private String formatRut(String rut){
+        rut = rut.toUpperCase();
         StringBuilder builder = new StringBuilder();
         if (rut.length() > 1) { 
             String digitoVerificador = rut.substring(rut.length() - 1); 
@@ -213,8 +214,10 @@ public class EditUsuarioController implements Initializable {
         _usuarioEditable.setDireccion(direccionText.getText());
         _usuarioEditable.setTelefono(telefonoText.getText());
         Usuario usuarioRut = usuarioService.getUsuario(cleanRut(rutText.getText()));
-        boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.usuarioEditable.getId()!=usuarioRut.getId());
-        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+_usuarioEditable.getId());
+        boolean existeOtroUsuarioConRut = ((usuarioRut!=null) && (this.usuarioEditable.getId()!=usuarioRut.getId()));
+        if (usuarioRut!=null) {
+        System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+this.usuarioEditable.getId() + "id usuario existent"+usuarioRut.getId());
+        }
         System.err.println("query usuario:"+usuarioRut);
         if (existeOtroUsuarioConRut) {
             this.rutLabel.setText(ERROR_MSG_RUT_EXISTENTE);
@@ -228,7 +231,7 @@ public class EditUsuarioController implements Initializable {
             this.usuarioEditable.setApellidos(_usuarioEditable.getApellidos());
             this.usuarioEditable.setDireccion(_usuarioEditable.getDireccion());
             this.usuarioEditable.setTelefono(_usuarioEditable.getTelefono());
-            this.usuarioRepository.save(_usuarioEditable);
+            this.usuarioRepository.save(this.usuarioEditable);
             Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
             stage.close();
         } else {

@@ -117,6 +117,7 @@ public class AddUsuarioController implements Initializable{
     }
 
      private String formatRut(String rut){
+        rut = rut.toUpperCase();
         StringBuilder builder = new StringBuilder();
         if (rut.length() > 1) { 
             String digitoVerificador = rut.substring(rut.length() - 1); 

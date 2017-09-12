@@ -191,7 +191,7 @@ public class AddUsuarioController implements Initializable{
         _newUsuario.setDireccion(direccionText.getText());
         _newUsuario.setTelefono(telefonoText.getText());  
         Usuario usuarioRut = usuarioService.getUsuario(this.cleanRut(rutText.getText()));
-        boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.newUsuario.getId()!=usuarioRut.getId());
+        boolean existeOtroUsuarioConRut = usuarioRut!=null;
         System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id newuser:"+_newUsuario.getId());
         System.err.println("query usuario:"+usuarioRut);
         if (existeOtroUsuarioConRut) {

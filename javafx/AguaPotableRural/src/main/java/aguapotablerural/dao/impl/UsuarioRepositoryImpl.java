@@ -7,10 +7,7 @@ package main.java.aguapotablerural.dao.impl;
 
 import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
-import main.java.aguapotablerural.database.impl.SqliteDriverManager;
-import main.java.aguapotablerural.model.Administrador;
 import main.java.aguapotablerural.model.Usuario;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Collection;
@@ -109,18 +106,15 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             statement.setString(3,usuario.getApellidos());
             statement.setString(4,usuario.getDireccion());
             statement.setString(5,usuario.getTelefono());
-            int rowsAffected = statement.executeUpdate();
+            statement.executeUpdate();
             statement.close();
             
-            if (!(rowsAffected>0)){
-                guardadoConExito = this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
-                this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
-            } else {
-               System.err.println("Error al guardar mas de un registro encontrado con id"+usuario.getId());
+            guardadoConExito = this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
+            this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
 
-            }
         }catch (Exception e){
-            System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
+           System.err.println("Error al guardar mas de un registro encontrado con id"+usuario.getId());
+           System.err.println(this.getClass()+ ": " + e.getClass().getName() + ": " + e.getMessage() );
         }  
         return guardadoConExito;
     }

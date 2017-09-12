@@ -207,7 +207,6 @@ public class EditUsuarioController implements Initializable {
         usuarioEditable.setApellidos(apellidosText.getText());
         usuarioEditable.setDireccion(direccionText.getText());
         usuarioEditable.setTelefono(telefonoText.getText());
-        usuarioRepository.save(usuarioEditable);
         Usuario usuarioRut = usuarioService.getUsuario(cleanRut(rutText.getText()));
         boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.usuarioEditable.getId()!=usuarioRut.getId());
         System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+usuarioEditable.getId());
@@ -216,7 +215,7 @@ public class EditUsuarioController implements Initializable {
             this.rutLabel.setText(ERROR_MSG_RUT_EXISTENTE);
             this.rutLabel.setVisible(true);
         } 
-        this.rutLabel.setVisible(existeOtroUsuarioConRut);
+        this.rutLabel.setVisible(existeOtroUsuarioConRut || !UsuarioValidator.isValidRut(usuarioEditable.getRut()));
         
         if (UsuarioValidator.isValid(usuarioEditable) && !existeOtroUsuarioConRut) {    
             this.usuarioEditable.setRut(usuarioEditable.getRut());

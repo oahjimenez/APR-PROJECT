@@ -12,7 +12,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +21,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import main.java.aguapotablerural.dao.repository.MedidorRepository;
@@ -90,14 +88,14 @@ public class AddUsuarioController implements Initializable{
 
     private ObservableList<Usuario> usuarios;
     
-    private Usuario newUsuario;
+    private final Usuario newUsuario;
     
     private UsuarioRepository usuarioRepository;
-    private MedidorRepository medidorRepository;
+    private final MedidorRepository medidorRepository;
     
     
-    private DecimalFormat formatter;
-    private UsuarioService usuarioService;
+    private final DecimalFormat formatter;
+    private final UsuarioService usuarioService;
 
     
     public AddUsuarioController(ObservableList<Usuario> usuarios,UsuarioRepository usuarioRepository,MedidorRepository medidorRepository) {

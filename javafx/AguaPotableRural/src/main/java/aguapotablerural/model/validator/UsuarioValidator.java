@@ -5,6 +5,11 @@
  */
 package main.java.aguapotablerural.model.validator;
 
+import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 import main.java.aguapotablerural.model.Usuario;
 
 /**
@@ -22,6 +27,15 @@ public class UsuarioValidator {
     public static final int APELLIDOS_MAXCHAR = 40;
     public static final int DIRECCION_MAXCHAR = 50;
     public static final int TELEFONO_MAXCHAR = 8;
+    private boolean isRutMandatory;
+    
+    public UsuarioValidator() {
+        
+    }
+    
+    public void setRutMandatory(boolean isRutMandatory) {
+        this.isRutMandatory = isRutMandatory;
+    }
 
     public static boolean isValidRut(String rut) {
         if (rut==null) {
@@ -63,5 +77,20 @@ public class UsuarioValidator {
              s = (s + rut % 10 * (9 - m++ % 6)) % 11;
         }
         return ((char) (s != 0 ? s + 47 : asciiKValue));
+    }
+    
+    public static String formatRut(String rut){
+        rut = rut.replace(".","").replace("-","");
+        StringBuilder builder = new StringBuilder();
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        formatter.setDecimalFormatSymbols(symbols);
+        if (rut.length() > 1) { 
+            String digitoVerificador = rut.substring(rut.length() - 1); 
+            String rutSinDgv = rut.substring(0, rut.length() - 1);
+            return builder.append(formatter.format(new BigInteger(rutSinDgv))).append("-").append(digitoVerificador).toString();
+        }
+        return formatter.format(new BigInteger(rut));
     }
 }

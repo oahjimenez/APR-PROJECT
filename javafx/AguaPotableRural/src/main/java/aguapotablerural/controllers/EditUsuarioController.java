@@ -115,7 +115,7 @@ public class EditUsuarioController implements Initializable {
         this.direccionText.setMaxLength(UsuarioValidator.DIRECCION_MAXCHAR);
         this.telefonoText.setMaxLength(UsuarioValidator.TELEFONO_MAXCHAR);
 
-        this.rutText.setText(usuarioEditable.getRut());
+        this.rutText.setText(this.formatRut(usuarioEditable.getRut().replace(".","").replace("-","")));
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
             try {
                 String rut = newRut.replace(".","").replace("-","");
@@ -201,6 +201,13 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     public void editarUsuarioAction(ActionEvent event){        
+        Usuario usuarioEditable = new Usuario();
+        usuarioEditable.setRut(cleanRut(rutText.getText()));
+        usuarioEditable.setNombres(nombresText.getText());
+        usuarioEditable.setApellidos(apellidosText.getText());
+        usuarioEditable.setDireccion(direccionText.getText());
+        usuarioEditable.setTelefono(telefonoText.getText());
+        usuarioRepository.save(usuarioEditable);
         Usuario usuarioRut = usuarioService.getUsuario(cleanRut(rutText.getText()));
         boolean existeOtroUsuarioConRut = (usuarioRut!=null) && (this.usuarioEditable.getId()!=usuarioRut.getId());
         System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id editable:"+usuarioEditable.getId());
@@ -211,12 +218,12 @@ public class EditUsuarioController implements Initializable {
         } 
         this.rutLabel.setVisible(existeOtroUsuarioConRut);
         
-        if (UsuarioValidator.isValid(this.usuarioEditable) && !existeOtroUsuarioConRut) {    
-            this.usuarioEditable.setRut(cleanRut(rutText.getText()));
-            this.usuarioEditable.setNombres(nombresText.getText());
-            this.usuarioEditable.setApellidos(apellidosText.getText());
-            this.usuarioEditable.setDireccion(direccionText.getText());
-            this.usuarioEditable.setTelefono(telefonoText.getText());
+        if (UsuarioValidator.isValid(usuarioEditable) && !existeOtroUsuarioConRut) {    
+            this.usuarioEditable.setRut(usuarioEditable.getRut());
+            this.usuarioEditable.setNombres(usuarioEditable.getNombres());
+            this.usuarioEditable.setApellidos(usuarioEditable.getApellidos());
+            this.usuarioEditable.setDireccion(usuarioEditable.getDireccion());
+            this.usuarioEditable.setTelefono(usuarioEditable.getTelefono());
             this.usuarioRepository.save(usuarioEditable);
             Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
             stage.close();

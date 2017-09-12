@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -36,6 +37,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import main.java.aguapotablerural.dao.repository.MedidorRepository;
 import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
+import main.java.aguapotablerural.model.validator.UsuarioValidator;
 /**
  *
  * @author Sebastián
@@ -83,7 +85,9 @@ public class UsuariosController implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       rutColumn.setCellValueFactory(cellData -> cellData.getValue().getRutProperty());
+       rutColumn.setCellValueFactory(cellData -> {
+           return new SimpleStringProperty(UsuarioValidator.formatRut(cellData.getValue().getRut()));
+       });
        nombresColumn.setCellValueFactory(cellData -> cellData.getValue().getNombresProperty());
        apellidosColumn.setCellValueFactory(cellData -> cellData.getValue().getApellidosProperty());
        direccionColumn.setCellValueFactory(cellData -> cellData.getValue().getDireccionProperty());

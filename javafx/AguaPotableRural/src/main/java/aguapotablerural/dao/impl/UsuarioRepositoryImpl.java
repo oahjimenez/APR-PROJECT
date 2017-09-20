@@ -73,17 +73,17 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
     public boolean save(Usuario usuario) {
       boolean guardadoConExito = false;
       try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("INSERT OR REPLACE INTO USUARIO (id,rut,nombres,apellidos,direccion,telefono,fecha_registro) VALUES (?,?, ? , ?, ?, ? , CURRENT_DATE );");
-            statement.setInt(1,usuario.getId());
-            statement.setString(2,usuario.getRut());
-            statement.setString(3,usuario.getNombres());
-            statement.setString(4,usuario.getApellidos());
-            statement.setString(5,usuario.getDireccion());
-            statement.setString(6,usuario.getTelefono());
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("UPDATE USUARIO SET rut=?,nombres=?,apellidos=?,direccion=?,telefono=?,fecha_registro=CURRENT_DATE WHERE id=?;");
+            statement.setString(1,usuario.getRut());
+            statement.setString(2,usuario.getNombres());
+            statement.setString(3,usuario.getApellidos());
+            statement.setString(4,usuario.getDireccion());
+            statement.setString(5,usuario.getTelefono());
+            statement.setInt(6,usuario.getId());
             int rowsAffected = statement.executeUpdate();
             statement.close();
             
-            if (!(rowsAffected>0)){
+            if (rowsAffected==1){
                 guardadoConExito = this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
                 this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
             } else {

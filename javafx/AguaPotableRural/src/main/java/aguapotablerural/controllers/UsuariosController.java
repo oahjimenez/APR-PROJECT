@@ -144,7 +144,7 @@ public class UsuariosController implements Initializable {
                     if (controllerClass == AddUsuarioController.class) {
                         return new AddUsuarioController(usuarios,usuarioRepository,medidorRepository);
                     } else if (controllerClass == EditUsuarioController.class) {
-                        return new EditUsuarioController(tableViewUsuarios.getSelectionModel().getSelectedItem(),usuarioRepository);
+                        return new EditUsuarioController(tableViewUsuarios.getSelectionModel().getSelectedItem(),usuarioRepository,tableViewUsuarios);
                     } else {
                         try {
                             return controllerClass.newInstance();

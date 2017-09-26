@@ -19,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.java.aguapotablerural.dao.repository.UsuarioRepository;
@@ -83,8 +84,9 @@ public class EditUsuarioController implements Initializable {
     
     private UsuarioService usuarioService;
     private UsuarioValidator usuarioValidator;
+    private TableView<Usuario> tableViewUsuarios;
     
-    public EditUsuarioController(Usuario usuarioEditable,UsuarioRepository usuarioRepository) {
+    public EditUsuarioController(Usuario usuarioEditable,UsuarioRepository usuarioRepository,TableView tableViewUsuarios) {
         this.usuarioEditable = usuarioEditable;
         this.usuarioRepository = usuarioRepository;
         this.usuarioService = new UsuarioService();
@@ -92,6 +94,7 @@ public class EditUsuarioController implements Initializable {
         this.usuarioValidator.setRutMandatory(true);
         this.usuarioValidator.setNombresMandatory(true);
         this.usuarioValidator.setApellidosMandatory(true);
+        this.tableViewUsuarios = tableViewUsuarios;
         
         formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
@@ -232,6 +235,7 @@ public class EditUsuarioController implements Initializable {
             this.usuarioEditable.setDireccion(_usuarioEditable.getDireccion());
             this.usuarioEditable.setTelefono(_usuarioEditable.getTelefono());
             this.usuarioRepository.save(this.usuarioEditable);
+            this.tableViewUsuarios.refresh();
             Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
             stage.close();
         } else {

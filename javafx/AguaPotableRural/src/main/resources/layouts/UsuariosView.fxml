@@ -42,7 +42,7 @@
             </TabPane>
             <TableView fx:id="tableViewUsuarios" layoutX="104.0" layoutY="137.0" prefHeight="357.0" prefWidth="598.0">
               <columns>
-                <TableColumn fx:id="rutColumn" prefWidth="75.0" text="Rut" />
+                <TableColumn fx:id="rutColumn" prefWidth="75.0" text="Rut" styleClass="right-align" />
 
                 <TableColumn fx:id="nombresColumn" prefWidth="75.0" text="Nombres" />
                   <TableColumn fx:id="apellidosColumn" prefWidth="75.0" text="Apellidos" />
@@ -62,3 +62,4 @@
       </AnchorPane>
    </children>
 </VBox>
+

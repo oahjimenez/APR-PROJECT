@@ -159,13 +159,13 @@ public class UsuariosController implements Initializable {
     
     @FXML
     private void eliminaUsuarioAction(ActionEvent event) {
+        Usuario usuario = this.tableViewUsuarios.getSelectionModel().getSelectedItem();
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmación");
         alert.setHeaderText(null);
-        alert.setContentText("¿Estás seguro de eliminar a este usuario? Esto es irreversible");
+        alert.setContentText(String.format("¿Estás seguro de eliminar al usuario %s %s? Esto es irreversible",usuario.getNombres(),usuario.getApellidos()));
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            Usuario usuario = this.tableViewUsuarios.getSelectionModel().getSelectedItem();
             usuarios.remove(usuario);
             System.out.println("Eliminando usuario de BD:" + usuario);
             usuarioRepository.delete(usuario);

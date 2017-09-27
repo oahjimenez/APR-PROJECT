@@ -11,12 +11,15 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
@@ -203,7 +206,19 @@ public class EditUsuarioController implements Initializable {
     @FXML
     private boolean eliminaMedidorAction(ActionEvent event) {
         Medidor medidor = this.listViewMedidores.getSelectionModel().getSelectedItem();
-        return this.usuarioEditable.getMedidoresObservable().remove(medidor);
+        boolean eliminadoConExito = false;
+    
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText(String.format("¿Estás seguro de eliminar Medidor %s? Esto es irreversible",medidor.getId()));
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return this.usuarioEditable.getMedidoresObservable().remove(medidor);
+        } else {
+            System.out.println("usuario cancela eliminacion de medidor");
+        }
+        return eliminadoConExito;
     }
     
     private String cleanRut(String rut){

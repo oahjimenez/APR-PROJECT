@@ -219,12 +219,12 @@ public class AddUsuarioController implements Initializable{
                 this.rutLabel.setVisible(true);
             }
             
-            if ((_newUsuario.getNombres()==null || _newUsuario.getNombres().isEmpty()) && this.usuarioValidator.isNombresMandatory()) {
+            if ((_newUsuario.getNombres()==null || _newUsuario.getNombres().trim().isEmpty()) && this.usuarioValidator.isNombresMandatory()) {
                 this.nombreLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
                 this.nombreLabel.setVisible(true);
             }
             
-            if ((_newUsuario.getApellidos()==null || _newUsuario.getApellidos().isEmpty()) && this.usuarioValidator.isApellidosMandatory()) {
+            if ((_newUsuario.getApellidos()==null || _newUsuario.getApellidos().trim().isEmpty()) && this.usuarioValidator.isApellidosMandatory()) {
                 this.apellidosLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
                 this.apellidosLabel.setVisible(true);
             }

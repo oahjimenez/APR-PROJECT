@@ -246,12 +246,12 @@ public class EditUsuarioController implements Initializable {
                 this.rutLabel.setVisible(true);
             }
             
-            if ((_usuarioEditable.getNombres()==null || _usuarioEditable.getNombres().isEmpty()) && this.usuarioValidator.isNombresMandatory()) {
+            if ((_usuarioEditable.getNombres()==null || _usuarioEditable.getNombres().trim().isEmpty()) && this.usuarioValidator.isNombresMandatory()) {
                 this.nombreLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
                 this.nombreLabel.setVisible(true);
             }
             
-            if ((_usuarioEditable.getApellidos()==null || _usuarioEditable.getApellidos().isEmpty()) && this.usuarioValidator.isApellidosMandatory()) {
+            if ((_usuarioEditable.getApellidos()==null || _usuarioEditable.getApellidos().trim().isEmpty()) && this.usuarioValidator.isApellidosMandatory()) {
                 this.apellidosLabel.setText(ERROR_MSG_CAMPO_OBLIGATORIO);
                 this.apellidosLabel.setVisible(true);
             }

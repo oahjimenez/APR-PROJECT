@@ -88,14 +88,14 @@ public class UsuarioValidator {
     }
 
     public boolean isValidNombres(String nombres) {
-        if (nombres==null || nombres.isEmpty()) {
+        if (nombres==null || nombres.trim().isEmpty()) {
             return !this.isNombresMandatory();
         }
         return nombres.length() <= NOMBRES_MAXCHAR;
     }
     
     public boolean isValidApellidos(String apellidos) {
-        if (apellidos==null || apellidos.isEmpty()){
+        if (apellidos==null || apellidos.trim().isEmpty()){
             return !this.isApellidosMandatory();
         }
         return apellidos.length() <= APELLIDOS_MAXCHAR;

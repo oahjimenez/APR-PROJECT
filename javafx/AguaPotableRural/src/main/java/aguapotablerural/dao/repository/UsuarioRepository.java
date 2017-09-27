@@ -13,7 +13,7 @@ import java.util.Collection;
  */
 public interface UsuarioRepository {
     
-    public Usuario get(String rut);
+    public Usuario getActive(String rut);
     public boolean save(Usuario usuario);
     public boolean delete(Usuario usuario);
     public Collection<Usuario> getAllUsuarios();

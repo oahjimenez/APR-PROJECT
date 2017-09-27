@@ -167,6 +167,7 @@ public class UsuariosController implements Initializable {
         if (result.get() == ButtonType.OK){
             Usuario usuario = this.tableViewUsuarios.getSelectionModel().getSelectedItem();
             usuarios.remove(usuario);
+            System.out.println("Eliminando usuario de BD:" + usuario);
             usuarioRepository.delete(usuario);
         } else {
             System.out.println("usuario cancela eliminacion");

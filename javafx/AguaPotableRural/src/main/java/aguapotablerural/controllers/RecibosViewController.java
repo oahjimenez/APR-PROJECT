@@ -307,7 +307,7 @@ public class RecibosViewController implements Initializable {
                             System.out.println(String.format("old:%snew%s",oldValue,newValue));
                             totalMensualLabel.setText(String.format("%s %s",String.valueOf(lecturaTotal - lecturaOld + lecturaNew),unidadMedicion));
                         });
-                        double lecturaMedidor = lecturaService.obtenerLectura(getUsuarioSeleccionado(),this.medidoresDelMes.get(fila),getSelectedMonthYear());
+                        double lecturaMedidor = lecturaService.obtenerLectura(getUsuarioSeleccionado(),this.medidoresDelMes.getActive(fila),getSelectedMonthYear());
                         if (lecturaMedidor!=-1) {
                             totalMensual+=lecturaMedidor;
                             lecturaTextField.setText(String.valueOf(lecturaMedidor));

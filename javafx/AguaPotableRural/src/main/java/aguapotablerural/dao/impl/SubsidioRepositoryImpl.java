@@ -118,7 +118,7 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
                 Date fecha = subsidiosRs.getDate("FECHA");
                 Subsidio subsidio = new Subsidio();
                 subsidio.setId(id);
-                subsidio.setUsuario(this.usuarioRepository.get(usuario_rut));
+                subsidio.setUsuario(this.usuarioRepository.getActive(usuario_rut));
                 subsidio.setMedidor(medidor);
                 subsidio.setPorcentaje(porcentaje_subsidio);
                 subsidio.setTope(tope);

@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public interface AdministradorRepository {
     
-    public Administrador get(String rut);
+    public Administrador getActive(String rut);
     public boolean save(Administrador admin);
     public boolean delete(Administrador usuario);
     public Collection<Administrador> getAllAdmins();

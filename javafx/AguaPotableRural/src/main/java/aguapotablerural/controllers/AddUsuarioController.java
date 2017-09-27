@@ -192,7 +192,7 @@ public class AddUsuarioController implements Initializable{
         _newUsuario.setDireccion(direccionText.getText());
         _newUsuario.setTelefono(telefonoText.getText());  
         Usuario usuarioRut = usuarioService.getUsuario(this.cleanRut(rutText.getText()));
-        boolean existeOtroUsuarioConRut = usuarioRut!=null;
+        boolean existeOtroUsuarioConRut = ((usuarioRut!=null) && (usuarioRut.getFechaRetiro()==null));
         System.err.println("existeOtroUsuarioConRut:<"+existeOtroUsuarioConRut+">,id newuser:"+_newUsuario.getId());
         System.err.println("query usuario:"+usuarioRut);
         if (existeOtroUsuarioConRut) {
@@ -207,7 +207,9 @@ public class AddUsuarioController implements Initializable{
             this.newUsuario.setApellidos(_newUsuario.getApellidos());
             this.newUsuario.setDireccion(_newUsuario.getDireccion());
             this.newUsuario.setTelefono(_newUsuario.getTelefono());  
-            registradoConExito = usuarioService.crearUsuario(this.newUsuario)&& usuarios.add(this.newUsuario);
+            registradoConExito = usuarioService.crearUsuario(this.newUsuario);
+            this.newUsuario.setId(usuarioService.getUsuario(this.newUsuario.getRut()).getId());
+            registradoConExito = registradoConExito && usuarios.add(this.newUsuario);
             Stage stage = (Stage) addUsuarioButton.getScene().getWindow();
             stage.close();
         }

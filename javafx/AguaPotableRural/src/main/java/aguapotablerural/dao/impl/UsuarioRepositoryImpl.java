@@ -5,14 +5,19 @@
  */
 package main.java.aguapotablerural.dao.impl;
 
+import java.sql.Date;
 import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.model.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import main.java.aguapotablerural.dao.repository.MedidorRepository;
 import main.java.aguapotablerural.dao.repository.TieneMedidorRepository;
 
@@ -36,11 +41,13 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
     }
     
     @Override
-    public Usuario get(String rut) {
+    public Usuario getActive(String rut) {
         
-       Usuario usuario = null;
+        Usuario usuario = null;
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+
        try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,NOMBRES,APELLIDOS,DIRECCION,TELEFONO,FECHA_REGISTRO,FECHA_RETIRO FROM USUARIO where rut = ?;");
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,NOMBRES,APELLIDOS,DIRECCION,TELEFONO,FECHA_REGISTRO,FECHA_RETIRO FROM USUARIO where rut = ? AND FECHA_RETIRO IS NULL;");
             statement.setString(1,rut);
             ResultSet usuarioRs = statement.executeQuery();
             if (usuarioRs.next()) {
@@ -50,8 +57,10 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
                 String direccion = usuarioRs.getString("direccion");
                 String telefono = usuarioRs.getString("telefono");
                 //TODO parsear fechas correctamente
-                //Date fechaRegistro = usuarioRs.getDate("fecha_registro");
-                //Date fechaRetiro = usuarioRs.getDate("fecha_retiro");
+                Date fechaRegistro = new java.sql.Date(dateformat.parse(usuarioRs.getString("fecha_registro")).getTime());
+                String fechaRetiroStr = usuarioRs.getString("fecha_retiro");
+                Date fechaRetiro = (fechaRetiroStr==null)? null : new java.sql.Date(dateformat.parse(fechaRetiroStr).getTime());
+                System.out.println("fechaRegistro:"+fechaRegistro+" fecharetiro:"+fechaRetiro);
                 usuario = new Usuario();
                 usuario.setId(id);
                 usuario.setRut(rut);
@@ -59,8 +68,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
                 usuario.setApellidos(apellidos);
                 usuario.setDireccion(direccion);
                 usuario.setTelefono(telefono);
-                //usuario.setFechaRegistro(fechaRegistro);
-                //usuario.setFechaRetiro(fechaRetiro);
+                usuario.setFechaRegistro(fechaRegistro);
+                usuario.setFechaRetiro(fechaRetiro);
             }
             statement.close();
         }catch (Exception e){
@@ -138,6 +147,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
     @Override
     public Collection<Usuario> getAllUsuarios() {
         List<Usuario> usuarios = new LinkedList();
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT ID,RUT,NOMBRES,APELLIDOS,DIRECCION,TELEFONO FROM USUARIO;");
             ResultSet usuariosRs = statement.executeQuery();
@@ -149,6 +159,10 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
                 String apellidos = usuariosRs.getString("apellidos");
                 String direccion = usuariosRs.getString("direccion");
                 String telefono = usuariosRs.getString("telefono");
+                Date fechaRegistro = new java.sql.Date(dateformat.parse(usuariosRs.getString("fecha_registro")).getTime());
+                String fechaRetiroStr = usuariosRs.getString("fecha_retiro");
+                Date fechaRetiro = (fechaRetiroStr==null)? null : new java.sql.Date(dateformat.parse(fechaRetiroStr).getTime());
+                System.out.println("fechaRegistro:"+fechaRegistro+" fecharetiro:"+fechaRetiro);
                 Usuario usuario = new Usuario();
                 usuario.setId(id);
                 usuario.setRut(rut);
@@ -156,6 +170,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
                 usuario.setApellidos(apellidos);
                 usuario.setDireccion(direccion);
                 usuario.setTelefono(telefono);
+                usuario.setFechaRegistro(fechaRegistro);
+                usuario.setFechaRetiro(fechaRetiro);
                 usuarios.add(usuario);
             }
             statement.close();
@@ -168,8 +184,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
     @Override
     public Collection<Usuario> getActiveUsuarios() {
        List<Usuario> usuarios = new LinkedList();
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT ID,RUT,NOMBRES,APELLIDOS,DIRECCION,TELEFONO FROM USUARIO WHERE FECHA_RETIRO IS NULL;");
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT ID,RUT,NOMBRES,APELLIDOS,DIRECCION,TELEFONO,FECHA_REGISTRO,FECHA_RETIRO FROM USUARIO WHERE FECHA_RETIRO IS NULL;");
             ResultSet usuariosRs = statement.executeQuery();
             
             while (usuariosRs.next()) {
@@ -179,6 +196,10 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
                 String apellidos = usuariosRs.getString("apellidos");
                 String direccion = usuariosRs.getString("direccion");
                 String telefono = usuariosRs.getString("telefono");
+                Date fechaRegistro = new java.sql.Date(dateformat.parse(usuariosRs.getString("fecha_registro")).getTime());
+                String fechaRetiroStr = usuariosRs.getString("fecha_retiro");
+                Date fechaRetiro = (fechaRetiroStr==null)? null : new java.sql.Date(dateformat.parse(fechaRetiroStr).getTime());
+                System.out.println("fechaRegistro:"+fechaRegistro+" fecharetiro:"+fechaRetiro);
                 Usuario usuario = new Usuario();
                 usuario.setId(id);
                 usuario.setRut(rut);

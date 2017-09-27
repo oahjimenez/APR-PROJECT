@@ -9,7 +9,6 @@ import main.java.aguapotablerural.dao.repository.AdministradorRepository;
 import main.java.aguapotablerural.dao.repository.RegistraUsuarioRepository;
 import main.java.aguapotablerural.dao.repository.UsuarioRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
-import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Administrador;
 import main.java.aguapotablerural.model.Usuario;
 import java.sql.Date;
@@ -17,8 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  *
@@ -45,7 +42,7 @@ public class RegistraUsuarioRepositoryImpl implements RegistraUsuarioRepository 
             
             while (usuariosRs.next()) {
                 Usuario usuario;
-                if ((usuario = this.usuarioRepository.get(usuariosRs.getString("usuario_rut"))) != null) {
+                if ((usuario = this.usuarioRepository.getActive(usuariosRs.getString("usuario_rut"))) != null) {
                     usuarios.add(usuario);
                 }
             }
@@ -67,7 +64,7 @@ public class RegistraUsuarioRepositoryImpl implements RegistraUsuarioRepository 
             
             while (administradoresRs.next()) {
                 Administrador admin;
-                if ((admin = this.administradorRepository.get(administradoresRs.getString("ADMINISTRADOR_RU"))) != null) {
+                if ((admin = this.administradorRepository.getActive(administradoresRs.getString("ADMINISTRADOR_RU"))) != null) {
                     administradores.add(admin);
                 }
             }

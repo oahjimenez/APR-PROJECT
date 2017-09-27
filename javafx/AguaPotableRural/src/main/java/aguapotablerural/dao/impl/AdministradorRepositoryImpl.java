@@ -28,9 +28,9 @@ public class AdministradorRepositoryImpl extends UsuarioRepositoryImpl implement
     }
 
     @Override
-    public Administrador get(String rut) {
+    public Administrador getActive(String rut) {
         Administrador administrador = null;
-        Usuario usuario = super.get(rut);
+        Usuario usuario = super.getActive(rut);
         try {
             PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT * FROM ADMINISTRADOR where rut = ?;");
             statement.setString(1,rut);
@@ -77,7 +77,7 @@ public class AdministradorRepositoryImpl extends UsuarioRepositoryImpl implement
         Collection<Administrador> administradores = new LinkedList();
         for (Usuario usuario: usuarios) {
             Administrador admin;
-            if ((admin = this.get(usuario.getRut())) != null) {
+            if ((admin = this.getActive(usuario.getRut())) != null) {
                 administradores.add(admin);
             }
         }
@@ -89,7 +89,7 @@ public class AdministradorRepositoryImpl extends UsuarioRepositoryImpl implement
         Collection<Administrador> administradores = new LinkedList();
         for (Usuario usuario: usuarios) {
             Administrador admin;
-            if ((admin = this.get(usuario.getRut())) != null) {
+            if ((admin = this.getActive(usuario.getRut())) != null) {
                 administradores.add(admin);
             }
         }

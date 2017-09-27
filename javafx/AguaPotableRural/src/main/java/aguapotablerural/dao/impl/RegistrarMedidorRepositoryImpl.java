@@ -44,7 +44,7 @@ public class RegistrarMedidorRepositoryImpl implements RegistraMedidorRepository
             
             while (administradoresRs.next()) {
                 Administrador admin;
-                if ((admin = this.administradorRepository.get(administradoresRs.getString("administrador_rut"))) != null) {
+                if ((admin = this.administradorRepository.getActive(administradoresRs.getString("administrador_rut"))) != null) {
                     administradores.add(admin);
                 }
             }

@@ -195,6 +195,11 @@ public class UsuariosController implements Initializable {
         this.openEditUsuarioLayout();
     }
     
+    @FXML
+    private void resetFilterAction(ActionEvent event) {
+        this.filtroText.clear();
+    }
+    
     private void openEditUsuarioLayout() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("main/resources/layouts/EditUsuario.fxml"));

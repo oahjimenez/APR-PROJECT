@@ -186,10 +186,12 @@ public class EditUsuarioController implements Initializable {
     @FXML
     private boolean agregaMedidorAction(ActionEvent event) {
         boolean addedSucess = false;
+        boolean medidorIngresadoIsValid = false;
         Medidor medidor = new Medidor();
         medidor.setId(this.idMedidorText.getText());
-        this.idMedidorLabel.setVisible(!MedidorValidator.isValid(medidor));
-        if (MedidorValidator.isValid(medidor) && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
+        medidorIngresadoIsValid = !medidor.getId().isEmpty() &&MedidorValidator.isValid(medidor);
+        this.idMedidorLabel.setVisible(!medidorIngresadoIsValid);
+        if (medidorIngresadoIsValid && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
             addedSucess = this.usuarioEditable.getMedidoresObservable().add(medidor);
             if (addedSucess) { 
                 this.idMedidorText.setText(""); 

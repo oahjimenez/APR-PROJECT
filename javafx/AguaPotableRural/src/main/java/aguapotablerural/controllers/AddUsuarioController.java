@@ -246,10 +246,12 @@ public class AddUsuarioController implements Initializable{
     @FXML
     private boolean agregaMedidorAction(ActionEvent event) {
         boolean addedSucess = false;
+        boolean medidorIngresadoIsValid = false;
         Medidor medidor = new Medidor();
         medidor.setId(this.idMedidorText.getText());
-        this.medidorLabel.setVisible(!MedidorValidator.isValid(medidor));
-        if (MedidorValidator.isValid(medidor) && !this.newUsuario.getMedidoresObservable().contains(medidor)){
+        medidorIngresadoIsValid = !medidor.getId().isEmpty() &&MedidorValidator.isValid(medidor);
+        this.medidorLabel.setVisible(!medidorIngresadoIsValid);
+        if (medidorIngresadoIsValid && !this.newUsuario.getMedidoresObservable().contains(medidor)){
             addedSucess = this.newUsuario.getMedidoresObservable().add(medidor);
             if (addedSucess) { 
                 this.idMedidorText.setText(""); 

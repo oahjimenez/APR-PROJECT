@@ -24,7 +24,12 @@ public class UsuarioService {
     }
     
     public Usuario getUsuario(String rut){
-        return this.usuarioRepository.get(rut);
+        return this.usuarioRepository.getActive(rut);
+    }
+    
+    public boolean existsActiveUsuario(String rut){
+        Usuario usuario = this.usuarioRepository.getActive(rut);
+        return (usuario!=null) && (usuario.getFechaRetiro()!=null);
     }
     
     public boolean crearUsuario(Usuario usuario) {

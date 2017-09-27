@@ -5,9 +5,7 @@
  */
 package main.java.aguapotablerural.model;
 
-import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.util.Collection;
 import java.util.Objects;
 import javafx.beans.property.SimpleStringProperty;
@@ -177,10 +175,9 @@ public class Usuario implements Comparable{
         return -1;
     }
 
-
     @Override
     public String toString() {
-        return "Usuario{" + "rut=" + this.getRut() + ", nombre=" + this.getNombres() + ", direccion=" + this.getDireccion() + ", telefono=" + this.getTelefono() + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
+        return "Usuario{" + "id=" + id + ", rutProperty=" + rutProperty + ", nombresProperty=" + nombresProperty + ", apellidosProperty=" + apellidosProperty + ", direccionProperty=" + direccionProperty + ", telefonoProperty=" + telefonoProperty + ", medidores=" + medidores + ", fechaRegistro=" + fechaRegistro + ", fechaRetiro=" + fechaRetiro + '}';
     }
     
 }

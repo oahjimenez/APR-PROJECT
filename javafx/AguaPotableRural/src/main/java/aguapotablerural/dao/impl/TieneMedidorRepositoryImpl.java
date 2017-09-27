@@ -42,7 +42,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
             statement.setString(1,medidor.getId());
             ResultSet usuarioRs = statement.executeQuery();
             statement.close(); 
-            return this.usuarioRepository.get(usuarioRs.getString("USUARIO_RUT"));
+            return this.usuarioRepository.getActive(usuarioRs.getString("USUARIO_RUT"));
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
@@ -75,7 +75,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
             
             while (usuariosRs.next()) {
                 Usuario usuario;
-                if ((usuario = this.usuarioRepository.get(usuariosRs.getString("USUARIO_ID"))) != null) {
+                if ((usuario = this.usuarioRepository.getActive(usuariosRs.getString("USUARIO_ID"))) != null) {
                     usuarios.add(usuario);
                 }
             }
@@ -116,7 +116,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
             statement.setString(1,medidor.getId());
             ResultSet usuarioRs = statement.executeQuery();
             statement.close(); 
-            return this.usuarioRepository.get(usuarioRs.getString("USUARIO_ID"));
+            return this.usuarioRepository.getActive(usuarioRs.getString("USUARIO_ID"));
         }catch (Exception e){
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }

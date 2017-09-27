@@ -205,8 +205,12 @@ public class EditUsuarioController implements Initializable {
     
     @FXML
     private boolean eliminaMedidorAction(ActionEvent event) {
-        Medidor medidor = this.listViewMedidores.getSelectionModel().getSelectedItem();
         boolean eliminadoConExito = false;
+        Medidor medidor = this.listViewMedidores.getSelectionModel().getSelectedItem();
+        if (medidor==null) { 
+            System.out.println("usuario cancela eliminacion de medidor");
+            return eliminadoConExito;
+        }
     
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmación");

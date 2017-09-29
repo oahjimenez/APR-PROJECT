@@ -185,4 +185,28 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
         }
         return medidores;   
     }
+
+    @Override
+    public boolean removeMedidoresNotIn(Usuario usuario, Collection<? extends Medidor> medidores, LocalDate fechaActual) {
+        int removedCount = 0;
+        try {
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("DELETE FROM TIENE_MEDIDOR WHERE MEDIDOR_ID = ? AND USUARIO_ID = ? AND CAST(strftime('%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%Y',fecha_adquisicion) as integer) = ?;");
+            statement.setInt(1,usuario.getId());
+            statement.setInt(2,fecha.getMonthValue());
+            statement.setInt(3,fecha.getYear());
+            
+            ResultSet medidoresRs = statement.executeQuery();
+            
+            while (medidoresRs.next()) {
+                Medidor medidor;
+                if ((medidor = this.medidorRepository.get(medidoresRs.getString("MEDIDOR_ID"))) != null) {
+                    medidores.add(medidor);
+                }
+            }
+            statement.close();
+        }catch (Exception e){
+            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
+        }
+        return (removedCount>0);   
+    }
 }

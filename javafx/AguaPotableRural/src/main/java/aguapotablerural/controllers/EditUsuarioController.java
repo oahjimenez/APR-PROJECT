@@ -13,6 +13,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -89,6 +91,8 @@ public class EditUsuarioController implements Initializable {
     private UsuarioValidator usuarioValidator;
     private TableView<Usuario> tableViewUsuarios;
     
+    private boolean isDirty = false; //indica si formulario ha cambiado 
+    
     public EditUsuarioController(Usuario usuarioEditable,UsuarioRepository usuarioRepository,TableView tableViewUsuarios) {
         this.usuarioEditable = usuarioEditable;
         this.usuarioRepository = usuarioRepository;
@@ -129,6 +133,7 @@ public class EditUsuarioController implements Initializable {
 
         this.rutText.setText(this.formatRut(usuarioEditable.getRut().replace(".","").replace("-","")));
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
+            this.setDirty(true);
             try {
                 String rut = newRut.replace(".","").replace("-","");
                 this.rutLabel.setVisible(!this.usuarioValidator.isValidRut(rut));
@@ -142,29 +147,34 @@ public class EditUsuarioController implements Initializable {
         });
         this.nombresText.setText(usuarioEditable.getNombres().toUpperCase());
         this.nombresText.textProperty().addListener((obs, oldNombre, newNombre) -> { 
+                this.setDirty(true);
                 this.nombreLabel.setVisible(!this.usuarioValidator.isValidNombres(newNombre));
                 this.nombresText.setText(newNombre.toUpperCase());
         });
         
         this.apellidosText.setText(usuarioEditable.getApellidos().toUpperCase());
         this.apellidosText.textProperty().addListener((obs, oldApellidos, newApellidos) -> {
+            this.setDirty(true);
             this.apellidosLabel.setVisible(!this.usuarioValidator.isValidApellidos(newApellidos));
             this.apellidosText.setText(newApellidos.toUpperCase());
         });
         
         this.direccionText.setText(usuarioEditable.getDireccion().toUpperCase());
         this.direccionText.textProperty().addListener((obs, oldDireccion, newDireccion) -> {
+            this.setDirty(true);
             this.direccionLabel.setVisible(!this.usuarioValidator.isValidDireccion(newDireccion));
             this.direccionText.setText(newDireccion.toUpperCase());
         });
 
         this.telefonoText.setText(usuarioEditable.getTelefono());
         this.telefonoText.textProperty().addListener((obs, oldTelefono, newTelefono) -> {
+            this.setDirty(true);
             this.telefonoLabel.setVisible(!this.usuarioValidator.isValidTelefono(newTelefono));
             this.telefonoText.setText(newTelefono);
         });
         
         this.idMedidorText.textProperty().addListener((obs, oldTelefono, newIdMedidor) -> {
+            this.setDirty(true);
             this.idMedidorLabel.setVisible(!MedidorValidator.isValidId(newIdMedidor));
             this.idMedidorText.setText(newIdMedidor);
         });
@@ -175,9 +185,14 @@ public class EditUsuarioController implements Initializable {
         this.direccionLabel.setVisible(!this.usuarioValidator.isValidDireccion(this.direccionText.getText()));
         this.telefonoLabel.setVisible(!this.usuarioValidator.isValidTelefono(this.telefonoText.getText()));   
         this.idMedidorLabel.setVisible(false); //porque es opcional
-        this.listViewMedidores.setItems(this.usuarioEditable.getMedidoresObservable());
+        
+        ObservableList<Medidor> medidoresCopy = FXCollections.observableArrayList();
+        this.usuarioEditable.getMedidoresObservable().forEach(medidor -> medidoresCopy.add(medidor.copy()));
+        this.listViewMedidores.setItems(FXCollections.observableArrayList(medidoresCopy));
     }
 
+    
+    
     public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
@@ -195,7 +210,7 @@ public class EditUsuarioController implements Initializable {
         medidorIngresadoIsValid = !medidor.getId().isEmpty() &&MedidorValidator.isValid(medidor);
         this.idMedidorLabel.setVisible(!medidorIngresadoIsValid);
         if (medidorIngresadoIsValid && !this.usuarioEditable.getMedidoresObservable().contains(medidor)){
-            addedSucess = this.usuarioEditable.getMedidoresObservable().add(medidor);
+            addedSucess = this.listViewMedidores.getItems().add(medidor);
             if (addedSucess) { 
                 this.idMedidorText.setText(""); 
             } //limpia campo de id medidor despues de ingresado
@@ -218,7 +233,8 @@ public class EditUsuarioController implements Initializable {
         alert.setContentText(String.format("¿Estás seguro de eliminar Medidor %s? Esto es irreversible",medidor.getId()));
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            return this.usuarioEditable.getMedidoresObservable().remove(medidor);
+            this.setDirty(true);
+            return this.listViewMedidores.getItems().remove(medidor);
         } else {
             System.out.println("usuario cancela eliminacion de medidor");
         }
@@ -255,6 +271,8 @@ public class EditUsuarioController implements Initializable {
             this.usuarioEditable.setApellidos(_usuarioEditable.getApellidos());
             this.usuarioEditable.setDireccion(_usuarioEditable.getDireccion());
             this.usuarioEditable.setTelefono(_usuarioEditable.getTelefono());
+            this.usuarioEditable.getMedidoresObservable().clear();
+            this.usuarioEditable.addMedidores(this.listViewMedidores.getItems());
             this.usuarioRepository.save(this.usuarioEditable);
             this.tableViewUsuarios.refresh();
             Stage stage = (Stage) editUsuarioButton.getScene().getWindow();
@@ -289,4 +307,13 @@ public class EditUsuarioController implements Initializable {
             System.err.println("usuario valid?"+this.usuarioValidator.isValid(this.usuarioEditable));
         }
     }
+    
+    public boolean isDirty(){
+        return this.isDirty;
+    }
+    
+    private void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+    }
+
 }

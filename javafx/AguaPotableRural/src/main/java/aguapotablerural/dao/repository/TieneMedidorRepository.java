@@ -28,6 +28,7 @@ public interface TieneMedidorRepository {
     
     public boolean save(Usuario usuario,Medidor medidor);
     public boolean save(Usuario usuario,Collection<? extends Medidor> medidores);
+    public boolean removeMedidoresNotIn(Usuario usuario,Collection<? extends Medidor> medidores,LocalDate fechaActual);
     
     
     public List<? extends Medidor> getMedidorOf(Usuario usuario,LocalDate fecha);

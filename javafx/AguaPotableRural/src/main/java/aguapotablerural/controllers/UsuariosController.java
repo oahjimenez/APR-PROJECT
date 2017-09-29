@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,6 +35,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import main.java.aguapotablerural.dao.repository.MedidorRepository;
 import main.java.aguapotablerural.dao.impl.MedidorRepositoryImpl;
@@ -207,6 +209,26 @@ public class UsuariosController implements Initializable {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));  
+            EditUsuarioController editUsuarioController = fxmlLoader.getController();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    if (!editUsuarioController.isDirty()) {
+                        return;
+                    }
+                    event.consume();
+
+                    Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Cancelar Edición");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tiene cambios sin guardar para este usuario. ¿Seguro que desea continuar?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK){
+                        System.err.println("Usuario cancela edicion");
+                        stage.close();
+                    }
+                }        
+            });
             stage.show();
         } catch(Exception e) {
            e.printStackTrace();

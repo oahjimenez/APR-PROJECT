@@ -69,6 +69,16 @@ public class Medidor implements Comparable {
         Medidor medidor = (Medidor) o;
         return Objects.equals(this.getId(),medidor.getId());
     }
+    
+    public Medidor copy(){
+        Medidor medidorCopy = new Medidor();
+        medidorCopy.setId(this.getId());
+        medidorCopy.setDescripcion(this.getDescripcion());
+        medidorCopy.setFechaRegistro(this.getFechaRegistro());
+        medidorCopy.setFechaRetiro(this.getFechaRetiro());
+        medidorCopy.setUsuario(this.getUsuario());
+        return medidorCopy;
+    }
 
     @Override
     public int hashCode() {

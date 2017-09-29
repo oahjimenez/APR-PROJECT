@@ -183,4 +183,5 @@ and open the template in the editor.
 .reset-btn:hover {
     -fx-background-color: #cecece; 
     -fx-cursor: hand;
+    -fx-font-weight: bold;
 }

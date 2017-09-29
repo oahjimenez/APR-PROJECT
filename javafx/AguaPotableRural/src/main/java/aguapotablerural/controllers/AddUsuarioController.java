@@ -97,6 +97,8 @@ public class AddUsuarioController implements Initializable{
     private final DecimalFormat formatter;
     private final UsuarioService usuarioService;
     private UsuarioValidator usuarioValidator;
+    
+    private boolean isDirty = false; //indica si formulario ha cambiado 
 
     
     public AddUsuarioController(ObservableList<Usuario> usuarios,UsuarioRepository usuarioRepository,MedidorRepository medidorRepository) {
@@ -142,6 +144,7 @@ public class AddUsuarioController implements Initializable{
         this.telefonoText.setMaxLength(UsuarioValidator.TELEFONO_MAXCHAR);
         
         this.rutText.textProperty().addListener((observable, oldRut, newRut) -> {
+            this.setDirty(true);
             try {
                 String rut = this.rutText.getText().replace(".","").replace("-","");
                 this.rutLabel.setVisible(!this.usuarioValidator.isValidRut(rut));
@@ -161,22 +164,27 @@ public class AddUsuarioController implements Initializable{
         this.telefonoLabel.setVisible(widgetVisible);
         this.medidorLabel.setVisible(widgetVisible);
         this.nombresText.textProperty().addListener((obs, oldNombre, newNombre) -> { 
-                this.nombreLabel.setVisible(!this.usuarioValidator.isValidNombres(newNombre));
-                this.nombresText.setText(newNombre.toUpperCase());
+            this.setDirty(true);
+            this.nombreLabel.setVisible(!this.usuarioValidator.isValidNombres(newNombre));
+            this.nombresText.setText(newNombre.toUpperCase());
         });
         this.apellidosText.textProperty().addListener((obs, oldApellidos, newApellidos) -> {
+            this.setDirty(true);
             this.apellidosLabel.setVisible(!this.usuarioValidator.isValidApellidos(newApellidos));
             this.apellidosText.setText(newApellidos.toUpperCase());
         });
         this.direccionText.textProperty().addListener((obs, oldDireccion, newDireccion) -> {
+            this.setDirty(true);
             this.direccionLabel.setVisible(!this.usuarioValidator.isValidDireccion(newDireccion));
             this.direccionText.setText(newDireccion.toUpperCase());
         });
         this.telefonoText.textProperty().addListener((obs, oldTelefono, newTelefono) -> {
+            this.setDirty(true);
             this.telefonoLabel.setVisible(!this.usuarioValidator.isValidTelefono(newTelefono));
             this.telefonoText.setText(newTelefono);
         });
         this.idMedidorText.textProperty().addListener((obs, oldTelefono, newIdMedidor) -> {
+            this.setDirty(true);
             this.medidorLabel.setVisible(!MedidorValidator.isValidId(newIdMedidor));
             this.idMedidorText.setText(newIdMedidor);
         });
@@ -274,6 +282,14 @@ public class AddUsuarioController implements Initializable{
     
     public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+    }
+    
+    public boolean isDirty(){
+        return this.isDirty;
+    }
+    
+    private void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
     }
 
     

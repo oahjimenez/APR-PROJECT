@@ -185,6 +185,26 @@ public class UsuariosController implements Initializable {
             Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));  
+            AddUsuarioController addUsuarioController = fxmlLoader.getController();
+            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    if (!addUsuarioController.isDirty()) {
+                        return;
+                    }
+                    event.consume();
+
+                    Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Cancelar Ingreso");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Tiene cambios sin guardar para este usuario. ¿Seguro que desea continuar?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK){
+                        System.err.println("Usuario cancela insercion");
+                        stage.close();
+                    }
+                }        
+            });
             stage.show();
         } catch(Exception e) {
            e.printStackTrace();

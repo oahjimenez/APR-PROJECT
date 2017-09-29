@@ -273,6 +273,7 @@ public class EditUsuarioController implements Initializable {
             this.usuarioEditable.setTelefono(_usuarioEditable.getTelefono());
             this.usuarioEditable.getMedidoresObservable().clear();
             this.usuarioEditable.addMedidores(this.listViewMedidores.getItems());
+            System.out.println( this.usuarioEditable);
             this.usuarioRepository.save(this.usuarioEditable);
             this.tableViewUsuarios.refresh();
             Stage stage = (Stage) editUsuarioButton.getScene().getWindow();

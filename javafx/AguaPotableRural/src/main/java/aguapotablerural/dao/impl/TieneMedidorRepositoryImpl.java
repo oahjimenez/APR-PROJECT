@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -190,23 +191,32 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     public boolean removeMedidoresNotIn(Usuario usuario, Collection<? extends Medidor> medidores, LocalDate fechaActual) {
         int removedCount = 0;
         try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("DELETE FROM TIENE_MEDIDOR WHERE MEDIDOR_ID = ? AND USUARIO_ID = ? AND CAST(strftime('%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%Y',fecha_adquisicion) as integer) = ?;");
-            statement.setInt(1,usuario.getId());
-            statement.setInt(2,fecha.getMonthValue());
-            statement.setInt(3,fecha.getYear());
-            
-            ResultSet medidoresRs = statement.executeQuery();
-            
-            while (medidoresRs.next()) {
-                Medidor medidor;
-                if ((medidor = this.medidorRepository.get(medidoresRs.getString("MEDIDOR_ID"))) != null) {
-                    medidores.add(medidor);
-                }
+            String sql = String.format("DELETE FROM TIENE_MEDIDOR WHERE MEDIDOR_ID NOT IN %s AND USUARIO_ID = ? AND CAST(strftime('%%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%%Y',fecha_adquisicion) as integer) = ?;",this.generateSqlInClauseArguments(medidores.size()));
+            System.err.println(sql);
+            PreparedStatement statement = driverManager.getConnection().prepareStatement(sql);
+            int argumentIndex = 1; 
+            for (Medidor medidor: medidores) {
+                statement.setString(argumentIndex++,medidor.getId());
             }
+            statement.setInt(argumentIndex++,usuario.getId());
+            statement.setInt(argumentIndex++,fechaActual.getMonthValue());
+            statement.setInt(argumentIndex++,fechaActual.getYear());
+            removedCount = statement.executeUpdate();
             statement.close();
-        }catch (Exception e){
+        }catch (Exception e) {
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
         return (removedCount>0);   
+    }
+    
+    private String generateSqlInClauseArguments(int numArgumentos){
+        if (numArgumentos<=0) {
+            return "()";
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append("(");
+        builder.append(String.join(",", Collections.nCopies(numArgumentos-1, "?")));
+        builder.append(")");
+        return builder.toString();
     }
 }

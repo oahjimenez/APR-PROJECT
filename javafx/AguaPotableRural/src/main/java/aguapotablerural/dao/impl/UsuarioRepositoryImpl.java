@@ -12,6 +12,7 @@ import main.java.aguapotablerural.model.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,6 +92,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             
             if (rowsAffected==1){
                 guardadoConExito = this.medidorRepository.saveAll(usuario.getMedidoresObservable()) &&
+                this.tieneMedidorRepository.removeMedidoresNotIn(usuario,usuario.getMedidoresObservable(),LocalDateTime.now().toLocalDate())  &&
                 this.tieneMedidorRepository.save(usuario,usuario.getMedidoresObservable());
             } else {
                System.err.println("Error al guardar mas de un registro encontrado con id"+usuario.getId());

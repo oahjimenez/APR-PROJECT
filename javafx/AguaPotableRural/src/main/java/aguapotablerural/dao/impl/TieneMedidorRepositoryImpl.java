@@ -189,7 +189,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
 
     @Override
     public boolean removeMedidoresNotIn(Usuario usuario, Collection<? extends Medidor> medidores, LocalDate fechaActual) {
-        int removedCount = 0;
+        boolean removeSuccess = false;
         try {
             String sql = String.format("DELETE FROM TIENE_MEDIDOR WHERE MEDIDOR_ID NOT IN %s AND USUARIO_ID = ? AND CAST(strftime('%%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%%Y',fecha_adquisicion) as integer) = ?;",this.generateSqlInClauseArguments(medidores.size()));
             System.err.println(sql);
@@ -201,12 +201,12 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
             statement.setInt(argumentIndex++,usuario.getId());
             statement.setInt(argumentIndex++,fechaActual.getMonthValue());
             statement.setInt(argumentIndex++,fechaActual.getYear());
-            removedCount = statement.executeUpdate();
+            removeSuccess = (statement.executeUpdate()>=0);
             statement.close();
         }catch (Exception e) {
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
-        return (removedCount>0);   
+        return removeSuccess;   
     }
     
     private String generateSqlInClauseArguments(int numArgumentos){
@@ -215,7 +215,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
         }
         StringBuilder builder = new StringBuilder();
         builder.append("(");
-        builder.append(String.join(",", Collections.nCopies(numArgumentos-1, "?")));
+        builder.append(String.join(",", Collections.nCopies(numArgumentos, "?")));
         builder.append(")");
         return builder.toString();
     }

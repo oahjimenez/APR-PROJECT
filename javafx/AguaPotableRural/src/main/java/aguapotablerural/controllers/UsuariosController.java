@@ -11,6 +11,8 @@ import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.Usuario;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
@@ -118,14 +120,31 @@ public class UsuariosController implements Initializable {
         filtroText.textProperty().addListener((observable, oldValue, newValue) -> {
             usuariosFiltrados.setPredicate(usuario -> {
                 // If filter text is empty, display all persons.
-                if (newValue == null || newValue.isEmpty()) {
+                if (newValue == null || newValue.isEmpty() || newValue.trim().isEmpty() ) {
                     return true;
                 }
-                String lowerCaseFilter = newValue.toLowerCase();
-                return (usuario.getRut().toLowerCase().contains(lowerCaseFilter) || 
-                        usuario.getNombres().toLowerCase().contains(lowerCaseFilter) ||
-                        usuario.getApellidos().toLowerCase().contains(lowerCaseFilter) ||
-                        usuario.getDireccion().toLowerCase().contains(lowerCaseFilter));
+                String lowerCaseFilter = newValue.toLowerCase().trim();
+                if (usuario.getRut().toLowerCase().contains(lowerCaseFilter) || usuario.getApellidos().toLowerCase().contains(lowerCaseFilter) ||
+                        usuario.getDireccion().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                String[] keywords = newValue.toLowerCase().trim().split(" ");
+                for (String keyword: keywords) {
+                    for (String nombre : usuario.getNombres().toLowerCase().split(" ")){
+                        if (nombre.contains(keyword)) {
+                            return true;
+                        }
+                    }
+                }
+                
+                for (String keyword: keywords) {
+                    for (String apellidos : usuario.getApellidos().toLowerCase().split(" ")){
+                        if (apellidos.contains(keyword)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             });
         });
         

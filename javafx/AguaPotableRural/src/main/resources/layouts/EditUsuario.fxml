@@ -45,15 +45,15 @@
                   <Label text="Nombre (*):" />
                   <Label text="Apellido (*):" GridPane.rowIndex="1" />
                   <Label text="Rut (*):" GridPane.rowIndex="2" />
-                  <Label text="Dirección (*):" GridPane.rowIndex="3" />
+                  <Label text="Dirección:" GridPane.rowIndex="3" />
                   <Label text="Teléfono: +569" GridPane.rowIndex="4" />
-                  <Label text="Medidores (*):" GridPane.rowIndex="5" />
+                  <Label text="Medidores:" GridPane.rowIndex="5" />
                   <LimitedTextField fx:id="nombresText" prefHeight="30.0" prefWidth="223.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" />
                   <LimitedTextField fx:id="apellidosText" prefWidth="278.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                   <LimitedTextField fx:id="rutText" prefWidth="266.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
                   <LimitedTextField fx:id="direccionText" prefHeight="25.0" prefWidth="299.0" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                   <LimitedTextField fx:id="telefonoText" styleClass="text_app" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                  <LimitedTextField fx:id="idMedidorText" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="text_app" />
+                  <LimitedTextField fx:id="idMedidorText" styleClass="text_app" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <Label fx:id="nombreLabel" styleClass="texterr_app2" text="Información obligatoria." GridPane.columnIndex="3" />
                   <Label fx:id="apellidosLabel" styleClass="texterr_app2" text="Información obligatoria." GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label fx:id="rutLabel" styleClass="texterr_app2" text="Rut inválido." GridPane.columnIndex="3" GridPane.rowIndex="2" />
@@ -63,12 +63,14 @@
 
                </children>
             </GridPane>
-            <Button fx:id="editUsuarioButton" onAction="#editarUsuarioAction" layoutX="413.0" layoutY="416.0" mnemonicParsing="false" styleClass="button_app" text="Guardar Usuario" />
+            <Button fx:id="editUsuarioButton" layoutX="413.0" layoutY="416.0" mnemonicParsing="false" onAction="#editarUsuarioAction" styleClass="button_app" text="Guardar Usuario" />
             <Label layoutX="54.0" layoutY="420.0" text="(*): Información necesaria para registrar usuario." />
-            <Button fx:id="addMedidorButton" onAction="#agregaMedidorAction" layoutX="289.0" layoutY="245.0" mnemonicParsing="false" styleClass="button_app" text="Agregar Medidor" />
-            <Button fx:id="removeMedidorButton" onAction="#eliminaMedidorAction" layoutX="308.0" layoutY="375.0" mnemonicParsing="false" styleClass="button_app" text="Eliminar Medidor" />
+            <Button fx:id="addMedidorButton" layoutX="307.0" layoutY="245.0" mnemonicParsing="false" onAction="#agregaMedidorAction" styleClass="button_app" text="Agregar Medidor" />
+            <Button fx:id="removeMedidorButton" layoutX="308.0" layoutY="375.0" mnemonicParsing="false" onAction="#eliminaMedidorAction" styleClass="button_app" text="Eliminar Medidor" />
             <ListView fx:id="listViewMedidores" layoutX="147.0" layoutY="286.0" prefHeight="83.0" prefWidth="266.0" />
+             <Button graphicTextGap="0.0" layoutX="282.0" layoutY="245.0" mnemonicParsing="false" onAction="#resetMedidorIdAction" prefHeight="22.0" prefWidth="22.0" styleClass="reset-btn" text="X" textFill="BLACK" />
          </children>
       </AnchorPane>
    </children>
 </VBox>
+

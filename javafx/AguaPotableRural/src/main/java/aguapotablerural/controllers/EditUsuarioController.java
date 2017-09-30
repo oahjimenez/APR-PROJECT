@@ -317,4 +317,8 @@ public class EditUsuarioController implements Initializable {
         this.isDirty = isDirty;
     }
 
+    @FXML
+    private void resetMedidorIdAction(ActionEvent event) {
+        this.idMedidorText.clear();
+    }
 }

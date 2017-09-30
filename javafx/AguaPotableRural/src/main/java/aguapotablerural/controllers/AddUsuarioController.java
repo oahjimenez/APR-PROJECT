@@ -292,5 +292,8 @@ public class AddUsuarioController implements Initializable{
         this.isDirty = isDirty;
     }
 
-    
+    @FXML
+    private void resetMedidorIdAction(ActionEvent event) {
+        this.idMedidorText.clear();
+    }
 }

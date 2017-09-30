@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import  main.java.aguapotablerural.ui.LimitedTextField?>
-
 <VBox prefHeight="485.0" prefWidth="600.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.AddUsuarioController">
    <children>
       <AnchorPane prefHeight="68.0" prefWidth="779.0" styleClass="background_app">
@@ -65,10 +64,12 @@
             </GridPane>
             <Label layoutX="54.0" layoutY="373.0" text="(*): Información necesaria para registrar usuario." />
             
-            <Button fx:id="addMedidorButton" onAction="#agregaMedidorAction" styleClass="button_app" mnemonicParsing="false" text="Agregar Medidor" layoutX="289.0" layoutY="245.0" />
-            <Button fx:id="addUsuarioButton" onAction="#registraUsuarioAction" layoutX="415.0" layoutY="369.0" mnemonicParsing="false" styleClass="button_app" text="Guardar Usuario" />
-            <Button fx:id="removeMedidorButton" onAction="#eliminaMedidorAction" layoutX="308.0" layoutY="375.0" mnemonicParsing="false" styleClass="button_app" text="Eliminar Medidor" />
+            <Button fx:id="addMedidorButton" layoutX="308.0" layoutY="245.0" mnemonicParsing="false" onAction="#agregaMedidorAction" styleClass="button_app" text="Agregar Medidor" />
+            <Button fx:id="addUsuarioButton" layoutX="415.0" layoutY="369.0" mnemonicParsing="false" onAction="#registraUsuarioAction" styleClass="button_app" text="Guardar Usuario" />
+            <Button fx:id="removeMedidorButton" layoutX="308.0" layoutY="375.0" mnemonicParsing="false" onAction="#eliminaMedidorAction" styleClass="button_app" text="Eliminar Medidor" />
             <ListView fx:id="listViewMedidores" layoutX="143.0" layoutY="288.0" prefHeight="61.0" prefWidth="274.0" />
+            <Button graphicTextGap="0.0" layoutX="282.0" layoutY="245.0" mnemonicParsing="false" onAction="#resetMedidorIdAction" prefHeight="22.0" prefWidth="22.0" styleClass="reset-btn" text="X" textFill="BLACK" />
+
          </children>
       </AnchorPane>
    </children>

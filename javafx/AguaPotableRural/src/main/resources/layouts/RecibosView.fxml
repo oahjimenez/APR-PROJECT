@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="692.0" prefWidth="963.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.RecibosViewController">
+<VBox prefHeight="692.0" prefWidth="1209.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.RecibosViewController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="73.0" prefWidth="600.0" styleClass="background_app">
          <children>
@@ -66,7 +66,7 @@
       </AnchorPane>
       <HBox prefHeight="523.0" prefWidth="750.0">
          <children>
-            <VBox prefHeight="521.0" prefWidth="314.0" styleClass="background_app2">
+            <VBox prefHeight="521.0" prefWidth="299.0" styleClass="background_app2">
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
@@ -75,17 +75,9 @@
                         <ListView fx:id="listViewUsuarios" layoutX="50.0" layoutY="84.0" prefHeight="143.0" prefWidth="214.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="306.0" prefWidth="196.0">
-                     <children>
-
-                        <Label fx:id="lecturasIngrsadasLabel" layoutX="67.0" layoutY="25.0" text="Lecturas Ingresadas" />
-                        <ListView fx:id="listViewUsuariosIngresados"  layoutX="46.0" layoutY="59.0" prefHeight="183.0" prefWidth="222.0" />
-
-                     </children>
-                  </AnchorPane>
                </children>
             </VBox>
-            <VBox>
+            <VBox prefHeight="521.0" prefWidth="608.0">
                <children>
                   <AnchorPane prefHeight="518.0" prefWidth="625.0">
                      <children>
@@ -121,7 +113,7 @@
                                        <children>
                                           <TableView fx:id="lecturasMensualesTableView" prefHeight="233.0" prefWidth="525.0">
                                             <columns>
-                                              <TableColumn  fx:id="medidorIdTableColumn" prefWidth="75.0" text="Medidor ID" />
+                                              <TableColumn fx:id="medidorIdTableColumn" prefWidth="75.0" text="Medidor ID" />
                                                 <TableColumn fx:id="lecturaTableColumn" prefWidth="75.0" text="Lectura" />
                                                 <TableColumn fx:id="costoTableColumn" prefWidth="75.0" text="Costo" />
                                             </columns>
@@ -137,8 +129,20 @@
                             </Tab>
                           </tabs>
                         </TabPane>
-                        <Label  layoutX="362.0" layoutY="484.0" text="Total a Pagar :" />
-                        <Label fx:id="totalMensualLabel"  layoutX="450.0" layoutY="484.0" text="" />
+                        <Label layoutX="362.0" layoutY="484.0" text="Total a Pagar :" />
+                        <Label fx:id="totalMensualLabel" layoutX="450.0" layoutY="484.0" text="" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+            <VBox prefHeight="521.0" prefWidth="302.0">
+               <children>
+                  <AnchorPane prefHeight="306.0" prefWidth="311.0">
+                     <children>
+
+                        <Label fx:id="lecturasIngrsadasLabel" layoutX="67.0" layoutY="25.0" text="Lecturas Ingresadas" />
+                        <ListView fx:id="listViewUsuariosIngresados" layoutX="46.0" layoutY="59.0" prefHeight="183.0" prefWidth="222.0" />
+
                      </children>
                   </AnchorPane>
                </children>
@@ -148,7 +152,7 @@
       <AnchorPane prefHeight="52.0" prefWidth="750.0" styleClass="background_app3">
          <children>
 
-            <Button fx:id="guardarLecturasMensualesButton" onAction="#guardarLecturasMensualesAction"  layoutX="818.0" layoutY="12.0" mnemonicParsing="false" styleClass="button_app" text="Guardar"  />
+            <Button fx:id="guardarLecturasMensualesButton" layoutX="818.0" layoutY="12.0" mnemonicParsing="false" onAction="#guardarLecturasMensualesAction" styleClass="button_app" text="Guardar" />
          </children>
       </AnchorPane>
    </children>

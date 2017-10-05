@@ -36,8 +36,8 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
         double lecturaMensual = -1;
         PreparedStatement statement = null;
         try {
-            statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_RUT = ? AND MEDIDOR_ID = ? AND FECHA = ?;");
-            statement.setString(1,usuario.getRut());
+            statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_ID = ? AND MEDIDOR_ID = ? AND FECHA = ?;");
+            statement.setInt(1,usuario.getId());
             statement.setString(2,medidor.getId());
             statement.setDate(3,Date.valueOf(fecha));
            
@@ -62,10 +62,10 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
     @Override
     public boolean save(Usuario usuario,Medidor medidor, LocalDate fecha, double lectura) {
        try {
-            String upsertSql = "INSERT OR REPLACE INTO LECTURA_MENSUAL(USUARIO_RUT,MEDIDOR_ID,FECHA,VALOR) VALUES (?,?,?,?);";
+            String upsertSql = "INSERT OR REPLACE INTO LECTURA_MENSUAL(USUARIO_ID,MEDIDOR_ID,FECHA,VALOR) VALUES (?,?,?,?);";
             
             PreparedStatement statement = this.driverManager.getConnection().prepareStatement(upsertSql);
-            statement.setString(1,usuario.getRut());
+            statement.setInt(1,usuario.getId());
             statement.setString(2,medidor.getId());
             statement.setDate(3,Date.valueOf(fecha));
             statement.setDouble(4,lectura);
@@ -79,20 +79,20 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
     }
 
     @Override
-    public List<String> getRutUsuariosConLecturaMensual(LocalDate fecha) {
-        List<String> ruts = new ArrayList();
+    public List<Integer> getRutUsuariosConLecturaMensual(LocalDate fecha) {
+        List<Integer> ids = new ArrayList<>();
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_RUT FROM LECTURA_MENSUAL WHERE FECHA = ?;");
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_ID FROM LECTURA_MENSUAL WHERE FECHA = ?;");
             statement.setDate(1,Date.valueOf(fecha));
-            ResultSet rutsRs = statement.executeQuery();
-            while (rutsRs.next()) {
-                ruts.add(rutsRs.getString("USUARIO_RUT"));
+            ResultSet lecturasRs = statement.executeQuery();
+            while (lecturasRs.next()) {
+                ids.add(lecturasRs.getInt("USUARIO_ID"));
             }
             statement.close();
         }catch (Exception e){
             System.err.println(String.format("%s - getRutUsuariosConLecturaMensual(): %s - %s",this.getClass().getSimpleName(),e.getClass().getName(),e.getMessage() ));
         }
-        return ruts; 
+        return ids; 
     }
     
 }

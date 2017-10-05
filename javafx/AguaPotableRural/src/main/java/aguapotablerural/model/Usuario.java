@@ -156,12 +156,12 @@ public class Usuario implements Comparable{
             return false;
         }
         Usuario usuario = (Usuario) o;
-        return Objects.equals(this.getRut(),usuario.getRut());
+        return Objects.equals(this.getId(),usuario.getId()) && Objects.equals(this.getRut(),usuario.getRut());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getRut());
+        return Objects.hash(this.getId());
     }
     
     @Override
@@ -169,7 +169,7 @@ public class Usuario implements Comparable{
         if(!(o instanceof Usuario)){
             return -1;
         }
-        if (this.getRut().equals(((Usuario)o).getRut())){
+        if ((this.getRut().equals(((Usuario)o).getRut())) && ((this.getId()== ((Usuario)o).getId()))){
            return 0; 
         }
         return -1;

@@ -99,16 +99,24 @@ public class RecibosViewController implements Initializable {
     private TextField filtroUsuario;
     
     @FXML
-    public Label nombreLabel; 
+    public Label nombreLabelValue; 
     
     @FXML
-    public Label rutLabel;
+    public Label rutLabel; 
+    @FXML
+    public Label rutLabelValue;
     
     @FXML
     public Label direccionLabel;
-     
+    
+    @FXML
+    public Label direccionLabelValue;
+    
     @FXML
     public Label telefonoLabel;
+    
+    @FXML
+    public Label telefonoLabelValue;
     
     @FXML
     public Label totalMensualLabel;
@@ -146,6 +154,7 @@ public class RecibosViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         lecturasMensualesTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        this.setControllerWidgetsVisible(false);
         this.lecturasMensualesTableView.setItems(lecturas);
         this.lecturasMensualesTableView.setEditable(true);
        medidorIdTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty((cellData.getValue().getMedidor().getId())));
@@ -242,6 +251,7 @@ public class RecibosViewController implements Initializable {
         this.listViewUsuarios.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                setControllerWidgetsVisible(true);
                 setUsuarioSeleccionado((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
                 actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
@@ -275,10 +285,10 @@ public class RecibosViewController implements Initializable {
                 }
                 medidoresDelMes = medidorService.getMedidoresOf(usuario,getSelectedMonthYear());
                 lecturasMensualesTableView.getItems().clear();
-                nombreLabel.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
-                rutLabel.setText(usuario.getRut());
-                direccionLabel.setText(usuario.getDireccion());
-                telefonoLabel.setText(usuario.getTelefono());
+                nombreLabelValue.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
+                rutLabelValue.setText(usuario.getRut());
+                direccionLabelValue.setText(usuario.getDireccion());
+                telefonoLabelValue.setText(usuario.getTelefono());
                 if (medidoresDelMes.isEmpty()) {
                     Label noPoseeMedidorLabel = new Label();
                    // noPoseeMedidorLabel.setText("Sin registros");
@@ -373,10 +383,10 @@ public class RecibosViewController implements Initializable {
     
     private void actualizarUsuariosIngresados(LocalDate fecha) {
         this.listViewUsuariosIngresados.getItems().clear();
-        List<String> ruts = lecturaService.getRutUsuariosConLecturaMensual(fecha);
-        ruts.forEach(rut-> {
+        List<Integer> usuarioIds = lecturaService.getRutUsuariosConLecturaMensual(fecha);
+        usuarioIds.forEach(id-> {
             Usuario usuarioLectura = new Usuario();
-            usuarioLectura.setRut(rut);
+            usuarioLectura.setId(id);
             int index = -1;
             if (((index = this.usuarios.indexOf(usuarioLectura)) != -1) && !this.listViewUsuariosIngresados.getItems().contains(this.usuarios.get(index))){
                this.listViewUsuariosIngresados.getItems().add(this.usuarios.get(index));
@@ -394,6 +404,12 @@ public class RecibosViewController implements Initializable {
     
     private boolean isNumeric(String charset) {
         return charset.matches("-?\\d+(\\.\\d*)?");  //match a number with optional '-' and decimal.
+    }
+    
+    private void setControllerWidgetsVisible(boolean visible) {
+        rutLabel.setVisible(visible);
+        telefonoLabel.setVisible(visible);
+        direccionLabel.setVisible(visible);
     }
     
 }

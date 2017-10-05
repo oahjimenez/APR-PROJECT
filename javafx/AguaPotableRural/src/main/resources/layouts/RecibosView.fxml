@@ -81,7 +81,7 @@
                <children>
                   <AnchorPane prefHeight="518.0" prefWidth="625.0">
                      <children>
-                        <Label fx:id="nombreLabel" layoutX="77.0" layoutY="25.0" text="Seleccione un usuario de la lista de usuarios para visualizar sus detalles de lectura." />
+                        <Label fx:id="nombreLabelValue" layoutX="77.0" layoutY="25.0" text="Seleccione un usuario de la lista de usuarios para visualizar sus detalles de lectura." />
                         <GridPane layoutX="53.0" layoutY="48.0" prefHeight="53.0" prefWidth="485.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.0" minWidth="10.0" prefWidth="73.0" />
@@ -94,15 +94,12 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label text="Rut" />
-                              <Label text="Dirección" GridPane.rowIndex="1" />
-                              <Label text="Teléfono" GridPane.rowIndex="2" />
-                              <Label fx:id="rutLabel" GridPane.columnIndex="2" />
-                              <Label fx:id="direccionLabel" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label fx:id="telefonoLabel" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <Label text=":" GridPane.columnIndex="1" />
-                              <Label text=":" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text=":" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label fx:id="rutLabel" text="Rut:" />
+                              <Label fx:id="direccionLabel" text="Dirección: " GridPane.rowIndex="1" />
+                              <Label fx:id="telefonoLabel" text="Teléfono: " GridPane.rowIndex="2" />
+                              <Label fx:id="rutLabelValue" GridPane.columnIndex="2" />
+                              <Label fx:id="direccionLabelValue" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label fx:id="telefonoLabelValue" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <TabPane layoutX="42.0" layoutY="116.0" prefHeight="337.0" prefWidth="520.0" styleClass="tab-header-background" tabClosingPolicy="UNAVAILABLE">
@@ -113,18 +110,13 @@
                                        <children>
                                           <TableView fx:id="lecturasMensualesTableView" prefHeight="308.0" prefWidth="525.0">
                                             <columns>
-                                              <TableColumn fx:id="medidorIdTableColumn" prefWidth="75.0" text="Medidor ID" />
-                                                <TableColumn fx:id="lecturaTableColumn" prefWidth="75.0" text="Lectura" />
+                                              <TableColumn fx:id="medidorIdTableColumn" prefWidth="75.0" text="Medidor" />
+                                                <TableColumn fx:id="lecturaTableColumn" prefWidth="75.0" text="Lectura (m3)" />
                                                 <TableColumn fx:id="costoTableColumn" prefWidth="75.0" text="Costo" />
                                             </columns>
                                           </TableView>
                                        </children>
                                     </AnchorPane>
-                              </content>
-                            </Tab>
-                            <Tab text="Historial">
-                              <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                               </content>
                             </Tab>
                           </tabs>

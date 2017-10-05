@@ -70,9 +70,9 @@
                <children>
                   <AnchorPane prefHeight="432.0" prefWidth="299.0">
                      <children>
-                        <Label layoutX="67.0" layoutY="24.0" text="Lista de Usuarios" />
-                        <TextField fx:id="filtroUsuario" layoutX="50.0" layoutY="49.0" prefHeight="25.0" prefWidth="169.0" />
-                        <ListView fx:id="listViewUsuarios" layoutX="50.0" layoutY="84.0" prefHeight="324.0" prefWidth="214.0" />
+                        <Label layoutX="16.0" layoutY="24.0" text="Lista de Usuarios" />
+                        <TextField fx:id="filtroUsuario" layoutX="14.0" layoutY="49.0" prefHeight="25.0" prefWidth="273.0" />
+                        <ListView fx:id="listViewUsuarios" layoutX="13.0" layoutY="84.0" prefHeight="427.0" prefWidth="273.0" />
                      </children>
                   </AnchorPane>
                </children>
@@ -140,8 +140,8 @@
                   <AnchorPane prefHeight="475.0" prefWidth="302.0">
                      <children>
 
-                        <Label fx:id="lecturasIngrsadasLabel" layoutX="67.0" layoutY="25.0" text="Lecturas Ingresadas" />
-                        <ListView fx:id="listViewUsuariosIngresados" layoutX="50.0" layoutY="59.0" prefHeight="339.0" prefWidth="222.0" />
+                        <Label fx:id="lecturasIngrsadasLabel" layoutX="17.0" layoutY="27.0" text="Lecturas Ingresadas" />
+                        <ListView fx:id="listViewUsuariosIngresados" layoutX="15.0" layoutY="59.0" prefHeight="450.0" prefWidth="273.0" />
 
                      </children>
                   </AnchorPane>

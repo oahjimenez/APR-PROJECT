@@ -20,14 +20,10 @@ import main.java.aguapotablerural.model.Usuario;
 public class CostoMetroCubicoRepositoryImpl implements CostoMetroCubicoRepository {
 
     protected DBDriverManager driverManager;
-    
-    private CostoMetroCubicoRepository costoMetroCubicoRepository;
-    
     public CostoMetroCubicoRepositoryImpl() {}
     
     public CostoMetroCubicoRepositoryImpl(DBDriverManager driverManager) {
         this.driverManager = driverManager;
-        this.costoMetroCubicoRepository = new CostoMetroCubicoRepositoryImpl(driverManager);
     }
     
     @Override

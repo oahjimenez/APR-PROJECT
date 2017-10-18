@@ -8,7 +8,7 @@ package main.java.aguapotablerural.dao.repository;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Subsidio;
 import main.java.aguapotablerural.model.Usuario;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 
 /**
@@ -17,11 +17,7 @@ import java.util.Collection;
  */
 public interface SubsidioRepository {
     
-    public Subsidio getSubsidio(Usuario usuario,Date fecha);
-    public Subsidio getSubsidioActual(Usuario usuario);
-    public Subsidio getSubsidioActual(Medidor medidor);
+    public Subsidio getSubsidio(Usuario usuario,LocalDate fecha);
     public Collection<Subsidio> getAllSubsidios(Usuario usuario);
     public Collection<Subsidio> getAllSubsidios(Medidor medidor);
-    public Subsidio getMostRecentSubsidio(Usuario usuario);
-    public Subsidio getMostRecentSubsidio(Medidor usuario);
 }

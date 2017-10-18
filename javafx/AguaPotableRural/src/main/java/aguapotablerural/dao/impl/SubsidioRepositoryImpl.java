@@ -15,6 +15,7 @@ import main.java.aguapotablerural.model.Usuario;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,15 +38,17 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
    
     
     @Override
-    public Subsidio getSubsidio(Usuario usuario, Date fecha) {
+    public Subsidio getSubsidio(Usuario usuario, LocalDate fecha) {
       Subsidio subsidio = null;
        try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID,PORCENTAJE_SUBSIDIO,TOPE FROM SUBSIDIO where USUARIO_RUT = ?  AND FECHA = ?;");
-            statement.setString(1,usuario.getRut());
-            statement.setDate(2,fecha);
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,MEDIDOR_ID,PORCENTAJE_SUBSIDIO,TOPE FROM SUBSIDIO WHERE USUARIO_ID = ?  AND CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");
+            statement.setInt(1,usuario.getId());
+            statement.setInt(2,fecha.getMonthValue());
+            statement.setInt(2,fecha.getYear());
             ResultSet subsidioRs = statement.executeQuery();
             subsidio = new Subsidio();
             subsidio.setUsuario(usuario);
+            subsidio.setId(subsidioRs.getInt("ID"));
             subsidio.setMedidor(this.medidorRepository.get(subsidioRs.getString("MEDIDOR_ID")));
             subsidio.setPorcentaje(subsidioRs.getDouble("PORCENTAJE_SUBSIDIO"));
             subsidio.setTope(subsidioRs.getDouble("TOPE"));
@@ -66,18 +69,13 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
             ResultSet subsidiosRs = statement.executeQuery();
             
             while (subsidiosRs.next()) {
-                String id = subsidiosRs.getString("ID");
-                String medidor_id = subsidiosRs.getString("MEDIDOR_ID");
-                Double porcentaje_subsidio = subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO");
-                Double tope = subsidiosRs.getDouble("TOPE");
-                Date fecha = subsidiosRs.getDate("FECHA");
                 Subsidio subsidio = new Subsidio();
-                subsidio.setId(id);
+                subsidio.setId(subsidiosRs.getInt("ID"));
                 subsidio.setUsuario(usuario);
-                subsidio.setMedidor(this.medidorRepository.get(medidor_id));
-                subsidio.setPorcentaje(porcentaje_subsidio);
-                subsidio.setTope(tope);
-                subsidio.setFecha(fecha);
+                subsidio.setMedidor(this.medidorRepository.get(subsidiosRs.getString("MEDIDOR_ID")));
+                subsidio.setPorcentaje(subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO"));
+                subsidio.setTope(subsidiosRs.getDouble("TOPE"));
+                subsidio.setFecha(subsidiosRs.getDate("FECHA"));
                 subsidios.add(subsidio);
             }
             statement.close();
@@ -85,21 +83,6 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
         return subsidios;
-    }
-
-    @Override
-    public Subsidio getMostRecentSubsidio(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Subsidio getSubsidioActual(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Subsidio getSubsidioActual(Medidor medidor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -111,18 +94,13 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
             ResultSet subsidiosRs = statement.executeQuery();
             
             while (subsidiosRs.next()) {
-                String id = subsidiosRs.getString("ID");
-                String usuario_rut = subsidiosRs.getString("USUARIO_RUT");
-                Double porcentaje_subsidio = subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO");
-                Double tope = subsidiosRs.getDouble("TOPE");
-                Date fecha = subsidiosRs.getDate("FECHA");
                 Subsidio subsidio = new Subsidio();
-                subsidio.setId(id);
-                subsidio.setUsuario(this.usuarioRepository.getActive(usuario_rut));
+                subsidio.setId(subsidiosRs.getInt("ID"));
+                subsidio.setUsuario(this.usuarioRepository.getActive(subsidiosRs.getString("USUARIO_ID")));
                 subsidio.setMedidor(medidor);
-                subsidio.setPorcentaje(porcentaje_subsidio);
-                subsidio.setTope(tope);
-                subsidio.setFecha(fecha);
+                subsidio.setPorcentaje(subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO"));
+                subsidio.setTope(subsidiosRs.getDouble("TOPE"));
+                subsidio.setFecha(subsidiosRs.getDate("FECHA"));
                 subsidios.add(subsidio);
             }
             statement.close();
@@ -130,11 +108,6 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
         return subsidios;  
-    }
-
-    @Override
-    public Subsidio getMostRecentSubsidio(Medidor usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

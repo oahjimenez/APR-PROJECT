@@ -13,7 +13,7 @@ import java.sql.Date;
  */
 public class Subsidio {
     
-    private String id;
+    private int id;
     private Usuario usuario;
     private Medidor medidor;
     private double porcentaje;
@@ -61,11 +61,11 @@ public class Subsidio {
         this.medidor = medidor;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
     

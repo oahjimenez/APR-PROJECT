@@ -15,7 +15,6 @@ public class Subsidio {
     
     private int id;
     private Usuario usuario;
-    private Medidor medidor;
     private double porcentaje;
     private double tope;
     private Date fecha;
@@ -50,15 +49,6 @@ public class Subsidio {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    
-    public Medidor getMedidor() {
-        return medidor;
-    }
-
-    public void setMedidor(Medidor medidor) {
-        this.medidor = medidor;
     }
 
     public int getId() {

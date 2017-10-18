@@ -26,6 +26,7 @@ import main.java.aguapotablerural.dao.repository.TieneMedidorRepository;
 public class UsuarioRepositoryImpl implements UsuarioRepository{
 
     protected DBDriverManager driverManager;
+    private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
     
     private MedidorRepository medidorRepository;
     private TieneMedidorRepository tieneMedidorRepository;
@@ -42,7 +43,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
     public Usuario getActive(String rut) {
         
         Usuario usuario = null;
-        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 
        try {
             PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,NOMBRES,APELLIDOS,DIRECCION,TELEFONO,FECHA_REGISTRO,FECHA_RETIRO FROM USUARIO where rut = ? AND FECHA_RETIRO IS NULL;");
@@ -214,6 +214,39 @@ public class UsuarioRepositoryImpl implements UsuarioRepository{
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
         return usuarios;
+    }
+
+    @Override
+    public Usuario get(int id) {
+        Usuario usuario = null;
+        try {
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,RUT,NOMBRES,APELLIDOS,DIRECCION,TELEFONO,FECHA_REGISTRO,FECHA_RETIRO FROM USUARIO where ID = ?;");
+            statement.setInt(1,id);
+            ResultSet usuariosRs = statement.executeQuery();
+            if (usuariosRs.next()) {
+                String rut = usuariosRs.getString("rut");
+                String nombre = usuariosRs.getString("nombres");
+                String apellidos = usuariosRs.getString("apellidos");
+                String direccion = usuariosRs.getString("direccion");
+                String telefono = usuariosRs.getString("telefono");
+                Date fechaRegistro = new java.sql.Date(dateformat.parse(usuariosRs.getString("fecha_registro")).getTime());
+                String fechaRetiroStr = usuariosRs.getString("fecha_retiro");
+                Date fechaRetiro = (fechaRetiroStr==null)? null : new java.sql.Date(dateformat.parse(fechaRetiroStr).getTime());
+                System.out.println("fechaRegistro:"+fechaRegistro+" fecharetiro:"+fechaRetiro);
+                usuario = new Usuario();
+                usuario.setId(id);
+                usuario.setRut(rut);
+                usuario.setNombres(nombre);
+                usuario.setApellidos(apellidos);
+                usuario.setDireccion(direccion);
+                usuario.setTelefono(telefono);
+                usuario.addMedidores(this.tieneMedidorRepository.getAllMedidores(usuario));
+            }
+            statement.close();
+        }catch (Exception e){
+            System.err.println(String.format("%s - get() : %s - %s",this.getClass().getSimpleName(),e.getClass().getSimpleName(),e.getMessage()));
+        }
+        return usuario;
     }
 
     

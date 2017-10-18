@@ -41,17 +41,19 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
     public Subsidio getSubsidio(Usuario usuario, LocalDate fecha) {
       Subsidio subsidio = null;
        try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,MEDIDOR_ID,PORCENTAJE_SUBSIDIO,TOPE FROM SUBSIDIO WHERE USUARIO_ID = ?  AND CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,USUARIO_ID,PORCENTAJE_SUBSIDIO,TOPE FROM SUBSIDIO WHERE USUARIO_ID = ?  AND CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");
             statement.setInt(1,usuario.getId());
             statement.setInt(2,fecha.getMonthValue());
-            statement.setInt(2,fecha.getYear());
+            statement.setInt(3,fecha.getYear());
             ResultSet subsidioRs = statement.executeQuery();
-            subsidio = new Subsidio();
-            subsidio.setUsuario(usuario);
-            subsidio.setId(subsidioRs.getInt("ID"));
-            subsidio.setMedidor(this.medidorRepository.get(subsidioRs.getString("MEDIDOR_ID")));
-            subsidio.setPorcentaje(subsidioRs.getDouble("PORCENTAJE_SUBSIDIO"));
-            subsidio.setTope(subsidioRs.getDouble("TOPE"));
+            
+            if (subsidioRs.next()) {
+                subsidio = new Subsidio();
+                subsidio.setUsuario(usuario);
+                subsidio.setId(subsidioRs.getInt("ID"));
+                subsidio.setPorcentaje(subsidioRs.getDouble("PORCENTAJE_SUBSIDIO"));
+                subsidio.setTope(subsidioRs.getDouble("TOPE"));
+            }
             statement.close();
             return subsidio;
         }catch (Exception e){
@@ -72,7 +74,6 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
                 Subsidio subsidio = new Subsidio();
                 subsidio.setId(subsidiosRs.getInt("ID"));
                 subsidio.setUsuario(usuario);
-                subsidio.setMedidor(this.medidorRepository.get(subsidiosRs.getString("MEDIDOR_ID")));
                 subsidio.setPorcentaje(subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO"));
                 subsidio.setTope(subsidiosRs.getDouble("TOPE"));
                 subsidio.setFecha(subsidiosRs.getDate("FECHA"));
@@ -83,31 +84,6 @@ public class SubsidioRepositoryImpl implements SubsidioRepository {
             System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
         }
         return subsidios;
-    }
-
-    @Override
-    public Collection<Subsidio> getAllSubsidios(Medidor medidor) {
-       List<Subsidio> subsidios = new LinkedList();
-        try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT * FROM SUBSIDIO WHERE MEDIDOR_ID = ?;");
-            statement.setString(1,medidor.getId());
-            ResultSet subsidiosRs = statement.executeQuery();
-            
-            while (subsidiosRs.next()) {
-                Subsidio subsidio = new Subsidio();
-                subsidio.setId(subsidiosRs.getInt("ID"));
-                subsidio.setUsuario(this.usuarioRepository.getActive(subsidiosRs.getString("USUARIO_ID")));
-                subsidio.setMedidor(medidor);
-                subsidio.setPorcentaje(subsidiosRs.getDouble("PORCENTAJE_SUBSIDIO"));
-                subsidio.setTope(subsidiosRs.getDouble("TOPE"));
-                subsidio.setFecha(subsidiosRs.getDate("FECHA"));
-                subsidios.add(subsidio);
-            }
-            statement.close();
-        }catch (Exception e){
-            System.err.println(this.getClass()+ ": " +e.getClass().getName() + ": " + e.getMessage() );
-        }
-        return subsidios;  
     }
     
 }

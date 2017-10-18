@@ -14,6 +14,7 @@ import java.util.Collection;
 public interface UsuarioRepository {
     
     public Usuario getActive(String rut);
+    public Usuario get(int id);
     public boolean save(Usuario usuario);
     public boolean delete(Usuario usuario);
     public Collection<Usuario> getAllUsuarios();

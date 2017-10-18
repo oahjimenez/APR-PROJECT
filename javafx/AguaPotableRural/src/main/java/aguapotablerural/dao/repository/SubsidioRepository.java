@@ -19,5 +19,4 @@ public interface SubsidioRepository {
     
     public Subsidio getSubsidio(Usuario usuario,LocalDate fecha);
     public Collection<Subsidio> getAllSubsidios(Usuario usuario);
-    public Collection<Subsidio> getAllSubsidios(Medidor medidor);
 }

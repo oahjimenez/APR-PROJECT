@@ -19,11 +19,13 @@ public class ConsumoService {
     private static final double COSTO_METRO_CUBICO = 500; //todo parametrizar por mes y agregar tabla log de cambio
     private static final double TOPE_SUBSIDIADO = -1; //todo parametrizar por usuario y mes, agregar tabla log de cambio
     
+    private final SubsidioService subsidioService;
     private final LecturaService lecturaService;
     
     
     public ConsumoService() {
         this.lecturaService = new LecturaService();
+        this.subsidioService = new SubsidioService();
     }
     
     public double getConsumoMensual(Usuario usuario,Medidor medidor, LocalDate mes) {
@@ -35,7 +37,7 @@ public class ConsumoService {
     }
     
     public double getTopeSubsidiado(Usuario usuario,LocalDate mes) {
-        return TOPE_SUBSIDIADO;
+        return this.subsidioService.getSubsidio(usuario, mes).getTope();
     }
     
     public double getPorcentajeSubsidio(Usuario usuario,LocalDate mes) {
@@ -52,5 +54,12 @@ public class ConsumoService {
         }
         return valorACancelarConSubsidio;
     }
+    public static void main(String[] args) {
+        ConsumoService consumoService = new ConsumoService();
+        Usuario usuario = new Usuario();
+        usuario.setId(1);
+        System.out.println("tope:"+consumoService.getTopeSubsidiado(usuario,LocalDate.now()));
+    }
+    
     
 }

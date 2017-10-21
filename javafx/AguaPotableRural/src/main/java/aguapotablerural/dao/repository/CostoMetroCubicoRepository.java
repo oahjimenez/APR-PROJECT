@@ -5,6 +5,7 @@
  */
 package main.java.aguapotablerural.dao.repository;
 
+import java.time.LocalDate;
 import main.java.aguapotablerural.model.CostoMetroCubico;
 
 /**
@@ -12,5 +13,5 @@ import main.java.aguapotablerural.model.CostoMetroCubico;
  * @author carlo
  */
 public interface CostoMetroCubicoRepository {
-    public CostoMetroCubico getCostoMetroCubico();
+    public CostoMetroCubico getCostoMetroCubico(LocalDate fecha);
 }

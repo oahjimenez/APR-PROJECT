@@ -33,7 +33,7 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
 
     @Override
     public double getLecturaMensual(Usuario usuario, Medidor medidor,LocalDate fecha) {
-        double lecturaMensual = -1;
+        double lecturaMensual = 0.0;
         PreparedStatement statement = null;
         try {
             statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_ID = ? AND MEDIDOR_ID = ? AND FECHA = ?;");

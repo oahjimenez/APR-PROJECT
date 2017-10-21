@@ -5,13 +5,12 @@
  */
 package main.java.aguapotablerural.dao.impl;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import main.java.aguapotablerural.dao.repository.CostoMetroCubicoRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.model.CostoMetroCubico;
-import main.java.aguapotablerural.model.Usuario;
 
 /**
  *
@@ -27,10 +26,12 @@ public class CostoMetroCubicoRepositoryImpl implements CostoMetroCubicoRepositor
     }
     
     @Override
-    public CostoMetroCubico getCostoMetroCubico() {
+    public CostoMetroCubico getCostoMetroCubico(LocalDate fecha) {
         CostoMetroCubico costoMetroCubico = null;
          try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,COSTO FROM COSTO_METRO_CUBICO LIMIT 1;");;
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,COSTO FROM COSTO_METRO_CUBICO WHERE CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");;
+            statement.setInt(1,fecha.getMonthValue());
+            statement.setInt(2,fecha.getYear());
             ResultSet costoMetroCubicoRs = statement.executeQuery();
             if (costoMetroCubicoRs.next()) {
                 int id = costoMetroCubicoRs.getInt("id");

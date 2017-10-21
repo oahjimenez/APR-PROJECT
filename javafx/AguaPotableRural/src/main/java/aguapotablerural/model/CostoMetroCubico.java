@@ -19,7 +19,7 @@ public class CostoMetroCubico {
         this.costo = costo;
     }
     
-    public double getCostoMetroCubico() {
+    public double getCosto() {
         return this.costo;
     }
     

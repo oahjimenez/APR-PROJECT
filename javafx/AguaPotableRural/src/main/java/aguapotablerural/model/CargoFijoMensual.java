@@ -18,4 +18,12 @@ public class CargoFijoMensual {
         this.id = id;
         this.cargo = cargo;
     }
+    
+    public double getCargo() {
+        return this.cargo;
+    }
+    
+    public double getId() {
+        return this.id;
+    }
 }

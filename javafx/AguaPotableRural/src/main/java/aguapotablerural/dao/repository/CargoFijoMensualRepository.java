@@ -5,6 +5,7 @@
  */
 package main.java.aguapotablerural.dao.repository;
 
+import java.time.LocalDate;
 import main.java.aguapotablerural.model.CargoFijoMensual;
 
 /**
@@ -12,6 +13,6 @@ import main.java.aguapotablerural.model.CargoFijoMensual;
  * @author carlo
  */
 public interface CargoFijoMensualRepository {
-    public CargoFijoMensual getCargoFijoMensual();
+    public CargoFijoMensual getCargoFijoMensual(LocalDate fecha);
     
 }

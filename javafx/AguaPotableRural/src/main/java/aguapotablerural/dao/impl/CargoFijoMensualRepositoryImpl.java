@@ -7,6 +7,7 @@ package main.java.aguapotablerural.dao.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import main.java.aguapotablerural.dao.repository.CargoFijoMensualRepository;
 import main.java.aguapotablerural.database.contract.DBDriverManager;
 import main.java.aguapotablerural.model.CargoFijoMensual;
@@ -24,10 +25,12 @@ public class CargoFijoMensualRepositoryImpl implements CargoFijoMensualRepositor
     public CargoFijoMensualRepositoryImpl(DBDriverManager driverManager) {
         this.driverManager = driverManager;
     }
-     public CargoFijoMensual getCargoFijoMensual() {
+     public CargoFijoMensual getCargoFijoMensual(LocalDate fecha) {
         CargoFijoMensual cargoFijoMensual = null;
         try {
-            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,CARGO FROM CARGO_FIJO_MENSUAL LIMIT 1;");;
+            PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT ID,CARGO FROM CARGO_FIJO_MENSUAL WHERE CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");;
+            statement.setInt(1,fecha.getMonthValue());
+            statement.setInt(2,fecha.getYear());
             ResultSet cargoFijoMensualRs = statement.executeQuery();
             if (cargoFijoMensualRs.next()) {
                 int id = cargoFijoMensualRs.getInt("id");
@@ -40,5 +43,4 @@ public class CargoFijoMensualRepositoryImpl implements CargoFijoMensualRepositor
         }
         return cargoFijoMensual;
     }
-    
 }

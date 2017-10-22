@@ -34,7 +34,7 @@ public class LecturaService {
        return this.lecturaMensualRepository.getLecturaMensual(usuario,medidor, fecha);
    }
     
-    public List<Integer> getRutUsuariosConLecturaMensual(LocalDate fecha){
-       return this.lecturaMensualRepository.getRutUsuariosConLecturaMensual(fecha);
+    public List<Integer> getIdUsuariosConLecturaMensual(LocalDate fecha){
+       return this.lecturaMensualRepository.getIdUsuariosConLecturaMensual(fecha);
     }
 }

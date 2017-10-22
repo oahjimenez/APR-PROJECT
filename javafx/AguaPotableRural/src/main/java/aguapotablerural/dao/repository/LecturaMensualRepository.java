@@ -18,5 +18,5 @@ import java.util.List;
 public interface LecturaMensualRepository {
         public double getLecturaMensual(Usuario usuario,Medidor medidor,LocalDate fecha);
         public boolean save(Usuario usuario,Medidor medidor,LocalDate fecha,double lectura);
-        public List<Integer> getRutUsuariosConLecturaMensual(LocalDate fecha);   
+        public List<Integer> getIdUsuariosConLecturaMensual(LocalDate fecha);   
 }

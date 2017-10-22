@@ -34,7 +34,7 @@ public class MedidorService {
         this.tieneMedidorRepository = new TieneMedidorRepositoryImpl(driver,this.usuarioRepository,this.medidorRepository);
     }
     
-    public List<? extends Medidor> getMedidoresOf(Usuario usuario,LocalDate fecha) {
+    public List<Medidor> getMedidoresOf(Usuario usuario,LocalDate fecha) {
         return tieneMedidorRepository.getMedidorOf(usuario, fecha);
     }
     

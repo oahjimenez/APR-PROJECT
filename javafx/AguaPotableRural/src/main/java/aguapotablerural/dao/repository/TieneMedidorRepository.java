@@ -31,6 +31,6 @@ public interface TieneMedidorRepository {
     public boolean removeMedidoresNotIn(Usuario usuario,Collection<? extends Medidor> medidores,LocalDate fechaActual);
     
     
-    public List<? extends Medidor> getMedidorOf(Usuario usuario,LocalDate fecha);
+    public List<Medidor> getMedidorOf(Usuario usuario,LocalDate fecha);
     
 }

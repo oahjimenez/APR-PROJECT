@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -67,7 +68,7 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
             PreparedStatement statement = this.driverManager.getConnection().prepareStatement(upsertSql);
             statement.setInt(1,usuario.getId());
             statement.setString(2,medidor.getId());
-            statement.setDate(3,Date.valueOf(fecha));
+            statement.setString(3,fecha.format(DateTimeFormatter.ISO_DATE));
             statement.setDouble(4,lectura);
             int rowsAffected = statement.executeUpdate();
             statement.close();
@@ -79,18 +80,19 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
     }
 
     @Override
-    public List<Integer> getRutUsuariosConLecturaMensual(LocalDate fecha) {
+    public List<Integer> getIdUsuariosConLecturaMensual(LocalDate fecha) {
         List<Integer> ids = new ArrayList<>();
         try {
-            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_ID FROM LECTURA_MENSUAL WHERE FECHA = ?;");
-            statement.setDate(1,Date.valueOf(fecha));
+            PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_ID FROM LECTURA_MENSUAL WHERE CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");
+            statement.setInt(1,fecha.getMonthValue());
+            statement.setInt(1,fecha.getYear());
             ResultSet lecturasRs = statement.executeQuery();
             while (lecturasRs.next()) {
                 ids.add(lecturasRs.getInt("USUARIO_ID"));
             }
             statement.close();
         }catch (Exception e){
-            System.err.println(String.format("%s - getRutUsuariosConLecturaMensual(): %s - %s",this.getClass().getSimpleName(),e.getClass().getName(),e.getMessage() ));
+            System.err.println(String.format("%s - getIdUsuariosConLecturaMensual(): %s - %s",this.getClass().getSimpleName(),e.getClass().getName(),e.getMessage() ));
         }
         return ids; 
     }

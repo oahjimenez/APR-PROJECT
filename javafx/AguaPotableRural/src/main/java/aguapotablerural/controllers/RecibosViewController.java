@@ -7,7 +7,6 @@ package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -49,6 +48,7 @@ import main.java.aguapotablerural.database.impl.SqliteDriverManager;
 import main.java.aguapotablerural.model.LecturaMensual;
 import main.java.aguapotablerural.model.Medidor;
 import main.java.aguapotablerural.model.Usuario;
+import main.java.aguapotablerural.services.ConsumoService;
 import main.java.aguapotablerural.services.LecturaService;
 import main.java.aguapotablerural.services.MedidorService;
 
@@ -122,6 +122,12 @@ public class RecibosViewController implements Initializable {
     public Label totalMensualLabel;
     
     @FXML
+    public Label totalConsumoLabel;
+    
+    @FXML
+    public Label formulaLabel;
+    
+    @FXML
     public Button guardarLecturasMensualesButton;
     
     @FXML
@@ -131,8 +137,9 @@ public class RecibosViewController implements Initializable {
     
     private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
     
-    private MedidorService medidorService;
-    private LecturaService lecturaService;
+    private final MedidorService medidorService;
+    private final LecturaService lecturaService;
+    private final ConsumoService consumoService;
     
     private List<TextField> lecturasMedidoresTextFields;
     
@@ -145,6 +152,7 @@ public class RecibosViewController implements Initializable {
         this.usuarioRepository = new UsuarioRepositoryImpl(driverManager);
         this.medidorService = new MedidorService();
         this.lecturaService = new LecturaService();
+        this.consumoService = new ConsumoService();
         this.lecturasMedidoresTextFields = new ArrayList<>();
     }
     
@@ -379,11 +387,15 @@ public class RecibosViewController implements Initializable {
                 }
             }
         }
+        Usuario usuario = this.getUsuarioSeleccionado();
+        formulaLabel.setText(this.consumoService.getFormulaValorACancelarConSubsidio(usuario,this.getSelectedMonthYear()));
+        totalConsumoLabel.setText(String.valueOf(this.consumoService.getConsumoMensual(usuario,this.getSelectedMonthYear())));
+        totalMensualLabel.setText(String.valueOf(this.consumoService.getValorACancelarConSubsidio(usuario,this.getSelectedMonthYear())));
     }
     
     private void actualizarUsuariosIngresados(LocalDate fecha) {
         this.listViewUsuariosIngresados.getItems().clear();
-        List<Integer> usuarioIds = lecturaService.getRutUsuariosConLecturaMensual(fecha);
+        List<Integer> usuarioIds = lecturaService.getIdUsuariosConLecturaMensual(fecha);
         usuarioIds.forEach(id-> {
             Usuario usuarioLectura = new Usuario();
             usuarioLectura.setId(id);

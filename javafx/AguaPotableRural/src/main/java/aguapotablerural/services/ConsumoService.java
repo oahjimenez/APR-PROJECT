@@ -7,6 +7,7 @@ package main.java.aguapotablerural.services;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.List;
 import java.util.Locale;
 import main.java.aguapotablerural.model.CargoFijoMensual;
 import main.java.aguapotablerural.model.CostoMetroCubico;
@@ -24,6 +25,7 @@ public class ConsumoService {
     private final LecturaService lecturaService;
     private final CostoMetroCubicoService costoMetroCubicoService;
     private final CargoFijoMensualService cargoFijoMensualService;
+    private final MedidorService medidorService;
     
     
     public ConsumoService() {
@@ -31,6 +33,15 @@ public class ConsumoService {
         this.subsidioService = new SubsidioService();
         this.costoMetroCubicoService = new CostoMetroCubicoService();
         this.cargoFijoMensualService = new CargoFijoMensualService();
+        this.medidorService = new MedidorService();
+    }
+    public double getConsumoMensual(Usuario usuario,LocalDate mes) {
+        List<Medidor> medidores = this.medidorService.getMedidoresOf(usuario, mes);
+        double consumoMensual = 0.0;
+        for (Medidor medidor : medidores){
+            consumoMensual+=this.getConsumoMensual(usuario,medidor,mes);
+        }
+        return consumoMensual;
     }
     
     public double getConsumoMensual(Usuario usuario,Medidor medidor, LocalDate mes) {
@@ -61,8 +72,19 @@ public class ConsumoService {
         return this.getSubsidio(usuario, mes).getPorcentaje();
     }
     
-    public double getValorACancelarConSubsidio(Usuario usuario,Medidor medidor, LocalDate mes) {
-        double consumoMensual = this.getConsumoMensual(usuario,medidor,mes);
+    public String getFormulaValorACancelarConSubsidio(Usuario usuario, LocalDate mes) {
+        double consumoMensual = this.getConsumoMensual(usuario,mes);
+        String formula = "";
+        if (consumoMensual < getTopeSubsidiado(usuario,mes)) {
+            formula = String.format("(%s+%s*%s)*(1-%s)",this.cargoFijoMensualService.getCargoFijoMensual(mes).getCargo(), this.getCostoMetroCubico(mes).getCosto(),consumoMensual,getPorcentajeSubsidio(usuario,mes));
+        } else {
+            formula = String.format("(%s+%s*%s)*(1-%s) + (%s*(%s-%s))",this.cargoFijoMensualService.getCargoFijoMensual(mes).getCargo(), this.getCostoMetroCubico(mes).getCosto(),getTopeSubsidiado(usuario,mes),getPorcentajeSubsidio(usuario,mes),this.getCostoMetroCubico(mes).getCosto(),consumoMensual,getTopeSubsidiado(usuario,mes));
+        }
+        return formula;
+    }
+    
+    public double getValorACancelarConSubsidio(Usuario usuario,LocalDate mes) {
+        double consumoMensual = this.getConsumoMensual(usuario,mes);
         double valorACancelarConSubsidio = 0.0;
         if (consumoMensual < getTopeSubsidiado(usuario,mes)) {
             valorACancelarConSubsidio = (this.cargoFijoMensualService.getCargoFijoMensual(mes).getCargo() + this.getCostoMetroCubico(mes).getCosto()*consumoMensual)*(1-getPorcentajeSubsidio(usuario,mes));

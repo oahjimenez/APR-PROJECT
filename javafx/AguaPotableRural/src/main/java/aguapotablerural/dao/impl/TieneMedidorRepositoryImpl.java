@@ -164,7 +164,7 @@ public class TieneMedidorRepositoryImpl implements TieneMedidorRepository {
     }
     
     @Override
-    public List<? extends Medidor> getMedidorOf(Usuario usuario, LocalDate fecha) {
+    public List<Medidor> getMedidorOf(Usuario usuario, LocalDate fecha) {
         List<Medidor> medidores = new ArrayList();
         try {
             PreparedStatement statement = driverManager.getConnection().prepareStatement("SELECT MEDIDOR_ID FROM TIENE_MEDIDOR WHERE USUARIO_ID = ? AND CAST(strftime('%m',fecha_adquisicion) as integer) = ? AND CAST(strftime('%Y',fecha_adquisicion) as integer) = ?;");

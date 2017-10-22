@@ -47,14 +47,14 @@ public class SqliteDriverManager implements DBDriverManager {
         }*/
         
         if (this.connection!= null) {
-            return this.connection;     
+            return this.connection;
         }
         try {
             // db parameters
-            String url =  "jdbc:sqlite:C:/Users/carlo/Desktop/Monitoreo_remoto/gitrepo/APR-PROJECT/sqlite3/AGUA_POTABLE_RURAL.db";
+            String url =  "jdbc:sqlite:C:/gitrepo/APR-PROJECT/sqlite3/AGUA_POTABLE_RURAL.db";
             // create a connection to the database
             this.connection = DriverManager.getConnection(url);
-                
+            
             System.out.println("Connection to SQLite has been established.");
             
         } catch (SQLException e) {

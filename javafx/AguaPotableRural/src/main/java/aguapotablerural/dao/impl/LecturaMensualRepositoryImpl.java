@@ -37,10 +37,12 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
         double lecturaMensual = 0.0;
         PreparedStatement statement = null;
         try {
-            statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_ID = ? AND MEDIDOR_ID = ? AND FECHA = ?;");
+            statement = this.driverManager.getConnection().prepareStatement("SELECT VALOR FROM LECTURA_MENSUAL where USUARIO_ID = ? AND MEDIDOR_ID = ? AND CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");
             statement.setInt(1,usuario.getId());
             statement.setString(2,medidor.getId());
-            statement.setDate(3,Date.valueOf(fecha));
+            statement.setInt(3,fecha.getMonthValue());
+            statement.setInt(4,fecha.getYear());
+           
            
             ResultSet lecturaRs = statement.executeQuery();
             

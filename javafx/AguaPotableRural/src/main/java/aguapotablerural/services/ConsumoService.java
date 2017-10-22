@@ -85,6 +85,9 @@ public class ConsumoService {
     
     public double getValorACancelarConSubsidio(Usuario usuario,LocalDate mes) {
         double consumoMensual = this.getConsumoMensual(usuario,mes);
+        if (consumoMensual==0){
+            return 0;
+        }
         double valorACancelarConSubsidio = 0.0;
         if (consumoMensual < getTopeSubsidiado(usuario,mes)) {
             valorACancelarConSubsidio = (this.cargoFijoMensualService.getCargoFijoMensual(mes).getCargo() + this.getCostoMetroCubico(mes).getCosto()*consumoMensual)*(1-getPorcentajeSubsidio(usuario,mes));

@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -73,10 +74,7 @@ public class RecibosViewController implements Initializable {
     public ListView listViewUsuariosIngresados;
     
     @FXML
-    private MenuButton anoMenu;
-    
-    @FXML
-    private MenuButton mesMenu;
+    private MenuButton fechaLecturaMensual;
     
     @FXML
     private Tab mesTab;
@@ -187,6 +185,13 @@ public class RecibosViewController implements Initializable {
         LocalDate now = LocalDate.now();
         
         String mesName =this.getSpanishMonth(now);
+        
+        /* Agrega los meses del año actual */
+
+        MenuItem[] z = {new MenuItem(now.getMonth().FEBRUARY.)};
+        List<MenuItem> k = Arrays.asList(z);
+        fechaLecturaMensual.getItems().addAll(Arrays.asList());
+        
         this.mesMenu.setText(mesName);
         this.anoMenu.setText(String.valueOf(now.getYear()));
         this.mesTab.setText(this.mesMenu.getText());

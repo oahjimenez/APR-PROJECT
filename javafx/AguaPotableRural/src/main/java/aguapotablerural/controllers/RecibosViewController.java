@@ -7,11 +7,8 @@ package main.java.aguapotablerural.controllers;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
+import java.time.Month;
 import java.time.format.TextStyle;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +32,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -75,9 +71,6 @@ public class RecibosViewController implements Initializable {
     
     @FXML
     private MenuButton fechaLecturaMensual;
-    
-    @FXML
-    private Tab mesTab;
     
     @FXML 
     public TableView<LecturaMensual> lecturasMensualesTableView;
@@ -184,15 +177,27 @@ public class RecibosViewController implements Initializable {
         this.clearMedidoresUsuarioMensual();
         LocalDate now = LocalDate.now();
         
-        String mesName =this.getSpanishMonth(now);
+       // String mesName =this.getSpanishMonth(now);
         
         /* Agrega los meses del año actual */
 
-        MenuItem[] z = {new MenuItem(now.getMonth().FEBRUARY.)};
-        List<MenuItem> k = Arrays.asList(z);
-        fechaLecturaMensual.getItems().addAll(Arrays.asList());
-        
-        this.mesMenu.setText(mesName);
+        MenuItem[] meses = {
+            new MenuItem(this.getSpanishMonth(now.getMonth().JANUARY)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().FEBRUARY)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().MARCH)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().APRIL)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().MAY)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().JUNE)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().JULY)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().AUGUST)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().SEPTEMBER)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().OCTOBER)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().NOVEMBER)+" "+String.valueOf(now.getYear())),
+            new MenuItem(this.getSpanishMonth(now.getMonth().DECEMBER)+" "+String.valueOf(now.getYear()))
+        };
+        fechaLecturaMensual.getItems().addAll(Arrays.asList(meses));
+        fechaLecturaMensual.setText(this.getSpanishMonth(now)+" "+String.valueOf(now.getYear()));
+        /*this.mesMenu.setText(mesName);
         this.anoMenu.setText(String.valueOf(now.getYear()));
         this.mesTab.setText(this.mesMenu.getText());
         for (MenuItem ano : this.anoMenu.getItems()){
@@ -212,7 +217,7 @@ public class RecibosViewController implements Initializable {
                 this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
                 this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
             });
-        }
+        }*/
         this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
         this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
         this.listViewUsuarios.setCellFactory(cellFactory -> new ListCell<Usuario>() {
@@ -280,7 +285,8 @@ public class RecibosViewController implements Initializable {
     }    
     
     private LocalDate getSelectedMonthYear() {
-        if (this.mesMenu.getText().isEmpty() || this.anoMenu.getText().isEmpty()) {
+        return null;
+        /*if (this.mesMenu.getText().isEmpty() || this.anoMenu.getText().isEmpty()) {
             return null;
         }
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
@@ -288,7 +294,7 @@ public class RecibosViewController implements Initializable {
             .append(DateTimeFormatter.ofPattern("MMMM yyyy"))
             .toFormatter(new Locale("es", "ES"));
         TemporalAccessor parsed = formatter.parse(String.format("%s %s", this.mesMenu.getText(),this.anoMenu.getText()));
-        return YearMonth.from(parsed).atEndOfMonth();
+        return YearMonth.from(parsed).atEndOfMonth();*/
     }
     
     private void actualizarMedidoresAnoMes(Usuario usuario) {
@@ -354,7 +360,7 @@ public class RecibosViewController implements Initializable {
     }
     
     private void actualizaLecturaIngresadaLabel(LocalDate fecha) {
-         this.lecturasIngrsadasLabel.setText(String.format("%s (%s %s)",LECTURAS_INGRESADAS_PREFIX,this.getSpanishMonth(fecha),this.getYear(fecha)));
+        // this.lecturasIngrsadasLabel.setText(String.format("%s (%s %s)",LECTURAS_INGRESADAS_PREFIX,this.getSpanishMonth(fecha),this.getYear(fecha)));
  
     }
     
@@ -412,7 +418,11 @@ public class RecibosViewController implements Initializable {
     }
     
     private String getSpanishMonth(LocalDate fecha) {
-       return this.capitalize(fecha.getMonth().getDisplayName(TextStyle.FULL,new Locale("es", "ES")));
+       return this.capitalize(this.getSpanishMonth(fecha.getMonth()));
+    }
+    
+    private String getSpanishMonth(Month month) {
+           return this.capitalize(month.getDisplayName(TextStyle.FULL,new Locale("es", "ES")));
     }
     
     private String getYear(LocalDate fecha){

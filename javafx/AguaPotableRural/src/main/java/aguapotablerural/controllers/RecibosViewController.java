@@ -8,7 +8,11 @@ package main.java.aguapotablerural.controllers;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.TextStyle;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -197,6 +201,15 @@ public class RecibosViewController implements Initializable {
         };
         fechaLecturaMensual.getItems().addAll(Arrays.asList(meses));
         fechaLecturaMensual.setText(this.getSpanishMonth(now)+" "+String.valueOf(now.getYear()));
+        for (MenuItem mesAno : this.fechaLecturaMensual.getItems()){
+            mesAno.setOnAction(action->{
+                this.fechaLecturaMensual.setText(mesAno.getText());
+                this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
+                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
+                this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
+            });
+        }
+        
         /*this.mesMenu.setText(mesName);
         this.anoMenu.setText(String.valueOf(now.getYear()));
         this.mesTab.setText(this.mesMenu.getText());
@@ -285,16 +298,15 @@ public class RecibosViewController implements Initializable {
     }    
     
     private LocalDate getSelectedMonthYear() {
-        return null;
-        /*if (this.mesMenu.getText().isEmpty() || this.anoMenu.getText().isEmpty()) {
+        if (this.fechaLecturaMensual.getText().isEmpty()) {
             return null;
         }
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
             .parseCaseInsensitive()
             .append(DateTimeFormatter.ofPattern("MMMM yyyy"))
             .toFormatter(new Locale("es", "ES"));
-        TemporalAccessor parsed = formatter.parse(String.format("%s %s", this.mesMenu.getText(),this.anoMenu.getText()));
-        return YearMonth.from(parsed).atEndOfMonth();*/
+        TemporalAccessor parsed = formatter.parse(fechaLecturaMensual.getText());
+        return YearMonth.from(parsed).atEndOfMonth();
     }
     
     private void actualizarMedidoresAnoMes(Usuario usuario) {
@@ -407,10 +419,12 @@ public class RecibosViewController implements Initializable {
     private void actualizarUsuariosIngresados(LocalDate fecha) {
         this.listViewUsuariosIngresados.getItems().clear();
         List<Integer> usuarioIds = lecturaService.getIdUsuariosConLecturaMensual(fecha);
+        System.out.println("Ids de usuario con lectura mes:"+fecha+" "+usuarioIds);
         usuarioIds.forEach(id-> {
             Usuario usuarioLectura = new Usuario();
             usuarioLectura.setId(id);
             int index = -1;
+            System.out.println("id :"+id+"en listaingresados?" + this.usuarios.indexOf(usuarioLectura));
             if (((index = this.usuarios.indexOf(usuarioLectura)) != -1) && !this.listViewUsuariosIngresados.getItems().contains(this.usuarios.get(index))){
                this.listViewUsuariosIngresados.getItems().add(this.usuarios.get(index));
             }

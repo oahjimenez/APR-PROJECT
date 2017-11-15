@@ -87,7 +87,7 @@ public class LecturaMensualRepositoryImpl implements LecturaMensualRepository{
         try {
             PreparedStatement statement = this.driverManager.getConnection().prepareStatement("SELECT USUARIO_ID FROM LECTURA_MENSUAL WHERE CAST(strftime('%m',FECHA) as integer) = ? AND CAST(strftime('%Y',FECHA) as integer) = ?;");
             statement.setInt(1,fecha.getMonthValue());
-            statement.setInt(1,fecha.getYear());
+            statement.setInt(2,fecha.getYear());
             ResultSet lecturasRs = statement.executeQuery();
             while (lecturasRs.next()) {
                 ids.add(lecturasRs.getInt("USUARIO_ID"));

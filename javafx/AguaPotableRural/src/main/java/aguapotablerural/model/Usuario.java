@@ -156,7 +156,7 @@ public class Usuario implements Comparable{
             return false;
         }
         Usuario usuario = (Usuario) o;
-        return Objects.equals(this.getId(),usuario.getId()) && Objects.equals(this.getRut(),usuario.getRut());
+        return Objects.equals(this.getId(),usuario.getId());
     }
 
     @Override

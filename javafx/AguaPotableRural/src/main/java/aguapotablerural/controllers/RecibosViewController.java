@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -92,6 +93,8 @@ public class RecibosViewController implements Initializable {
     
     @FXML
     private TextField filtroUsuario;
+    @FXML
+    private TextField filtroUsuariosIngresados;
     
     @FXML
     public Label nombreLabelValue; 
@@ -131,6 +134,7 @@ public class RecibosViewController implements Initializable {
     private UsuarioRepository usuarioRepository;
     
     private ObservableList<Usuario> usuarios = FXCollections.observableArrayList();
+    private ObservableList<Usuario> usuariosIngresados = FXCollections.observableArrayList();
     
     private final MedidorService medidorService;
     private final LecturaService lecturaService;
@@ -205,7 +209,7 @@ public class RecibosViewController implements Initializable {
             mesAno.setOnAction(action->{
                 this.fechaLecturaMensual.setText(mesAno.getText());
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
-                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
+                this.actualizarListasUsuarios(this.getSelectedMonthYear());
                 this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
             });
         }
@@ -218,7 +222,7 @@ public class RecibosViewController implements Initializable {
                 this.anoMenu.setText(ano.getText());
                 this.mesTab.setText(String.format("%s %s",this.mesMenu.getText(),ano.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
-                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
+                this.actualizarListasUsuarios(this.getSelectedMonthYear());
                 this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
             });
         }
@@ -227,11 +231,11 @@ public class RecibosViewController implements Initializable {
                 this.mesMenu.setText(mes.getText());
                 this.mesTab.setText(String.format("%s %s",mes.getText(),this.anoMenu.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
-                this.actualizarUsuariosIngresados(this.getSelectedMonthYear());
+                this.actualizarListasUsuarios(this.getSelectedMonthYear());
                 this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
             });
         }*/
-        this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
+        this.usuarios.clear();
         this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
         this.listViewUsuarios.setCellFactory(cellFactory -> new ListCell<Usuario>() {
             @Override
@@ -294,7 +298,7 @@ public class RecibosViewController implements Initializable {
                 actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
         });
-        this.actualizarUsuariosIngresados(getSelectedMonthYear());
+        this.actualizarListasUsuarios(getSelectedMonthYear());
     }    
     
     private LocalDate getSelectedMonthYear() {
@@ -416,17 +420,27 @@ public class RecibosViewController implements Initializable {
         totalMensualLabel.setText(String.valueOf(this.consumoService.getValorACancelarConSubsidio(usuario,this.getSelectedMonthYear())));
     }
     
-    private void actualizarUsuariosIngresados(LocalDate fecha) {
-        this.listViewUsuariosIngresados.getItems().clear();
+    private List<Usuario> obtenerUsuariosLecturaMensual(LocalDate fecha) {
         List<Integer> usuarioIds = lecturaService.getIdUsuariosConLecturaMensual(fecha);
         System.out.println("Ids de usuario con lectura mes:"+fecha+" "+usuarioIds);
-        usuarioIds.forEach(id-> {
-            Usuario usuarioLectura = new Usuario();
-            usuarioLectura.setId(id);
-            int index = -1;
-            System.out.println("id :"+id+"en listaingresados?" + this.usuarios.indexOf(usuarioLectura));
-            if (((index = this.usuarios.indexOf(usuarioLectura)) != -1) && !this.listViewUsuariosIngresados.getItems().contains(this.usuarios.get(index))){
-               this.listViewUsuariosIngresados.getItems().add(this.usuarios.get(index));
+        List<Usuario> usuariosConLecturaMensual = this.usuarios.stream().filter(usuario -> usuarioIds.contains(usuario.getId())).collect(Collectors.toList());
+        return usuariosConLecturaMensual;
+    }
+    
+    private void actualizarListasUsuarios(LocalDate fecha) {
+        this.usuarios.clear();
+        this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
+        this.listViewUsuariosIngresados.getItems().clear();
+        List<Usuario> usuariosConLecturaMensual = this.obtenerUsuariosLecturaMensual(fecha);
+        this.moverUsuariosListaIngresados(usuariosConLecturaMensual);
+    }
+    
+    private void moverUsuariosListaIngresados(List<Usuario> usuarios) {
+        usuarios.forEach((Usuario usuario)-> {
+            System.out.println(usuario+"en listaingresados?" + this.usuarios.indexOf(usuario));
+            if ((!this.listViewUsuariosIngresados.getItems().contains(usuario))){
+                this.usuarios.remove(usuario);
+                this.listViewUsuariosIngresados.getItems().add(usuario);
             }
         });
     }

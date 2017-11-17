@@ -94,7 +94,8 @@
                      <children>
 
                         <Label fx:id="lecturasIngrsadasLabel" layoutX="17.0" layoutY="27.0" text="Lecturas Ingresadas" />
-                        <ListView fx:id="listViewUsuariosIngresados" layoutX="15.0" layoutY="59.0" prefHeight="450.0" prefWidth="273.0" />
+                        <ListView fx:id="listViewUsuariosIngresados" layoutX="15.0" layoutY="82.0" prefHeight="427.0" prefWidth="273.0" />
+                        <TextField fx:id="filtroUsuariosIngresados" layoutX="14.0" layoutY="44.0" prefHeight="25.0" prefWidth="273.0" />
 
                      </children>
                   </AnchorPane>

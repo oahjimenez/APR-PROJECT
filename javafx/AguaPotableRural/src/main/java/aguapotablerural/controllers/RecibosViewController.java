@@ -209,7 +209,7 @@ public class RecibosViewController implements Initializable {
             mesAno.setOnAction(action->{
                 this.fechaLecturaMensual.setText(mesAno.getText());
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
-                this.actualizarListasUsuarios(this.getSelectedMonthYear());
+                this.cargarListasUsuarios(this.getSelectedMonthYear());
                 this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
             });
         }
@@ -222,7 +222,7 @@ public class RecibosViewController implements Initializable {
                 this.anoMenu.setText(ano.getText());
                 this.mesTab.setText(String.format("%s %s",this.mesMenu.getText(),ano.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
-                this.actualizarListasUsuarios(this.getSelectedMonthYear());
+                this.cargarListasUsuarios(this.getSelectedMonthYear());
                 this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
             });
         }
@@ -231,12 +231,11 @@ public class RecibosViewController implements Initializable {
                 this.mesMenu.setText(mes.getText());
                 this.mesTab.setText(String.format("%s %s",mes.getText(),this.anoMenu.getText()));
                 this.actualizarMedidoresAnoMes((Usuario)listViewUsuarios.getSelectionModel().getSelectedItem());
-                this.actualizarListasUsuarios(this.getSelectedMonthYear());
+                this.cargarListasUsuarios(this.getSelectedMonthYear());
                 this.actualizaLecturaIngresadaLabel(this.getSelectedMonthYear());
             });
         }*/
-        this.usuarios.clear();
-        this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
+        this.cargarListasUsuarios(now);
         this.listViewUsuarios.setCellFactory(cellFactory -> new ListCell<Usuario>() {
             @Override
             public void updateItem(Usuario item, boolean empty) {
@@ -264,6 +263,7 @@ public class RecibosViewController implements Initializable {
         
         // Wrap ObservableList in a FilteredList
         FilteredList<Usuario> usuariosFiltrados = new FilteredList<>(usuarios,u -> true);
+        FilteredList<Usuario> usuariosIngresadosFiltrados = new FilteredList<>(usuariosIngresados,u -> true);
          //Set filter Predicate whenever the filter changes
         this.filtroUsuario.textProperty().addListener((observable, oldValue, newValue) -> {
             usuariosFiltrados.setPredicate(usuario -> {
@@ -279,10 +279,27 @@ public class RecibosViewController implements Initializable {
                         usuario.getDireccion().toLowerCase().contains(lowerCaseFilter));
             });
         });
-        
+        this.filtroUsuariosIngresados.textProperty().addListener((observable, oldValue, newValue) -> {
+            usuariosIngresadosFiltrados.setPredicate(usuario -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                return (usuario.getRut().toLowerCase().contains(lowerCaseFilter) || 
+                        usuario.getNombres().toLowerCase().contains(lowerCaseFilter) ||
+                        usuario.getApellidos().toLowerCase().contains(lowerCaseFilter) ||
+                        usuario.getDireccion().toLowerCase().contains(lowerCaseFilter));
+            });
+        });
         //Wrap FilteredList in a SortedList
         SortedList<Usuario> usuariosOrdenados = new SortedList<>(usuariosFiltrados);
         this.listViewUsuarios.setItems(usuariosOrdenados);
+        
+        SortedList<Usuario> usuariosIngresadosOrdenados = new SortedList<>(usuariosIngresadosFiltrados);
+        this.listViewUsuariosIngresados.setItems(usuariosIngresadosOrdenados);
+
         this.listViewUsuarios.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -298,7 +315,7 @@ public class RecibosViewController implements Initializable {
                 actualizarMedidoresAnoMes(getUsuarioSeleccionado());
              }
         });
-        this.actualizarListasUsuarios(getSelectedMonthYear());
+        this.cargarListasUsuarios(getSelectedMonthYear());
     }    
     
     private LocalDate getSelectedMonthYear() {
@@ -427,10 +444,15 @@ public class RecibosViewController implements Initializable {
         return usuariosConLecturaMensual;
     }
     
-    private void actualizarListasUsuarios(LocalDate fecha) {
+    private void cargarUsuariosActivos(LocalDate fecha){  
         this.usuarios.clear();
         this.usuarios.addAll(usuarioRepository.getActiveUsuarios());
-        this.listViewUsuariosIngresados.getItems().clear();
+    }
+    
+    
+    private void cargarListasUsuarios(LocalDate fecha) {
+        this.cargarUsuariosActivos(fecha);
+        this.usuariosIngresados.clear();
         List<Usuario> usuariosConLecturaMensual = this.obtenerUsuariosLecturaMensual(fecha);
         this.moverUsuariosListaIngresados(usuariosConLecturaMensual);
     }
@@ -438,9 +460,9 @@ public class RecibosViewController implements Initializable {
     private void moverUsuariosListaIngresados(List<Usuario> usuarios) {
         usuarios.forEach((Usuario usuario)-> {
             System.out.println(usuario+"en listaingresados?" + this.usuarios.indexOf(usuario));
-            if ((!this.listViewUsuariosIngresados.getItems().contains(usuario))){
+            if ((!this.usuariosIngresados.contains(usuario))){
                 this.usuarios.remove(usuario);
-                this.listViewUsuariosIngresados.getItems().add(usuario);
+                this.usuariosIngresados.add(usuario);
             }
         });
     }

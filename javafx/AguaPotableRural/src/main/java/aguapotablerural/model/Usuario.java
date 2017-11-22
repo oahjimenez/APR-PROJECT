@@ -94,6 +94,10 @@ public class Usuario implements Comparable{
     public StringProperty getApellidosProperty() {
         return this.apellidosProperty;
     }
+    
+    public String getNombreCompleto() {
+        return String.format("%s %s",this.getNombres(),this.getApellidos());
+    }
 
     public String getDireccion() {
         return this.direccionProperty.get();
@@ -172,7 +176,7 @@ public class Usuario implements Comparable{
         if ((this.getRut().equals(((Usuario)o).getRut())) && ((this.getId()== ((Usuario)o).getId()))){
            return 0; 
         }
-        return -1;
+        return (this.getNombreCompleto().compareTo(((Usuario)o).getNombreCompleto()));
     }
 
     @Override

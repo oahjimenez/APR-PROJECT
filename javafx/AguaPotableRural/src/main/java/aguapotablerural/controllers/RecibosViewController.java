@@ -58,6 +58,8 @@ import main.java.aguapotablerural.services.MedidorService;
  * FXML Controller class
  *
  * @author Sebastián
+ * 
+ * Edit Cell workouraround credit to James-d https://gist.github.com/james-d/be5bbd6255a4640a5357
  */
 public class RecibosViewController implements Initializable {
     
@@ -294,10 +296,10 @@ public class RecibosViewController implements Initializable {
             });
         });
         //Wrap FilteredList in a SortedList
-        SortedList<Usuario> usuariosOrdenados = new SortedList<>(usuariosFiltrados);
+        SortedList<Usuario> usuariosOrdenados = new SortedList<>(usuariosFiltrados).sorted();
         this.listViewUsuarios.setItems(usuariosOrdenados);
         
-        SortedList<Usuario> usuariosIngresadosOrdenados = new SortedList<>(usuariosIngresadosFiltrados);
+        SortedList<Usuario> usuariosIngresadosOrdenados = new SortedList<>(usuariosIngresadosFiltrados).sorted();
         this.listViewUsuariosIngresados.setItems(usuariosIngresadosOrdenados);
 
         this.listViewUsuarios.setOnMouseClicked(new EventHandler<MouseEvent>() {

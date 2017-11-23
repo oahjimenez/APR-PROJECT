@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="692.0" prefWidth="1209.0" stylesheets="@../styles/estilo.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.aguapotablerural.controllers.RecibosViewController">
    <children>
@@ -44,34 +45,36 @@
                <children>
                   <AnchorPane prefHeight="518.0" prefWidth="625.0">
                      <children>
-                        <Label fx:id="nombreLabelValue" layoutX="77.0" layoutY="25.0" text="Seleccione un usuario de la lista de usuarios para visualizar sus detalles de lectura." />
-                        <GridPane layoutX="53.0" layoutY="48.0" prefHeight="53.0" prefWidth="485.0">
+                        <Label layoutX="86.0" layoutY="23.0" text="SELECCIONE FECHA DE INGRESO DE LECTURA" />
+                        <GridPane layoutX="57.0" layoutY="70.0" prefHeight="71.0" prefWidth="490.0">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.0" minWidth="10.0" prefWidth="73.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="21.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0" prefWidth="325.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="260.0" minWidth="10.0" prefWidth="96.00003051757812" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="393.9999694824219" minWidth="10.0" prefWidth="393.9999694824219" />
+                              <ColumnConstraints />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="rutLabel" text="Rut:" />
-                              <Label fx:id="direccionLabel" text="Dirección: " GridPane.rowIndex="1" />
-                              <Label fx:id="telefonoLabel" text="Teléfono: " GridPane.rowIndex="2" />
-                              <Label fx:id="rutLabelValue" GridPane.columnIndex="2" />
-                              <Label fx:id="direccionLabelValue" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label fx:id="telefonoLabelValue" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Label fx:id="rutLabel" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="103.0" text="Rut: " GridPane.rowIndex="1" />
+                              <Label fx:id="direccionLabel" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="115.0" text="Dirección: " GridPane.rowIndex="2" />
+                              <Label fx:id="telefonoLabel" alignment="BOTTOM_RIGHT" prefHeight="17.0" prefWidth="108.0" text="Teléfono: " GridPane.rowIndex="3" />
+                              <Label fx:id="rutLabelValue" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                              <Label fx:id="direccionLabelValue" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                              <Label fx:id="telefonoLabelValue" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
-                        <AnchorPane layoutX="42.0" layoutY="116.0" minHeight="0.0" minWidth="0.0" prefHeight="181.0" prefWidth="437.0">
+                        <AnchorPane layoutX="19.0" layoutY="157.0" minHeight="0.0" minWidth="0.0" prefHeight="274.0" prefWidth="554.0">
                                <children>
-                                  <TableView fx:id="lecturasMensualesTableView" prefHeight="308.0" prefWidth="525.0">
+                                  <TableView fx:id="lecturasMensualesTableView" layoutX="1.0" layoutY="-5.0" prefHeight="283.0" prefWidth="554.0">
                                     <columns>
-                                      <TableColumn fx:id="medidorIdTableColumn" prefWidth="75.0" text="Medidor" />
-                                        <TableColumn fx:id="lecturaTableColumn" prefWidth="75.0" text="Lectura (m3)" />
-                                        <TableColumn fx:id="costoTableColumn" prefWidth="75.0" text="Costo" />
+                                      <TableColumn fx:id="medidorIdTableColumn" prefWidth="109.0" text="Medidor" />
+                                        <TableColumn fx:id="lecturaTableColumn" prefWidth="166.3333740234375" text="Lectura Actual (m3)" />
+                                        <TableColumn fx:id="costoTableColumn" prefWidth="142.0" text="Lectura Anterior (m3)" />
+                                    <TableColumn prefWidth="137.0" text="Consumo (m3)" />
                                     </columns>
                                   </TableView>
                                </children>
@@ -82,8 +85,12 @@
                         <Label layoutX="42.0" layoutY="470.0" text="Total consumo:" />
                         <Label fx:id="formulaLabel" layoutX="86.0" layoutY="491.0" prefHeight="14.0" prefWidth="336.0" text="" />
                         <Label fx:id="totalConsumoLabel" layoutX="127.0" layoutY="470.0" prefHeight="14.0" prefWidth="72.0" text="" />
-                        <MenuButton fx:id="fechaLecturaMensual" layoutX="522.0" layoutY="21.0" mnemonicParsing="false" text="Año">
+                        <MenuButton fx:id="fechaLecturaMensual" alignment="CENTER" layoutX="348.0" layoutY="18.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Año" textAlignment="CENTER">
             </MenuButton>
+                        <Label fx:id="nombreLabelValue" alignment="CENTER" layoutX="111.0" layoutY="59.0" prefHeight="17.0" prefWidth="417.0" text="Seleccione un usuario de la Lista de Usuario para consultar sus detalles">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
                      </children>
                   </AnchorPane>
                </children>

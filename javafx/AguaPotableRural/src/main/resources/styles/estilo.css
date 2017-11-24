@@ -27,6 +27,9 @@ and open the template in the editor.
 /*amarillo:#dfff80;*/
 
 /* cajas de texto */
+.text-bigger {
+    -fx-font-size:20px;
+}
 
 .text_app{
     -fx-background-color: #e5e6e7;

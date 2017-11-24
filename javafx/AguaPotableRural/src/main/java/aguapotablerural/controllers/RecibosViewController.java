@@ -91,7 +91,11 @@ public class RecibosViewController implements Initializable {
     private TableColumn<LecturaMensual,String> lecturaTableColumn;
     
     @FXML
-    private TableColumn<LecturaMensual,String> costoTableColumn;
+    private TableColumn<LecturaMensual,String> lecturaAnteriorTableColumn;
+    
+    
+    @FXML
+    private TableColumn<LecturaMensual,String> consumoTableColumn;
     
     @FXML
     private TextField filtroUsuario;
@@ -166,6 +170,7 @@ public class RecibosViewController implements Initializable {
         this.setControllerWidgetsVisible(false);
         this.lecturasMensualesTableView.setItems(lecturas);
         this.lecturasMensualesTableView.setEditable(true);
+        this.lecturasMensualesTableView.setPlaceholder(new Label("Sin medidores registrados"));
        medidorIdTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty((cellData.getValue().getMedidor().getId())));
        lecturaTableColumn.setCellValueFactory(cellData -> {
            String lecturaValue = (cellData.getValue().getLectura()==0.0)? "Ingrese un valor" : String.valueOf(cellData.getValue().getLectura());
@@ -181,7 +186,7 @@ public class RecibosViewController implements Initializable {
             System.out.println(String.format("old:%snew%s",t.getOldValue(),t.getNewValue()));
             totalMensualLabel.setText(String.format("%s %s",String.valueOf(lecturaTotal - lecturaOld + lecturaNew),UNIDAD_PAGO));
         });
-        costoTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getCosto())));
+        lecturaAnteriorTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getCosto())));
         
         
         this.clearMedidoresUsuarioMensual();
@@ -340,6 +345,7 @@ public class RecibosViewController implements Initializable {
                 medidoresDelMes = medidorService.getMedidoresOf(usuario,getSelectedMonthYear());
                 lecturasMensualesTableView.getItems().clear();
                 nombreLabelValue.setText(new StringBuilder().append(usuario.getNombres()).append(" ").append(usuario.getApellidos()).toString());
+                nombreLabelValue.getStyleClass().add("text-bigger");
                 rutLabelValue.setText(usuario.getRut());
                 direccionLabelValue.setText(usuario.getDireccion());
                 telefonoLabelValue.setText(usuario.getTelefono());
